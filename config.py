@@ -61,7 +61,9 @@ def indent(elem, level=0):
 def create_test_xml():
     # create the file structure
     print('create the XML file structure')
+    tree = ET.ElementTree()
     xml_config = ET.Element('test_element')
+    tree._setroot(xml_config)
     items = ET.SubElement(xml_config, 'items')
     item1 = ET.SubElement(items, 'item')
     item2 = ET.SubElement(items, 'item')
@@ -72,11 +74,15 @@ def create_test_xml():
 
     # create a new XML file with the results
     print('create a new XML file with the results')
+    indent(xml_config)
+    tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
+    '''
     mydata = str(ET.tostring(xml_config),'utf-8')
     print('mydata type: ' + str(type(mydata)))
     myfile = open(XML_CONFIG, "w")
     myfile.write(mydata)
     myfile.close()
+    '''
 
 def read_write():
     print('read from file: ' + str(XML_TEST))
