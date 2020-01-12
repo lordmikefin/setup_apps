@@ -19,9 +19,10 @@
     :license: MIT License
 """
 
-#import xml.etree.ElementTree as ET
-from lxml import etree as ET
+import xml.etree.ElementTree as ET
+#from lxml import etree as ET
 #import lxml.etree as ET
+# TODO: remove 'lxml' from requirements
 
 
 XML_CONFIG = 'xml_config.xml'
@@ -34,6 +35,28 @@ XML_TEST = 'test.xml'
 # https://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
 # https://lxml.de/index.html
 # https://pypi.org/project/lxml/
+
+
+def indent(elem, level=0):
+    ''' Indent the xml tree '''
+    # TODO: this should be part of 'xml.etree.ElementTree'
+
+    # NOTE: code copied from stackoverflow
+    # https://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
+    i = "\n" + level*"  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+        for elem in elem:
+            indent(elem, level+1)
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+
 
 def create_test_xml():
     # create the file structure
@@ -62,8 +85,10 @@ def read_write():
     #root.
     items = ET.SubElement(root, 'items')
     #pretty_xml_as_string = root.toprettyxml()
-    pretty_xml_as_string = ET.tostring(root, pretty_print=True)
-    print('pretty_xml_as_string: ' + str(pretty_xml_as_string))
+    #pretty_xml_as_string = ET.tostring(root, pretty_print=True)
+    #print('pretty_xml_as_string: ' + str(pretty_xml_as_string))
     print('write to file: ' + str(XML_CONFIG))
+    indent(root)
     #tree.write(XML_CONFIG)
     tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
+    #tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True, pretty_print=True)
