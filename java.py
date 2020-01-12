@@ -9,10 +9,10 @@
 	   MIT License
 
 	License is available online:
-	  https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/LICENSE
+	  https://github.com/lordmikefin/setup_apps/blob/master/LICENSE
 
 	Latest version of this script file:
-	  https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/setup_apps/java.py
+	  https://github.com/lordmikefin/setup_apps/blob/master/java.py
 
 
 	:copyright: (c) 2019, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
@@ -115,7 +115,7 @@ def install_jre():
 def is_installed_jdk():
 	False
 
-	
+
 def install_jdk():
 	'''
 	TODO: download and install Java:  OpenJDK or OracleJDK
@@ -165,5 +165,5 @@ def run():
 
 	if not is_installed_jre():
 		if install_jre():
-		    update_env_var_path()
+			update_env_var_path()
 

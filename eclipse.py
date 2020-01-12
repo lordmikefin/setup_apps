@@ -9,10 +9,10 @@
        MIT License
 
     License is available online:
-      https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/LICENSE
+      https://github.com/lordmikefin/setup_apps/blob/master/LICENSE
 
     Latest version of this script file:
-      https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/setup_apps/eclipse.py
+      https://github.com/lordmikefin/setup_apps/blob/master/eclipse.py
 
 
     :copyright: (c) 2019, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)

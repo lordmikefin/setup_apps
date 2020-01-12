@@ -9,10 +9,10 @@
 	   MIT License
 
 	License is available online:
-	  https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/LICENSE
+	  https://github.com/lordmikefin/setup_apps/blob/master/LICENSE
 
 	Latest version of this script file:
-	  https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/setup_apps/__init__.py
+	  https://github.com/lordmikefin/setup_apps/blob/master/__init__.py
 
 
 	:copyright: (c) 2019, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
@@ -20,8 +20,8 @@
 """
 
 __license__ = "MIT License"
-__version__ = "0.0.24"
-__revision__ = "setup_apps (module)  v" + __version__ + " (2020-01-06)"
+__version__ = "0.1.0"
+__revision__ = "setup_apps (module)  v" + __version__ + " (2020-01-12)"
 
 
 '''

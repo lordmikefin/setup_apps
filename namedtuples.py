@@ -9,10 +9,10 @@
 	   MIT License
 
 	License is available online:
-	  https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/LICENSE
+	  /LICENSE
 
 	Latest version of this script file:
-	  https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/setup_apps/namedtuples.py
+	  https://github.com/lordmikefin/setup_apps/blob/master/namedtuples.py
 
 	Read more:
 	  https://docs.python.org/3/library/collections.html#collections.namedtuple

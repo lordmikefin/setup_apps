@@ -9,10 +9,10 @@
        MIT License
 
     License is available online:
-      https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/LICENSE
+      https://github.com/lordmikefin/setup_apps/blob/master/LICENSE
 
     Latest version of this script file:
-      https://github.com/lordmikefin/LMAutoSetBotWin/blob/master/setup_apps/pydev.py
+      https://github.com/lordmikefin/setup_apps/blob/master/pydev.py
 
 
     :copyright: (c) 2019, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
@@ -123,33 +123,32 @@ def define_file():
 
 
 def run():
-	print('')
-	print('Test comment from "pydev.py"')
+    print('')
+    print('Test comment from "pydev.py"')
 
-	print('Value of variable "PATH_APP_PYDEV": ' + str(PATH_APP_PYDEV))
-	print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
+    print('Value of variable "PATH_APP_PYDEV": ' + str(PATH_APP_PYDEV))
+    print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
 
-	define_file()
-	if not is_download():
-		download()
+    define_file()
+    if not is_download():
+        download()
 
-	if not is_download():
-		# TODO: How we should handle error?
-		print('')
-		print('Installer is still missing!?')
-		print('I will now exit with error :(')
-		util.pause()
-		sys.exit(1)
+    if not is_download():
+        # TODO: How we should handle error?
+        print('')
+        print('Installer is still missing!?')
+        print('I will now exit with error :(')
+        util.pause()
+        sys.exit(1)
 
-	if not is_installed():
-		if install():
-		    pass
+    if not is_installed():
+        if install():
+            pass
 
-	if not is_installed():
-		# TODO: How we should handle error?
-		print('')
-		print('pydev was not installed!?')
-		print('I will now exit with error :(')
-		util.pause()
-		sys.exit(1)
-
+    if not is_installed():
+        # TODO: How we should handle error?
+        print('')
+        print('pydev was not installed!?')
+        print('I will now exit with error :(')
+        util.pause()
+        sys.exit(1)
