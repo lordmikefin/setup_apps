@@ -160,33 +160,33 @@ def install():
 
 
 def run():
-	print('')
-	print('Test comment from "eclipse.py"')
+    print('')
+    print('Test comment from "eclipse.py"')
 
-	print('Value of variable "PATH_APP_ECLIPSE": ' + str(PATH_APP_ECLIPSE))
-	print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
+    print('Value of variable "PATH_APP_ECLIPSE": ' + str(PATH_APP_ECLIPSE))
+    print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
 
-	define_file()
-	if not is_download():
-		download()
+    define_file()
+    if not is_download():
+        download()
 
-	if not is_download():
-		# TODO: How we should handle error?
-		print('')
-		print('Installer is still missing!?')
-		print('I will now exit with error :(')
-		util.pause()
-		sys.exit(1)
+    if not is_download():
+        # TODO: How we should handle error?
+        print('')
+        print('Installer is still missing!?')
+        print('I will now exit with error :(')
+        util.pause()
+        sys.exit(1)
 
-	if not is_installed():
-		if install():
-		    pass
+    if not is_installed():
+        if install():
+            pass
 
-	if not is_installed():
-		# TODO: How we should handle error?
-		print('')
-		print('Eclipse was not installed!?')
-		print('I will now exit with error :(')
-		util.pause()
-		sys.exit(1)
+    if not is_installed():
+        # TODO: How we should handle error?
+        print('')
+        print('Eclipse was not installed!?')
+        print('I will now exit with error :(')
+        util.pause()
+        sys.exit(1)
 

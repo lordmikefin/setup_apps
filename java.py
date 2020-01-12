@@ -1,22 +1,22 @@
 # -*- coding: UTF-8 -*-
 """
-	java.py
-	~~~~~~~
+    java.py
+    ~~~~~~~
 
-	Install Java JDK/JRE.
+    Install Java JDK/JRE.
 
-	License of this script file:
-	   MIT License
+    License of this script file:
+       MIT License
 
-	License is available online:
-	  https://github.com/lordmikefin/setup_apps/blob/master/LICENSE
+    License is available online:
+      https://github.com/lordmikefin/setup_apps/blob/master/LICENSE
 
-	Latest version of this script file:
-	  https://github.com/lordmikefin/setup_apps/blob/master/java.py
+    Latest version of this script file:
+      https://github.com/lordmikefin/setup_apps/blob/master/java.py
 
 
-	:copyright: (c) 2019, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
-	:license: MIT License
+    :copyright: (c) 2019, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
+    :license: MIT License
 """
 
 from . import PATH_INSTALLERS
@@ -44,9 +44,9 @@ def is_installed_jre():
 
 
 def is_download_jre():
-	# Check if we already have the installer
-	print(str(_installer_file_fullname))
-	return os.path.isfile(_installer_file_fullname)
+    # Check if we already have the installer
+    print(str(_installer_file_fullname))
+    return os.path.isfile(_installer_file_fullname)
 
 
 def download_jre():
@@ -66,16 +66,16 @@ def download_jre():
 
 
 def define_file_jre():
-	global _installer_file_fullname
-	global _file_name
+    global _installer_file_fullname
+    global _file_name
 
-	installer_file = "jre-8u221-windows-x64.exe"
-	_file_name = installer_file
+    installer_file = "jre-8u221-windows-x64.exe"
+    _file_name = installer_file
 
-	installer_path = PATH_INSTALLERS
-	_installer_file_fullname = str(installer_path) + str(installer_file)
+    installer_path = PATH_INSTALLERS
+    _installer_file_fullname = str(installer_path) + str(installer_file)
 
-	print(str(_installer_file_fullname))
+    print(str(_installer_file_fullname))
 
 
 def install_jre():
@@ -113,25 +113,25 @@ def install_jre():
 
 
 def is_installed_jdk():
-	False
+    False
 
 
 def install_jdk():
-	'''
-	TODO: download and install Java:  OpenJDK or OracleJDK
-	Oracle
-	https://www.oracle.com/technetwork/java/index.html
+    '''
+    TODO: download and install Java:  OpenJDK or OracleJDK
+    Oracle
+    https://www.oracle.com/technetwork/java/index.html
 
-	OpenJDK
-	https://openjdk.java.net/
-	https://openjdk.java.net/install/
-	https://jdk.java.net/13/
-	ZIP
-	https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_windows-x64_bin.zip
-	SHA256
-	https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_windows-x64_bin.zip.sha256
-	'''
-	pass
+    OpenJDK
+    https://openjdk.java.net/
+    https://openjdk.java.net/install/
+    https://jdk.java.net/13/
+    ZIP
+    https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_windows-x64_bin.zip
+    SHA256
+    https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_windows-x64_bin.zip.sha256
+    '''
+    pass
 
 def update_env_var_path():
     # TODO: Do we need to update environment variables? PATH?
@@ -152,18 +152,18 @@ def update_env_var_path():
     #print('PATH : ' + str(os.environ.get('PATH')))
 
 def run():
-	print('')
-	print('Test comment from "java.py"')
+    print('')
+    print('Test comment from "java.py"')
 
-	# TODO: Can default installation be changed?  (C:\Program Files\Java\jre1.8.0_221)
-	#print('Value of variable "PATH_APP_NPP": ' + str(PATH_APP_NPP))
-	print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
+    # TODO: Can default installation be changed?  (C:\Program Files\Java\jre1.8.0_221)
+    #print('Value of variable "PATH_APP_NPP": ' + str(PATH_APP_NPP))
+    print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
 
-	define_file_jre()
-	if not is_download_jre():
-		download_jre()
+    define_file_jre()
+    if not is_download_jre():
+        download_jre()
 
-	if not is_installed_jre():
-		if install_jre():
-			update_env_var_path()
+    if not is_installed_jre():
+        if install_jre():
+            update_env_var_path()
 

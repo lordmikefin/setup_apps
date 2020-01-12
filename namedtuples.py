@@ -1,25 +1,25 @@
 # -*- coding: UTF-8 -*-
 """
-	namedtuples.py
-	~~~~~~~~~~~~~~
+    namedtuples.py
+    ~~~~~~~~~~~~~~
 
-	Collection of named tuples.
+    Collection of named tuples.
 
-	License of this script file:
-	   MIT License
+    License of this script file:
+       MIT License
 
-	License is available online:
-	  /LICENSE
+    License is available online:
+      /LICENSE
 
-	Latest version of this script file:
-	  https://github.com/lordmikefin/setup_apps/blob/master/namedtuples.py
+    Latest version of this script file:
+      https://github.com/lordmikefin/setup_apps/blob/master/namedtuples.py
 
-	Read more:
-	  https://docs.python.org/3/library/collections.html#collections.namedtuple
-	  https://docs.python.org/3/library/typing.html#typing.NamedTuple
+    Read more:
+      https://docs.python.org/3/library/collections.html#collections.namedtuple
+      https://docs.python.org/3/library/typing.html#typing.NamedTuple
 
-	:copyright: (c) 2020, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
-	:license: MIT License
+    :copyright: (c) 2020, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
+    :license: MIT License
 """
 
 from typing import NamedTuple

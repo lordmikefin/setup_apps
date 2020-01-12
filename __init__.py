@@ -1,26 +1,26 @@
 # -*- coding: UTF-8 -*-
 """
-	setup_apps
-	~~~~~~~~~~
+    setup_apps
+    ~~~~~~~~~~
 
-	Module for installing windows applictions.
+    Module for installing windows applictions.
 
-	License of this script file:
-	   MIT License
+    License of this script file:
+       MIT License
 
-	License is available online:
-	  https://github.com/lordmikefin/setup_apps/blob/master/LICENSE
+    License is available online:
+      https://github.com/lordmikefin/setup_apps/blob/master/LICENSE
 
-	Latest version of this script file:
-	  https://github.com/lordmikefin/setup_apps/blob/master/__init__.py
+    Latest version of this script file:
+      https://github.com/lordmikefin/setup_apps/blob/master/__init__.py
 
 
-	:copyright: (c) 2019, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
-	:license: MIT License
+    :copyright: (c) 2019, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
+    :license: MIT License
 """
 
 __license__ = "MIT License"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __revision__ = "setup_apps (module)  v" + __version__ + " (2020-01-12)"
 
 
@@ -86,21 +86,21 @@ PATH_APP_PUTTY = PATH_APPS + '\\putty'
 
 
 def connect_samba_share():
-	""" Connect samba share. """
-	# TODO: Test if drive exists.
-	
-	# TODO: Get samba share address from config.
-	#command = 'net use W: \\192.168.122.1\sambashare\windows'
-	command = 'net use ' + DRIVE_INSTALLER + ' \\192.168.122.1\sambashare\windows'
-	res = int(os.system(command))
-	print('')
-	if res > 0:
-		print('Samba connection  FAILED.')
-		#sys.exit(1)
-		return False
-	else:
-		print('Samba share connected.')
-		return True
+    """ Connect samba share. """
+    # TODO: Test if drive exists.
+    
+    # TODO: Get samba share address from config.
+    #command = 'net use W: \\192.168.122.1\sambashare\windows'
+    command = 'net use ' + DRIVE_INSTALLER + ' \\192.168.122.1\sambashare\windows'
+    res = int(os.system(command))
+    print('')
+    if res > 0:
+        print('Samba connection  FAILED.')
+        #sys.exit(1)
+        return False
+    else:
+        print('Samba share connected.')
+        return True
 
 
 #connect_samba_share()
