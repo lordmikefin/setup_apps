@@ -19,7 +19,10 @@
     :license: MIT License
 """
 
-import xml.etree.ElementTree as ET
+#import xml.etree.ElementTree as ET
+from lxml import etree as ET
+#import lxml.etree as ET
+
 
 XML_CONFIG = 'xml_config.xml'
 XML_TEST = 'test.xml'
@@ -27,6 +30,10 @@ XML_TEST = 'test.xml'
 # https://stackabuse.com/reading-and-writing-xml-files-in-python/
 
 # https://docs.python.org/3.7/library/xml.etree.elementtree.html
+
+# https://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
+# https://lxml.de/index.html
+# https://pypi.org/project/lxml/
 
 def create_test_xml():
     # create the file structure
@@ -51,6 +58,12 @@ def create_test_xml():
 def read_write():
     print('read from file: ' + str(XML_TEST))
     tree = ET.parse(XML_TEST)
+    root = tree.getroot()
+    #root.
+    items = ET.SubElement(root, 'items')
+    #pretty_xml_as_string = root.toprettyxml()
+    pretty_xml_as_string = ET.tostring(root, pretty_print=True)
+    print('pretty_xml_as_string: ' + str(pretty_xml_as_string))
     print('write to file: ' + str(XML_CONFIG))
     #tree.write(XML_CONFIG)
     tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
