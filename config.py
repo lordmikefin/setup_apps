@@ -135,6 +135,10 @@ def parse_apps(elem_apps: Element):
             print('version       : ' + str(eclipse.version))
             print('installer_file: ' + str(eclipse.installer_file))
             print('installer_url : ' + str(eclipse.installer_url))
+            print('installer_full_url       : ' + str(eclipse.installer_full_url))
+
+            eclipse.generate_full_url()
+            print('installer_full_url       : ' + str(eclipse.installer_full_url))
 
 
 def print_sample():

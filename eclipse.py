@@ -29,9 +29,48 @@ import sys
 class Eclipse():
 
     def __init__(self):
+        self.url_ok = False
+
         self.version = None
         self.installer_file = None
         self.installer_url = None
+        self.installer_full_url = None
+
+
+    def _insert_file_into_url(self, file: str):
+        self.installer_full_url = str(self.installer_url).format(installer_file=file)
+
+
+    def generate_full_url(self):
+        if self.installer_url is None:
+            # TODO: log error
+            print('Incorrect Eclipse config: Missing tag "installer_url"')
+            return
+
+        if not '{installer_file}' in self.installer_url:
+            self.installer_full_url = self.installer_url
+            self.url_ok = True
+            return
+
+        if self.installer_file is None:
+            # TODO: log error
+            print('Incorrect Eclipse config: Missing tag "installer_file"')
+            return
+
+        if not '{version}' in self.installer_file:
+            self._insert_file_into_url(file=self.installer_file)
+            self.url_ok = True
+            return
+
+        if self.version is None:
+            # TODO: log error
+            print('Incorrect Eclipse config: Missing tag "version"')
+            return
+
+        file = str(self.installer_file).format(version=self.version)
+        self._insert_file_into_url(file=file)
+        self.url_ok = True
+        return
 
 
 _installer_file_fullname = ''
