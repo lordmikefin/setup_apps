@@ -69,11 +69,23 @@ def create_sample():
     tree = ET.ElementTree(root)
     #tree._setroot(root)
 
-    root.append(ET.Comment('Supported version of "setup_apps"'))
+    root.append(ET.Comment(' Supported version of "setup_apps" '))
 
     #root.set('version', __version__)
     version = ET.SubElement(root, 'version')
     version.text = __version__
+
+    apps = ET.SubElement(root, 'apps')
+
+    eclipse = ET.SubElement(apps, 'eclipse')
+    version = ET.SubElement(eclipse, 'version')
+    version.text = '2019-09'
+    eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    installer_file = ET.SubElement(eclipse, 'installer_file')
+    installer_file.text = 'eclipse-javascript-{version}-R-win32-x86_64.zip'
+    eclipse.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
+    installer_url = ET.SubElement(eclipse, 'installer_url')
+    installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
 
     indent(root)
     util.mkdir(CONFIG_PATH)
