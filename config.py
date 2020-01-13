@@ -65,9 +65,9 @@ def indent(elem, level=0):
 def create_sample():
     print('create the sample config XML file')
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
-    tree = ET.ElementTree()
     root = ET.Element('setup')
-    tree._setroot(root)
+    tree = ET.ElementTree(root)
+    #tree._setroot(root)
 
     root.append(ET.Comment('Supported version of "setup_apps"'))
 
