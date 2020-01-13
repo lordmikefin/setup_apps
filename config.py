@@ -132,13 +132,16 @@ def parse_apps(elem_apps: Element):
             if not elem_url is None:
                 eclipse.installer_url = elem_url.text
 
-            print('version       : ' + str(eclipse.version))
-            print('installer_file: ' + str(eclipse.installer_file))
-            print('installer_url : ' + str(eclipse.installer_url))
+            print('version                  : ' + str(eclipse.version))
+            print('installer_file           : ' + str(eclipse.installer_file))
+            print('installer_url            : ' + str(eclipse.installer_url))
             print('installer_full_url       : ' + str(eclipse.installer_full_url))
 
             eclipse.generate_full_url()
             print('installer_full_url       : ' + str(eclipse.installer_full_url))
+
+            eclipse.generate_installer_path()
+            print('installer_path           : ' + str(eclipse.installer_path))
 
 
 def print_sample():

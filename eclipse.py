@@ -36,9 +36,32 @@ class Eclipse():
         self.installer_url = None
         self.installer_full_url = None
 
+        # TODO: set PATH_INSTALLERS from config xml
+        #self.installer_path = PATH_INSTALLERS
+        #_installer_file_fullname = str(installer_path) + str(installer_file)
+        self.path_ok = False
+        self.installer_path = None
+
 
     def _insert_file_into_url(self, file: str):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
+
+
+    def is_installer_file(self) -> bool:
+        if self.installer_file:
+            return True
+
+        # TODO: log error
+        print('Incorrect Eclipse config: Missing tag "installer_file"')
+        return False
+
+
+    def generate_installer_path(self):
+        if not self.is_installer_file():
+            return
+
+        self.installer_path = PATH_INSTALLERS + self.installer_file
+        self.path_ok = True
 
 
     def generate_full_url(self):
@@ -52,9 +75,7 @@ class Eclipse():
             self.url_ok = True
             return
 
-        if self.installer_file is None:
-            # TODO: log error
-            print('Incorrect Eclipse config: Missing tag "installer_file"')
+        if not self.is_installer_file():
             return
 
         if not '{version}' in self.installer_file:

@@ -68,8 +68,11 @@ PATH_ROOT = 'D:\\'
 PATH_TOY_BOX = PATH_ROOT + 'LM_ToyBox\\'
 #PATH_INSTALLERS = PATH_TOY_BOX + 'temp'
 #PATH_INSTALLERS = PATH_TOY_BOX + 'download'
+
+# TODO: set PATH_INSTALLERS from config xml
 DRIVE_INSTALLER = 'W:'
 PATH_INSTALLERS = DRIVE_INSTALLER + '\\'
+
 # TODO: parameterize the destination installation path
 #PATH_APPS = PATH_TOY_BOX + 'apps'
 #PATH_APPS = PATH_ROOT + 'apps'
