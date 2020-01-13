@@ -21,6 +21,7 @@
 
 import xml.etree.ElementTree as ET
 from setup_apps import util, __version__
+from xml.etree.ElementTree import Element
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -62,34 +63,79 @@ def indent(elem, level=0):
             elem.tail = i
 
 
+class Tag():
+    setup = 'setup'
+    version = 'version'
+    apps = 'apps'
+    installer_file = 'installer_file'
+    installer_url = 'installer_url'
+
+    eclipse = 'eclipse'
+
+
 def create_sample():
     print('create the sample config XML file')
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
-    root = ET.Element('setup')
+    root = ET.Element(Tag.setup)
     tree = ET.ElementTree(root)
     #tree._setroot(root)
 
     root.append(ET.Comment(' Supported version of "setup_apps" '))
 
     #root.set('version', __version__)
-    version = ET.SubElement(root, 'version')
+    version = ET.SubElement(root, Tag.version)
     version.text = __version__
 
-    apps = ET.SubElement(root, 'apps')
+    apps = ET.SubElement(root, Tag.apps)
 
-    eclipse = ET.SubElement(apps, 'eclipse')
-    version = ET.SubElement(eclipse, 'version')
+    eclipse = ET.SubElement(apps, Tag.eclipse)
+    version = ET.SubElement(eclipse, Tag.version)
     version.text = '2019-09'
     eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    installer_file = ET.SubElement(eclipse, 'installer_file')
+    installer_file = ET.SubElement(eclipse, Tag.installer_file)
     installer_file.text = 'eclipse-javascript-{version}-R-win32-x86_64.zip'
     eclipse.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
-    installer_url = ET.SubElement(eclipse, 'installer_url')
+    installer_url = ET.SubElement(eclipse, Tag.installer_url)
     installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
 
     indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
+
+
+def parse():
+    print('parse the config XML file')
+    file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
+    tree = ET.parse(file)
+    root = tree.getroot()
+    for elem in root:
+        # TODO: check version
+        if elem.tag == Tag.apps:
+            parse_apps(elem)
+
+
+def parse_apps(elem_apps: Element):
+    # TODO: is there better way to fix auto complete within the for loop ?
+    if False:  # for Eclipse auto complete only :)
+        elem = Element()
+    for elem in elem_apps:
+        if elem.tag == Tag.eclipse:
+            version = None
+            installer_file = None
+            installer_url = None
+            elem_version = elem.find(Tag.version)
+            if not elem_version is None:
+                version = elem_version.text
+            elem_file = elem.find(Tag.installer_file)
+            if not elem_file is None:
+                installer_file = elem_file.text
+            elem_url = elem.find(Tag.installer_url)
+            if not elem_url is None:
+                installer_url = elem_url.text
+
+            print('version       : ' + str(version))
+            print('installer_file: ' + str(installer_file))
+            print('installer_url : ' + str(installer_url))
 
 
 def print_sample():
