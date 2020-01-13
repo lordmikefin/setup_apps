@@ -42,6 +42,8 @@ class Eclipse():
         self.path_ok = False
         self.installer_path = None
 
+        self.is_downloaded = False
+
 
     def _insert_file_into_url(self, file: str):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
@@ -52,7 +54,7 @@ class Eclipse():
             return True
 
         # TODO: log error
-        print('Incorrect Eclipse config: Missing tag "installer_file"')
+        print('ERROR: Incorrect Eclipse config: Missing tag "installer_file"')
         return False
 
 
@@ -60,6 +62,7 @@ class Eclipse():
         if not self.is_installer_file():
             return
 
+        #file = str(self.installer_file).format(version=self.version)
         self.installer_path = PATH_INSTALLERS + self.installer_file
         self.path_ok = True
 
@@ -67,7 +70,7 @@ class Eclipse():
     def generate_full_url(self):
         if self.installer_url is None:
             # TODO: log error
-            print('Incorrect Eclipse config: Missing tag "installer_url"')
+            print('ERROR: Incorrect Eclipse config: Missing tag "installer_url"')
             return
 
         if not '{installer_file}' in self.installer_url:
@@ -85,13 +88,23 @@ class Eclipse():
 
         if self.version is None:
             # TODO: log error
-            print('Incorrect Eclipse config: Missing tag "version"')
+            print('ERROR: Incorrect Eclipse config: Missing tag "version"')
             return
 
-        file = str(self.installer_file).format(version=self.version)
-        self._insert_file_into_url(file=file)
+        self.installer_file = str(self.installer_file).format(version=self.version)
+        self._insert_file_into_url(file=self.installer_file)
         self.url_ok = True
         return
+
+
+    def download(self):
+        if not (self.url_ok and self.path_ok):
+            # TODO: log error
+            print('ERROR: Can not download Eclipse installer.')
+
+        print('Download Eclipse installer.')
+        util.download(self.installer_full_url, self.installer_path)
+        self.is_downloaded = True
 
 
 _installer_file_fullname = ''

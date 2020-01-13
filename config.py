@@ -116,6 +116,8 @@ def parse():
 
 
 def parse_apps(elem_apps: Element):
+    global APPS
+
     # TODO: is there better way to fix auto complete within the for loop ?
     if False:  # for Eclipse auto complete only :)
         elem = Element()
@@ -142,6 +144,21 @@ def parse_apps(elem_apps: Element):
 
             eclipse.generate_installer_path()
             print('installer_path           : ' + str(eclipse.installer_path))
+
+            eclipse_list = list(APPS.get('eclipse', []))
+            eclipse_list.append(eclipse)
+            APPS['eclipse'] = eclipse_list
+
+# TODO: should this be a class ?
+APPS = {
+    'eclipse': []
+    }
+
+def download():
+    """ Download all app installers """
+    eclipse_list = list(APPS.get('eclipse', []))
+    for eclipse in eclipse_list:
+        eclipse.download()
 
 
 def print_sample():
