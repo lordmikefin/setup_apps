@@ -25,6 +25,15 @@ from . import util
 import os
 import sys
 
+
+class Eclipse():
+
+    def __init__(self):
+        self.version = None
+        self.installer_file = None
+        self.installer_url = None
+
+
 _installer_file_fullname = ''
 _file_name = ''
 

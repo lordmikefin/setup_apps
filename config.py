@@ -22,6 +22,7 @@
 import xml.etree.ElementTree as ET
 from setup_apps import util, __version__
 from xml.etree.ElementTree import Element
+from setup_apps.eclipse import Eclipse
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -120,22 +121,20 @@ def parse_apps(elem_apps: Element):
         elem = Element()
     for elem in elem_apps:
         if elem.tag == Tag.eclipse:
-            version = None
-            installer_file = None
-            installer_url = None
+            eclipse = Eclipse()
             elem_version = elem.find(Tag.version)
             if not elem_version is None:
-                version = elem_version.text
+                eclipse.version = elem_version.text
             elem_file = elem.find(Tag.installer_file)
             if not elem_file is None:
-                installer_file = elem_file.text
+                eclipse.installer_file = elem_file.text
             elem_url = elem.find(Tag.installer_url)
             if not elem_url is None:
-                installer_url = elem_url.text
+                eclipse.installer_url = elem_url.text
 
-            print('version       : ' + str(version))
-            print('installer_file: ' + str(installer_file))
-            print('installer_url : ' + str(installer_url))
+            print('version       : ' + str(eclipse.version))
+            print('installer_file: ' + str(eclipse.installer_file))
+            print('installer_url : ' + str(eclipse.installer_url))
 
 
 def print_sample():
