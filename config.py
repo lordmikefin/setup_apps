@@ -80,6 +80,18 @@ def create_sample():
     tree.write(file, encoding="UTF-8", xml_declaration=True)
 
 
+def print_sample():
+    print('print the sample config XML file')
+    print()
+    file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
+    tree = ET.parse(file)
+    #print(tree)
+    print(str(ET.tostring(tree.getroot()), 'utf-8'))
+    print()
+    print('  NOTE: declaration and comments are not printed!')
+    print()
+
+
 def create_test_xml():
     # create the file structure
     print('create the XML file structure')
