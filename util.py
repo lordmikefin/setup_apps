@@ -28,6 +28,7 @@ import traceback
 
 from distutils.version import StrictVersion
 from .namedtuples import CommandRet
+from pathlib import Path
 
 PWS='powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
 
@@ -159,3 +160,19 @@ def run_command(command: str) -> CommandRet:
     #return 0
     return CommandRet(errorlevel=0, stdout=str(test, 'utf-8'))
 
+
+def home_path() -> str:
+    ''' User home path '''
+    # https://stackoverflow.com/questions/4028904/how-to-get-the-home-directory-in-python
+    # https://docs.python.org/3.7/library/pathlib.html#pathlib.Path.home
+    return str(Path.home())
+
+
+def fix_path(path: str) -> str:
+    ''' Fix the path separators '''
+    return str(Path(path))
+
+
+def mkdir(path: str):
+    ''' Create the path '''
+    Path(path).mkdir(parents=True, exist_ok=True)

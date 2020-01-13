@@ -20,10 +20,14 @@
 """
 
 import xml.etree.ElementTree as ET
+from setup_apps import util, __version__
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
 
+
+CONFIG_PATH = util.fix_path(util.home_path() + '/LM_ToyBox/setup_apps')
+CONFIG_FILE = 'setup_apps_config.xml'
 
 XML_CONFIG = 'xml_config.xml'
 XML_TEST = 'test.xml'
@@ -56,6 +60,24 @@ def indent(elem, level=0):
     else:
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
+
+
+def create_sample():
+    print('create the sample config XML file')
+    file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
+    tree = ET.ElementTree()
+    root = ET.Element('setup')
+    tree._setroot(root)
+
+    root.append(ET.Comment('Supported version of "setup_apps"'))
+
+    #root.set('version', __version__)
+    version = ET.SubElement(root, 'version')
+    version.text = __version__
+
+    indent(root)
+    util.mkdir(CONFIG_PATH)
+    tree.write(file, encoding="UTF-8", xml_declaration=True)
 
 
 def create_test_xml():
