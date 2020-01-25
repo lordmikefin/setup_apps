@@ -207,4 +207,7 @@ def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None) -> str:
 
 
 def print_progress(calculated, file_len):
+    # TODO: create console progress bar
+    # https://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console
+    # https://stackoverflow.com/questions/3160699/python-progress-bar/3162864
     return print('Progress ' + str(calculated) + ' / ' + str(file_len))
