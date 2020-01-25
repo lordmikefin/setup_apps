@@ -35,17 +35,20 @@ class Eclipse():
         self.installer_file = None
         self.installer_url = None
         self.installer_full_url = None
+        self.installer_full_url_md5 = None
 
         # TODO: set PATH_INSTALLERS from config xml
         # self.installer_path = PATH_INSTALLERS
         # _installer_file_fullname = str(installer_path) + str(installer_file)
         self.path_ok = False
         self.installer_path = None
+        self.installer_path_md5 = None
 
         self.is_downloaded = False
 
     def _insert_file_into_url(self, file: str):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
+        self.installer_full_url_md5 = self.installer_full_url + '.md5'
 
     def is_installer_file(self) -> bool:
         if self.installer_file:
@@ -118,6 +121,8 @@ class Eclipse():
         # util.download(self.installer_full_url, self.installer_path)
         util.download(self.installer_full_url, self.installer_path, show_progress=True)
         print('Download complete.')
+        print('Download Eclipse installer md5.')
+        util.download(self.installer_full_url_md5, self.installer_path_md5)
         print('Calculate md5sum')
         md5 = util.md5sum(self.installer_path, show_progress=True)
         print('md5 hash: ' + str(md5))
