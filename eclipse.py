@@ -102,6 +102,10 @@ class Eclipse():
             # TODO: log error
             print('ERROR: Can not download Eclipse installer.')
 
+        if util.is_file(self.installer_path):
+            print('Eclipse installer file exists.')
+            # TODO: verify file is complete. MD5 check ?
+
         print('Download Eclipse installer.')
         util.download(self.installer_full_url, self.installer_path)
         self.is_downloaded = True
