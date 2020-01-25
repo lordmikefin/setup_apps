@@ -70,6 +70,7 @@ class Tag():
     apps = 'apps'
     installer_file = 'installer_file'
     installer_url = 'installer_url'
+    install_path = 'install_path'
 
     eclipse = 'eclipse'
 
@@ -98,6 +99,9 @@ def create_sample():
     eclipse.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
     installer_url = ET.SubElement(eclipse, Tag.installer_url)
     installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
+    eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    install_path = ET.SubElement(eclipse, Tag.install_path)
+    install_path.text = 'C:\\Program Files\\eclipse-{version}'
 
     indent(root)
     util.mkdir(CONFIG_PATH)
@@ -133,6 +137,9 @@ def parse_apps(elem_apps: Element):
             elem_url = elem.find(Tag.installer_url)
             if not elem_url is None:
                 eclipse.installer_url = elem_url.text
+            elem_path = elem.find(Tag.install_path)
+            if not elem_path is None:
+                eclipse.install_path = elem_path.text
 
             print('version                  : ' + str(eclipse.version))
             print('installer_file           : ' + str(eclipse.installer_file))
@@ -144,6 +151,9 @@ def parse_apps(elem_apps: Element):
 
             eclipse.generate_installer_path()
             print('installer_path           : ' + str(eclipse.installer_path))
+
+            eclipse.generate_install_path()
+            print('install_path_full        : ' + str(eclipse.install_path_full))
 
             eclipse_list = list(APPS.get('eclipse', []))
             eclipse_list.append(eclipse)

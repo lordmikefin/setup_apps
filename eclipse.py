@@ -44,6 +44,10 @@ class Eclipse():
         self.installer_path = None
         self.installer_path_md5 = None
 
+        self.install_path_ok = False
+        self.install_path = None
+        self.install_path_full = None
+
         self.is_downloaded = False
 
     def _insert_file_into_url(self, file: str):
@@ -66,6 +70,25 @@ class Eclipse():
         self.installer_path = PATH_INSTALLERS + self.installer_file
         self.installer_path_md5 = self.installer_path + '.md5'
         self.path_ok = True
+
+    def generate_install_path(self):
+        if self.install_path is None:
+            # TODO: log error
+            print('ERROR: Incorrect Eclipse config: Missing tag "install_path"')
+            return
+
+        if self.version is None:
+            # TODO: log error
+            print('ERROR: Incorrect Eclipse config: Missing tag "version"')
+            return
+
+        if not '{version}' in self.install_path:
+            self.install_path_full = str(self.install_path)
+            self.install_path_ok = True
+            return
+
+        self.install_path_full = str(self.install_path).format(version=self.version)
+        self.install_path_ok = True
 
     def generate_full_url(self):
         if self.installer_url is None:
