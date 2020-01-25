@@ -115,7 +115,8 @@ class Eclipse():
                     print('download file again')
 
         print('Download Eclipse installer.')
-        util.download(self.installer_full_url, self.installer_path)
+        #util.download(self.installer_full_url, self.installer_path)
+        util.download(self.installer_full_url, self.installer_path, show_progress=True)
         print('Download complete.')
         print('Calculate md5sum')
         md5 = util.md5sum(self.installer_path, show_progress=True)

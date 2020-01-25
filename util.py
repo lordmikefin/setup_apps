@@ -37,7 +37,7 @@ from .namedtuples import CommandRet
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
 
 
-def download(url: str, dst: str):
+def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progress: bool=False):
     '''
     Download the file from `url` and save it locally under `file_name`
 
@@ -50,16 +50,29 @@ def download(url: str, dst: str):
     TODO: Test more ways.
     https://dzone.com/articles/simple-examples-of-downloading-files-using-python
     '''
-    data = requests.get(url)
-    open(dst, 'wb').write(data.content)
+    #data = requests.get(url)
+    #open(dst, 'wb').write(data.content)
+
+    with open(dst, "wb") as f:
+        response = requests.get(url, stream=True)
+        total_length = response.headers.get('content-length')
+
+        if total_length is None:
+            print('no content length header')
+            f.write(response.content)
+        else:
+            pbar = None
+            if show_progress:
+                total_length = int(total_length)
+                pbar = tqdm(total=total_length)
+            for data in response.iter_content(chunk_size=length):
+                f.write(data)
+                if pbar:
+                    pbar.update(len(data))
 
     # file_name, headers = urllib.request.urlretrieve(url, filename=dst)
     # print('file_name : ' + str(file_name))
     # print('headers   : ' + str(headers))
-
-    # command = ''
-    # res = int(os.system(command))
-    # TODO: How to show the progress?
 
 
 def pause():
