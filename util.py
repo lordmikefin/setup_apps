@@ -20,6 +20,8 @@
 """
 
 from distutils.version import StrictVersion
+import hashlib
+import io
 import os
 from pathlib import Path
 import subprocess
@@ -178,3 +180,26 @@ def fix_path(path: str) -> str:
 def mkdir(path: str):
     ''' Create the path '''
     Path(path).mkdir(parents=True, exist_ok=True)
+
+
+def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None) -> str:
+    '''
+    Calculate md5 checksum.
+
+    https://www.geeksforgeeks.org/md5-hash-python/
+    https://stackoverflow.com/questions/3431825/generating-an-md5-checksum-of-a-file
+      NOTE: "The underlying MD5 algorithm is no longer deemed secure"
+      TODO: Use SHA-2 or SHA-3 instead. For serucity.
+
+    https://stackoverflow.com/questions/1131220/get-md5-hash-of-big-files-in-python/40961519#40961519
+    '''
+    calculated = 0
+    md5 = hashlib.md5()
+    with io.open(src, mode="rb") as fd:
+        for chunk in iter(lambda: fd.read(length), b''):
+            md5.update(chunk)
+            if not callback is None:
+                calculated += len(chunk)
+                callback(calculated)
+    # return md5
+    return md5.hexdigest()
