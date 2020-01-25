@@ -27,6 +27,7 @@ from pathlib import Path
 import subprocess
 import sys
 import traceback
+from zipfile import ZipFile
 
 import requests
 from tqdm import tqdm
@@ -93,10 +94,29 @@ def is_file(file: str) -> bool:
 
 def unzip(zip_file: str, dst: str):
     print('Unzip the file')
+    print('Unzip to  ' + str(dst))
     command = 'PowerShell -Command "Expand-Archive \'' + str(zip_file) + '\' \'' + str(dst) + '\'"'
     res = int(os.system(command))
     # TODO: How to handle possible errors?
 
+
+def unzip_py(zip_file: str, dst: str):
+    '''
+    Unzip pythonic way.
+
+    https://docs.python.org/3.7/library/zipfile.html
+    https://stackoverflow.com/questions/3451111/unzipping-files-in-python
+    https://thispointer.com/python-how-to-unzip-a-file-extract-single-multiple-or-all-files-from-a-zip-archive/
+    https://stackoverflow.com/questions/4341584/extract-zipfile-using-python-display-progress-percentage
+    '''
+    print('Unzip the file. Pythonic way.')
+    print('Unzip to  ' + str(dst))
+    # ZipFile
+    with ZipFile(zip_file, 'r') as zip_obj:
+        # Get a list of all archived file names from the zip
+        lists = zip_obj.namelist()
+        # Extract all the contents of zip file in different directory
+        zip_obj.extractall(dst)
 
 def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
     '''

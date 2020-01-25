@@ -189,7 +189,8 @@ class Eclipse():
         print('')
 
         # NOTE: This is "offline installer" ;)
-        util.unzip(str(self.installer_path), str(self.install_path_full))
+        #util.unzip(str(self.installer_path), str(self.install_path_full))
+        util.unzip_py(str(self.installer_path), str(self.install_path_full))
 
         if not self.is_installed():
             print('Eclipse is NOT installed!')
