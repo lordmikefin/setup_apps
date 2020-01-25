@@ -220,3 +220,25 @@ def print_progress(calculated, file_len):
     # https://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console
     # https://stackoverflow.com/questions/3160699/python-progress-bar/3162864
     return print('Progress ' + str(calculated) + ' / ' + str(file_len))
+
+
+def is_md5_in_file(file: str, md5: str) -> bool:
+    '''
+    Match file md5 sum to the md5sum file.
+
+    TODO: Get md5sum file from the download site.
+    TODO: If not available then generate it.
+          It should be stored with code base
+          or common loacation (separate github project).
+    '''
+    f = open(file, "r")
+    first_line = str(f.readline())
+    # print(first_line)
+    f.close()
+    test = first_line.split(sep=' ', maxsplit=1)
+    md5_from_file = test[0]
+    # print(md5_from_file)
+
+    if md5 == md5_from_file:
+        return True
+    return False
