@@ -193,6 +193,7 @@ def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None) -> str:
 
     https://stackoverflow.com/questions/1131220/get-md5-hash-of-big-files-in-python/40961519#40961519
     '''
+    file_len = Path(src).stat().st_size
     calculated = 0
     md5 = hashlib.md5()
     with io.open(src, mode="rb") as fd:
@@ -200,6 +201,10 @@ def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None) -> str:
             md5.update(chunk)
             if not callback is None:
                 calculated += len(chunk)
-                callback(calculated)
+                callback(calculated, file_len)
     # return md5
     return md5.hexdigest()
+
+
+def print_progress(calculated, file_len):
+    return print('Progress ' + str(calculated) + ' / ' + str(file_len))
