@@ -19,11 +19,11 @@
     :license: MIT License
 """
 
-from . import PATH_APP_ECLIPSE, PATH_INSTALLERS, PATH_APP_PYDEV
-from . import util
-
 import os
 import sys
+
+from . import PATH_APP_ECLIPSE, PATH_INSTALLERS, PATH_APP_PYDEV
+from . import util
 
 
 class Eclipse():
@@ -37,17 +37,15 @@ class Eclipse():
         self.installer_full_url = None
 
         # TODO: set PATH_INSTALLERS from config xml
-        #self.installer_path = PATH_INSTALLERS
-        #_installer_file_fullname = str(installer_path) + str(installer_file)
+        # self.installer_path = PATH_INSTALLERS
+        # _installer_file_fullname = str(installer_path) + str(installer_file)
         self.path_ok = False
         self.installer_path = None
 
         self.is_downloaded = False
 
-
     def _insert_file_into_url(self, file: str):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
-
 
     def is_installer_file(self) -> bool:
         if self.installer_file:
@@ -57,16 +55,14 @@ class Eclipse():
         print('ERROR: Incorrect Eclipse config: Missing tag "installer_file"')
         return False
 
-
     def generate_installer_path(self):
         if not self.is_installer_file():
             return
 
-        #file = str(self.installer_file).format(version=self.version)
+        # file = str(self.installer_file).format(version=self.version)
         self.installer_path = PATH_INSTALLERS + self.installer_file
         self.installer_path_md5 = self.installer_path + '.md5'
         self.path_ok = True
-
 
     def generate_full_url(self):
         if self.installer_url is None:
@@ -97,7 +93,6 @@ class Eclipse():
         self.url_ok = True
         return
 
-
     def download(self):
         if not (self.url_ok and self.path_ok):
             # TODO: log error
@@ -107,14 +102,14 @@ class Eclipse():
             print('Eclipse installer file exists.')
             print('Calculate md5sum')
             md5 = util.md5sum(self.installer_path, show_progress=True)
-            #md5 = util.md5sum(self.installer_path, callback=util.print_progress)
-            #md5 = util.md5sum(self.installer_path)
+            # md5 = util.md5sum(self.installer_path, callback=util.print_progress)
+            # md5 = util.md5sum(self.installer_path)
             print('md5 hash: ' + str(md5))
             if util.is_file(self.installer_path_md5):
                 print('md5 file exists')
                 if util.is_md5_in_file(self.installer_path_md5, md5):
                     print('md5 is in file')
-                    return # file is downloaded
+                    return  # file is downloaded
                 else:
                     print('md5 does not match')
                     print('download file again')
@@ -134,7 +129,7 @@ class Eclipse():
                 print('md5 does not match')
                 print('download failed !  TODO: interrupt the process?')
                 self.is_downloaded = False
-        #self.is_downloaded = True
+        # self.is_downloaded = True
 
 
 _installer_file_fullname = ''
@@ -151,14 +146,14 @@ def is_installed():
 
     # For now just check if exec file exists.
     # D:\apps\eclipse\pydev\2019-09\eclipse
-    #return util.is_file(str(PATH_APP_PYDEV) + '\\2019-09\\eclipse\\eclipse.exe')
-    #return util.is_file(str(PATH_APP_PYDEV) + '\\eclipse\\eclipse.exe')
+    # return util.is_file(str(PATH_APP_PYDEV) + '\\2019-09\\eclipse\\eclipse.exe')
+    # return util.is_file(str(PATH_APP_PYDEV) + '\\eclipse\\eclipse.exe')
     return util.is_file(_exe_file)
 
 
 def is_download():
     # Check if we already have the installer
-    #print(str(_installer_file_fullname))
+    # print(str(_installer_file_fullname))
     return util.is_file(_installer_file_fullname)
 
 
@@ -178,8 +173,8 @@ def download():
     print('Download Eclipse installer.')
     
     if _file_name:
-        #url = 'https://www.eclipse.org/downloads/download.php?file=/oomph/epp/2019-09/R/' + str(_file_name) + '&mirror_id=1099'
-        #url = 'https://www.eclipse.org/downloads/download.php?file=/oomph/epp/2019-09/R/' + str(_file_name)
+        # url = 'https://www.eclipse.org/downloads/download.php?file=/oomph/epp/2019-09/R/' + str(_file_name) + '&mirror_id=1099'
+        # url = 'https://www.eclipse.org/downloads/download.php?file=/oomph/epp/2019-09/R/' + str(_file_name)
         url = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/' + str(_file_name)
         # Download the file from `url` and save it locally under `file_name`
         util.download(url, _installer_file_fullname)
@@ -200,7 +195,7 @@ def define_file():
     global _file_name
     global _exe_file
 
-    #installer_file = "eclipse-inst-win64.exe"
+    # installer_file = "eclipse-inst-win64.exe"
     installer_file = "eclipse-javascript-2019-09-R-win32-x86_64.zip"
     _file_name = installer_file
 
@@ -229,15 +224,15 @@ def install():
     # eclipse-inst-win64.exe -vm c:\apps\jdk8 configuration.setup -vmargs -Doomph.setup.install.root=C:\directory
     # EclipseCurrentConfiguration.setup
 
-    #command = str(str(_installer_file_fullname))
-    #command = str(str(_installer_file_fullname) + ' -vmargs -Doomph.setup.install.root=' + str(PATH_APP_PYDEV))
-    #command = str(str(_installer_file_fullname) + ' -vm "C:\Program Files\Java\jre1.8.0_221" EclipsePyDevConfiguration.setup -vmargs -Doomph.setup.install.root=' + str(PATH_APP_PYDEV))
+    # command = str(str(_installer_file_fullname))
+    # command = str(str(_installer_file_fullname) + ' -vmargs -Doomph.setup.install.root=' + str(PATH_APP_PYDEV))
+    # command = str(str(_installer_file_fullname) + ' -vm "C:\Program Files\Java\jre1.8.0_221" EclipsePyDevConfiguration.setup -vmargs -Doomph.setup.install.root=' + str(PATH_APP_PYDEV))
     print('Start Eclipse installer.')
-    #print(command)
+    # print(command)
     print('')
     print(' Installing ... wait ... wait ... ')
     print('')
-    #res = int(os.system(command))
+    # res = int(os.system(command))
     # TODO: How to halt command line until installation is completed?
 
     # NOTE: This is "offline installer" ;)
@@ -253,7 +248,7 @@ def install():
     dst_link_file = os.environ.get('USERPROFILE') + '\\Desktop\\Eclipse pydev.lnk'
     util.shortcut(exe_file=_exe_file, dst_link_file=dst_link_file, ico='')
     
-    return True # TODO: return error?
+    return True  # TODO: return error?
 
     '''
     print('Eclipse installer will not halt command line :(')
