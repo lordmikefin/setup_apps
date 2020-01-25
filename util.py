@@ -100,7 +100,7 @@ def unzip(zip_file: str, dst: str):
     # TODO: How to handle possible errors?
 
 
-def unzip_py(zip_file: str, dst: str):
+def unzip_py(zip_file: str, dst: str, show_progress: bool=False):
     '''
     Unzip pythonic way.
 
@@ -113,10 +113,14 @@ def unzip_py(zip_file: str, dst: str):
     print('Unzip to  ' + str(dst))
     # ZipFile
     with ZipFile(zip_file, 'r') as zip_obj:
-        # Get a list of all archived file names from the zip
-        lists = zip_obj.namelist()
-        # Extract all the contents of zip file in different directory
-        zip_obj.extractall(dst)
+        if not show_progress:
+            # Extract all the contents of zip file in different directory
+            zip_obj.extractall(dst)
+        else:
+            # Show progress during unzip
+            for member in tqdm(zip_obj.infolist(), desc='Extracting '):
+                zip_obj.extract(member, dst)
+
 
 def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
     '''
