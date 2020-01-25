@@ -47,6 +47,7 @@ class Eclipse():
         self.install_path_ok = False
         self.install_path = None
         self.install_path_full = None
+        self.exe_file = None
 
         self.is_downloaded = False
 
@@ -88,6 +89,7 @@ class Eclipse():
             return
 
         self.install_path_full = str(self.install_path).format(version=self.version)
+        self.exe_file = self.install_path_full + '\\eclipse\\eclipse.exe'
         self.install_path_ok = True
 
     def generate_full_url(self):
@@ -135,6 +137,7 @@ class Eclipse():
                 print('md5 file exists')
                 if util.is_md5_in_file(self.installer_path_md5, md5):
                     print('md5 is in file')
+                    self.is_downloaded = True
                     return  # file is downloaded
                 else:
                     print('md5 does not match')
@@ -159,6 +162,53 @@ class Eclipse():
                 print('download failed !  TODO: interrupt the process?')
                 self.is_downloaded = False
         # self.is_downloaded = True
+
+    def is_installed(self):
+        # TODO: how to check Eclipse version?
+        # For now just check if exec file exists.
+        return util.is_file(self.exe_file)
+
+    def install(self):
+        if not self.is_downloaded:
+            # TODO: log error
+            print('ERROR: Eclipse installer not downloaded.')
+
+        if not self.install_path_ok:
+            # TODO: log error
+            print('ERROR: Installation path not defined.')
+
+        if self.is_installed():
+            print('Eclipse is already installed')
+            self.create_link()
+            return
+
+        print('Start Eclipse installer.')
+
+        print('')
+        print(' Installing ... wait ... wait ... ')
+        print('')
+
+        # NOTE: This is "offline installer" ;)
+        util.unzip(str(self.installer_path), str(self.install_path_full))
+
+        if not self.is_installed():
+            print('Eclipse is NOT installed!')
+            return
+
+        print('Eclipse is installed')
+        print('Eclipse exe: ' + str(self.exe_file))
+
+        # TODO: Change the default workspace folder (eclipse.ini)
+        # -Dosgi.instance.area.default=@user.home/eclipse-workspace
+
+        # NOTE: Shortcut is not created, because installer is not used.
+        # TODO: Create shortcut for eclipse into Start Menu
+        self.create_link()
+
+    def create_link(self):
+        # Create link into Desktop.
+        dst_link_file = os.environ.get('USERPROFILE') + '\\Desktop\\Eclipse - ' + self.version + '.lnk'
+        util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='')
 
 
 _installer_file_fullname = ''

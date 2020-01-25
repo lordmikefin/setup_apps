@@ -171,6 +171,13 @@ def download():
         eclipse.download()
 
 
+def install():
+    """ install all app """
+    eclipse_list = list(APPS.get('eclipse', []))
+    for eclipse in eclipse_list:
+        eclipse.install()
+
+
 def print_sample():
     print('print the sample config XML file')
     print()
