@@ -29,6 +29,7 @@ import sys
 import traceback
 
 import requests
+from tqdm import tqdm
 
 from .namedtuples import CommandRet
 
@@ -182,7 +183,7 @@ def mkdir(path: str):
     Path(path).mkdir(parents=True, exist_ok=True)
 
 
-def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None) -> str:
+def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None, show_progress: bool=False) -> str:
     '''
     Calculate md5 checksum.
 
@@ -194,6 +195,9 @@ def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None) -> str:
     https://stackoverflow.com/questions/1131220/get-md5-hash-of-big-files-in-python/40961519#40961519
     '''
     file_len = Path(src).stat().st_size
+    pbar = None
+    if show_progress:
+        pbar = tqdm(total=file_len)
     calculated = 0
     md5 = hashlib.md5()
     with io.open(src, mode="rb") as fd:
@@ -202,6 +206,11 @@ def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None) -> str:
             if not callback is None:
                 calculated += len(chunk)
                 callback(calculated, file_len)
+            elif pbar:
+                pbar.update(len(chunk))
+
+    if pbar:
+        pbar.close()
     # return md5
     return md5.hexdigest()
 

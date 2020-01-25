@@ -104,8 +104,9 @@ class Eclipse():
 
         if util.is_file(self.installer_path):
             print('Eclipse installer file exists.')
-            # TODO: verify file is complete. MD5 check ?
-            md5 = util.md5sum(self.installer_path, callback=util.print_progress)
+            print('Calculate md5sum')
+            md5 = util.md5sum(self.installer_path, show_progress=True)
+            #md5 = util.md5sum(self.installer_path, callback=util.print_progress)
             #md5 = util.md5sum(self.installer_path)
             print('md5 hash: ' + str(md5))
             return # download only if needed
@@ -113,9 +114,8 @@ class Eclipse():
         print('Download Eclipse installer.')
         util.download(self.installer_full_url, self.installer_path)
         print('Download complete.')
-        # TODO: store md5 sum
-        #md5 = util.md5sum(self.installer_path, callback=util.print_progress)
-        md5 = util.md5sum(self.installer_path)
+        print('Calculate md5sum')
+        md5 = util.md5sum(self.installer_path, show_progress=True)
         print('md5 hash: ' + str(md5))
         self.is_downloaded = True
 
