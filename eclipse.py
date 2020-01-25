@@ -64,6 +64,7 @@ class Eclipse():
 
         #file = str(self.installer_file).format(version=self.version)
         self.installer_path = PATH_INSTALLERS + self.installer_file
+        self.installer_path_md5 = self.installer_path + '.md5'
         self.path_ok = True
 
 
@@ -109,7 +110,14 @@ class Eclipse():
             #md5 = util.md5sum(self.installer_path, callback=util.print_progress)
             #md5 = util.md5sum(self.installer_path)
             print('md5 hash: ' + str(md5))
-            return # download only if needed
+            if util.is_file(self.installer_path_md5):
+                print('md5 file exists')
+                if util.is_md5_in_file(self.installer_path_md5, md5):
+                    print('md5 is in file')
+                    return # file is downloaded
+                else:
+                    print('md5 does not match')
+                    print('download file again')
 
         print('Download Eclipse installer.')
         util.download(self.installer_full_url, self.installer_path)
@@ -117,7 +125,16 @@ class Eclipse():
         print('Calculate md5sum')
         md5 = util.md5sum(self.installer_path, show_progress=True)
         print('md5 hash: ' + str(md5))
-        self.is_downloaded = True
+        if util.is_file(self.installer_path_md5):
+            print('md5 file exists')
+            if util.is_md5_in_file(self.installer_path_md5, md5):
+                print('md5 is in file')
+                self.is_downloaded = True
+            else:
+                print('md5 does not match')
+                print('download failed !  TODO: interrupt the process?')
+                self.is_downloaded = False
+        #self.is_downloaded = True
 
 
 _installer_file_fullname = ''
