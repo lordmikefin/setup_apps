@@ -50,8 +50,8 @@ def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progre
     TODO: Test more ways.
     https://dzone.com/articles/simple-examples-of-downloading-files-using-python
     '''
-    #data = requests.get(url)
-    #open(dst, 'wb').write(data.content)
+    # data = requests.get(url)
+    # open(dst, 'wb').write(data.content)
 
     with open(dst, "wb") as f:
         response = requests.get(url, stream=True)
