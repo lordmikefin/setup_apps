@@ -37,6 +37,12 @@ from .namedtuples import CommandRet
 # import urllib.request
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
 
+OS_WINDOWS = 'win32'
+
+
+def is_os_windows() -> bool:
+    return sys.platform == OS_WINDOWS
+
 
 def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progress: bool=False):
     '''
@@ -82,6 +88,8 @@ def pause():
 
     https://stackoverflow.com/questions/11552320/correct-way-to-pause-python-program
     '''
+    if not is_os_windows():
+        raise OSError('util.pause() Works only with Windows')
     os.system("pause")
 
 
@@ -93,6 +101,8 @@ def is_file(file: str) -> bool:
 
 
 def unzip(zip_file: str, dst: str):
+    if not is_os_windows():
+        raise OSError('util.unzip() Works only with Windows')
     print('Unzip the file')
     print('Unzip to  ' + str(dst))
     command = 'PowerShell -Command "Expand-Archive \'' + str(zip_file) + '\' \'' + str(dst) + '\'"'
@@ -130,6 +140,9 @@ def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
     https://superuser.com/questions/392061/how-to-make-a-shortcut-from-cmd/392066
     https://stackoverflow.com/questions/346107/creating-a-shortcut-for-a-exe-from-a-batch-file
     '''
+    if not is_os_windows():
+        # TODO: create custom exception
+        raise OSError('util.shortcut() Works only with Windows')
     print('Creating the shortcut file')
     command = '$ws = New-Object -ComObject WScript.Shell; '
     command += '$s = $ws.CreateShortcut(\'' + dst_link_file + '\'); '
