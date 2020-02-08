@@ -52,6 +52,8 @@ class Eclipse():
 
         self.is_downloaded = False
 
+        self.config = None
+
     def _insert_file_into_url(self, file: str):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
         self.installer_full_url_md5 = self.installer_full_url + '.md5'
@@ -221,6 +223,12 @@ class Eclipse():
         util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='')
 
     def configure(self):
+        print('Configure')
+        if self.config:
+            print('self.config' + str(self.config))
+            #self.config = None
+
+    def configure_hc(self):
         #self.config_eclipse_ini
         print('Configure eclipse.ini')
         found_line = -1

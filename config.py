@@ -76,6 +76,8 @@ class Tag():
     file = 'file'
     name = 'name'
     type = 'type'
+    key_values = 'key_values'
+    key_value = 'key_value'
     key = 'key'
     value = 'value'
 
@@ -117,9 +119,11 @@ def create_sample():
     name.text = '\eclipse.ini'
     file_type = ET.SubElement(configure_file, Tag.type)
     file_type.text = 'ini'
-    key = ET.SubElement(configure_file, Tag.key)
+    key_values = ET.SubElement(configure_file, Tag.key_values)
+    key_value = ET.SubElement(key_values, Tag.key_value)
+    key = ET.SubElement(key_value, Tag.key)
     key.text = '-Dosgi.instance.area.default'
-    value = ET.SubElement(configure_file, Tag.value)
+    value = ET.SubElement(key_value, Tag.value)
     value.text = '@user.home/eclipse-workspace-2019-09'
 
     indent(root)
@@ -173,6 +177,40 @@ def parse_apps(elem_apps: Element):
 
             eclipse.generate_install_path()
             print('install_path_full        : ' + str(eclipse.install_path_full))
+
+            configure = elem.find(Tag.configure)
+            if not configure is None:
+                conf_file_list = []
+                eclipse.config = conf_file_list
+                #eclipse.install_path = elem_path.text
+                print('Has configure')
+                for c_elem in configure:
+                    if c_elem.tag == Tag.file:
+                        file = {}
+                        conf_file_list.append(file)
+                        print('Found file')
+                        name = c_elem.find(Tag.name)
+                        file['name'] = name.text
+                        print('name: ' + str(name.text))
+                        file_type = c_elem.find(Tag.type)
+                        file['type'] = file_type.text
+                        print('type: ' + str(file_type.text))
+                        key_values = c_elem.find(Tag.key_values)
+                        key_vals = []
+                        file['confs'] = key_vals
+                        for kvs in key_values:
+                            if kvs.tag == Tag.key_value:
+                                key_val = {}
+                                key_vals.append(key_val)
+                                #key_value = c_elem.find(Tag.key_value)
+                                key = kvs.find(Tag.key)
+                                key_val['key'] = key.text
+                                value = kvs.find(Tag.value)
+                                key_val['value'] = value.text
+                                print('key: ' + str(key.text) + ' value: ' + str(value.text))
+
+                    #file = c_elem.find(Tag.file)
+                    #print('file: ' + str(file))
 
             eclipse_list = list(APPS.get('eclipse', []))
             eclipse_list.append(eclipse)
