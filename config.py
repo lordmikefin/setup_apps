@@ -240,6 +240,7 @@ def configure():
     eclipse_list = list(APPS.get('eclipse', []))
     for eclipse in eclipse_list:
         eclipse.configure()
+        #eclipse.configure_hc()
 
 
 def print_sample():

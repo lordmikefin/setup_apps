@@ -236,18 +236,24 @@ class Eclipse():
                     key = conf.get('key')
                     value = conf.get('value')
                     print('key: ' + str(key) + ' value: ' + str(value))
+                    self.config_apply(self.install_path_full + name, key, value)
 
     def configure_hc(self):
         #self.config_eclipse_ini
-        print('Configure eclipse.ini')
-        found_line = -1
-        line_idx = -1
+        print('Configure hard coded test')
         key = '-Dosgi.instance.area.default'
         new_value = '@user.home/eclipse-workspace-2019-09'
-        new_key_value = key + '=' + new_value + '\n'
+        #self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
+        self.config_apply(self.config_eclipse_ini, key, new_value)
+
+    def config_apply(self, file: str, key: str, value: str):
+        print('Configure ' + str(file))
+        new_key_value = key + '=' + value + '\n'
         has_key_value = False
+        found_line = -1
+        line_idx = -1
         lines = []
-        with open(self.config_eclipse_ini, "r") as f:
+        with open(file, "r") as f:
             for line in f: 
                 lines.append(line)
                 line_idx += 1
@@ -276,7 +282,7 @@ class Eclipse():
             print('Append line at the end')
             lines.append(new_key_value)
         #print('lines: ' + str(lines))
-        with open(self.config_eclipse_ini, 'w') as f:
+        with open(file, 'w') as f:
             f.writelines(lines)
 
     def configure_test(self):
