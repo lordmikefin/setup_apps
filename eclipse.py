@@ -48,6 +48,7 @@ class Eclipse():
         self.install_path = None
         self.install_path_full = None
         self.exe_file = None
+        self.config_eclipse_ini = None
 
         self.is_downloaded = False
 
@@ -91,6 +92,7 @@ class Eclipse():
         self.install_path_full = str(self.install_path).format(version=self.version)
         self.unzipped = self.install_path_full + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
         self.exe_file = self.install_path_full + '\\eclipse.exe'
+        self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
         self.install_path_ok = True
 
     def generate_full_url(self):
@@ -217,6 +219,34 @@ class Eclipse():
         # Create link into Desktop.
         dst_link_file = os.environ.get('USERPROFILE') + '\\Desktop\\Eclipse - ' + self.version + '.lnk'
         util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='')
+
+    def configure(self):
+        #self.config_eclipse_ini
+        print('Configure eclipse.ini')
+        eclipse_ini = ''
+        with open(self.config_eclipse_ini, "r") as f:
+            eclipse_ini = f.read()
+            # print(eclipse_ini)
+        # -Dosgi.instance.area.default=@user.home/eclipse-workspace
+        key = '-Dosgi.instance.area.default'
+        key_idx = eclipse_ini.find(key)
+        print('key_idx: ' + str(key_idx))
+        ini_tmp = eclipse_ini[key_idx:]
+        next_line_idx = ini_tmp.find('\n')
+        old_key_value = ini_tmp[:next_line_idx]
+        new_value = '@user.home/eclipse-workspace-2019-09'
+        new_key_value = key + '=' + new_value 
+        write_lines = True
+        if old_key_value == new_key_value:
+            print('value already set')
+            write_lines = False
+
+        if write_lines:
+            new_data = '#' + old_key_value + '\n' + new_key_value
+            new_eclipse_ini = eclipse_ini.replace(old_key_value, new_data, 1)
+            print(new_eclipse_ini)
+            with open(self.config_eclipse_ini, 'w') as f:
+                f.write(new_eclipse_ini) 
 
 
 _installer_file_fullname = ''
