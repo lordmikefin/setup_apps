@@ -72,6 +72,13 @@ class Tag():
     installer_url = 'installer_url'
     install_path = 'install_path'
 
+    configure = 'configure'
+    file = 'file'
+    name = 'name'
+    type = 'type'
+    key = 'key'
+    value = 'value'
+
     eclipse = 'eclipse'
 
 
@@ -102,6 +109,18 @@ def create_sample():
     eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     install_path = ET.SubElement(eclipse, Tag.install_path)
     install_path.text = 'C:\\Program Files\\eclipse-{version}'
+
+    configure = ET.SubElement(eclipse, Tag.configure)
+    configure.append(ET.Comment(' "file" is realative path of "install_path" '))
+    configure_file = ET.SubElement(configure, Tag.file)
+    name = ET.SubElement(configure_file, Tag.name)
+    name.text = '\eclipse.ini'
+    file_type = ET.SubElement(configure_file, Tag.type)
+    file_type.text = 'ini'
+    key = ET.SubElement(configure_file, Tag.key)
+    key.text = '-Dosgi.instance.area.default'
+    value = ET.SubElement(configure_file, Tag.value)
+    value.text = '@user.home/eclipse-workspace-2019-09'
 
     indent(root)
     util.mkdir(CONFIG_PATH)
@@ -176,6 +195,13 @@ def install():
     eclipse_list = list(APPS.get('eclipse', []))
     for eclipse in eclipse_list:
         eclipse.install()
+
+
+def configure():
+    """ configure all app """
+    eclipse_list = list(APPS.get('eclipse', []))
+    for eclipse in eclipse_list:
+        eclipse.configure()
 
 
 def print_sample():
