@@ -227,6 +227,15 @@ class Eclipse():
         if self.config:
             print('self.config' + str(self.config))
             #self.config = None
+            for file in self.config:
+                name = file.get('name')
+                f_type = file.get('type')
+                print('name: ' + str(name) + ' type: ' + str(f_type))
+                confs = file.get('confs', [])
+                for conf in confs:
+                    key = conf.get('key')
+                    value = conf.get('value')
+                    print('key: ' + str(key) + ' value: ' + str(value))
 
     def configure_hc(self):
         #self.config_eclipse_ini
