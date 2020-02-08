@@ -308,3 +308,6 @@ def move_win(src: str, dst: str):
     command = 'move "' + str(src) + '" "' + str(dst) + '"'
     print(command)
     res = int(os.system(command))
+
+def startswith_comment(line: str):
+    return line.startswith('#') or line.startswith(';')
