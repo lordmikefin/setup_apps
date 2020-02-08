@@ -305,9 +305,14 @@ def move_win(src: str, dst: str):
         # TODO: create custom exception
         raise OSError('util.move_win() Works only with Windows')
 
-    command = 'move "' + str(src) + '" "' + str(dst) + '"'
+    #command = 'move "' + str(src) + '" "' + str(dst) + '"'
+    command = 'xcopy /E /Q /H "' + str(src) + '" "' + str(dst) + '"'
+    # /E           Copies directories and subdirectories, including empty ones.
+    # /H           Copies hidden and system files also.
+    # /Q           Does not display file names while copying.
     print(command)
     res = int(os.system(command))
 
 def startswith_comment(line: str):
+    ''' Is line a comment line of INI file. '''
     return line.startswith('#') or line.startswith(';')
