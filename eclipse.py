@@ -89,7 +89,8 @@ class Eclipse():
             return
 
         self.install_path_full = str(self.install_path).format(version=self.version)
-        self.exe_file = self.install_path_full + '\\eclipse\\eclipse.exe'
+        self.unzipped = self.install_path_full + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
+        self.exe_file = self.install_path_full + '\\eclipse.exe'
         self.install_path_ok = True
 
     def generate_full_url(self):
@@ -191,6 +192,12 @@ class Eclipse():
         # NOTE: This is "offline installer" ;)
         #util.unzip(str(self.installer_path), str(self.install_path_full))
         util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
+
+        # NOTE: Eclipse is unzipped into subfolder /eclipse/ because zip file contains subfolder /eclipse/
+        # TODO: Why python shutil.move() is throwing an error? How it should be used to mimic Win copy?
+        #util.move(str(self.unzipped), str(self.install_path_full))  # shutil.Error: Destination path 'C:\Program Files\eclipse-2019-09\eclipse' already exists
+        #util.move(str(self.unzipped) + '\\', str(self.install_path_full) + '\\') 
+        util.move_win(str(self.unzipped) + '\\*', str(self.install_path_full) + '\\')
 
         if not self.is_installed():
             print('Eclipse is NOT installed!')
