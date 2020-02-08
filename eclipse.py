@@ -223,7 +223,47 @@ class Eclipse():
     def configure(self):
         #self.config_eclipse_ini
         print('Configure eclipse.ini')
-        eclipse_ini = ''
+        found_line = -1
+        line_idx = -1
+        key = '-Dosgi.instance.area.default'
+        new_value = '@user.home/eclipse-workspace-2019-09'
+        new_key_value = key + '=' + new_value + '\n'
+        has_key_value = False
+        lines = []
+        with open(self.config_eclipse_ini, "r") as f:
+            for line in f: 
+                lines.append(line)
+                line_idx += 1
+                line_txt = line.lstrip()
+                if util.startswith_comment(line_txt):
+                    continue  # skip comment line
+
+                has_key = line_txt.startswith(key)
+                if has_key:
+                    if line_txt == new_key_value:
+                        print('value already set')
+                        has_key_value = True
+                        break  # do not set again
+                    else:
+                        found_line = line_idx
+
+        if has_key_value:
+            return  # do not set again
+
+        if found_line > -1:
+            print('Append line after: ' + str(found_line))
+            #print('lines: ' + str(lines))
+            lines.insert(found_line+1, new_key_value)
+            lines[found_line] = '#' + lines[found_line]
+        else:
+            print('Append line at the end')
+            lines.append(new_key_value)
+        #print('lines: ' + str(lines))
+        with open(self.config_eclipse_ini, 'w') as f:
+            f.writelines(lines)
+
+    def configure_test(self):
+        # NOTE: this will repet the line for each run
         with open(self.config_eclipse_ini, "r") as f:
             eclipse_ini = f.read()
             # print(eclipse_ini)
