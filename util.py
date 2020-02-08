@@ -33,6 +33,7 @@ import requests
 from tqdm import tqdm
 
 from .namedtuples import CommandRet
+import shutil
 
 # import urllib.request
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
@@ -292,3 +293,18 @@ def is_md5_in_file(file: str, md5: str) -> bool:
     if md5 == md5_from_file:
         return True
     return False
+
+
+def move(src: str, dst: str):
+    # https://docs.python.org/3.8/library/shutil.html#shutil.move
+    shutil.move(src, dst)
+
+
+def move_win(src: str, dst: str):
+    if not is_os_windows():
+        # TODO: create custom exception
+        raise OSError('util.move_win() Works only with Windows')
+
+    command = 'move "' + str(src) + '" "' + str(dst) + '"'
+    print(command)
+    res = int(os.system(command))
