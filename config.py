@@ -147,19 +147,22 @@ def append_plugins(eclipse: Element):
     plugins = ET.SubElement(eclipse, Tag.plugins)
     plugin = ET.SubElement(plugins, Tag.plugin)
     plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
-    '''
-    version = ET.SubElement(eclipse, Tag.version)
-    version.text = '2019-09'
-    eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    installer_file = ET.SubElement(eclipse, Tag.installer_file)
-    installer_file.text = 'eclipse-javascript-{version}-R-win32-x86_64.zip'
-    eclipse.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
-    installer_url = ET.SubElement(eclipse, Tag.installer_url)
-    installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
-    eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    install_path = ET.SubElement(eclipse, Tag.install_path)
-    install_path.text = 'C:\\Program Files\\eclipse-{version}'
-    '''
+    version = ET.SubElement(plugin_pydev, Tag.version)
+    version.text = '7.4.0'
+    plugin_pydev.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    installer_file = ET.SubElement(plugin_pydev, Tag.installer_file)
+    #installer_file.text = 'PyDev%20{version}.zip'
+    installer_file.text = 'PyDev {version}.zip'
+    plugin_pydev.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
+    installer_url = ET.SubElement(plugin_pydev, Tag.installer_url)
+    installer_url.text = 'https://sourceforge.net/projects/pydev/files/pydev/PyDev%20{version}/{installer_file}/download'
+    plugin_pydev.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    #install_path = ET.SubElement(plugin_pydev, Tag.install_path)
+    # TODO: get this path from eclipse
+    #install_path.text = 'C:\\Program Files\\eclipse-{version}'
+    #install_path.text = '\\eclipse-{version}'
+    # TODO: Jar file location is needed for "is_instelled" check
+    #_jar_file = _eclipse_path + '\\plugins\\org.python.pydev_7.4.0.201910251334\\pydev.jar'
 
 
 def parse():
