@@ -67,7 +67,10 @@ def indent(elem, level=0):
 class Tag():
     setup = 'setup'
     version = 'version'
+
     apps = 'apps'
+    eclipse = 'eclipse'
+
     installer_file = 'installer_file'
     installer_url = 'installer_url'
     install_path = 'install_path'
@@ -81,7 +84,9 @@ class Tag():
     key = 'key'
     value = 'value'
 
-    eclipse = 'eclipse'
+    plugins = 'plugins'
+    plugin = 'plugin'
+    plugin_pydev = 'plugin_pydev'
 
 
 def create_sample():
@@ -119,6 +124,7 @@ def append_eclipse(apps: Element):
     install_path = ET.SubElement(eclipse, Tag.install_path)
     install_path.text = 'C:\\Program Files\\eclipse-{version}'
     append_configure(eclipse)
+    append_plugins(eclipse)
 
 
 def append_configure(eclipse: Element):
@@ -135,6 +141,25 @@ def append_configure(eclipse: Element):
     key.text = '-Dosgi.instance.area.default'
     value = ET.SubElement(key_value, Tag.value)
     value.text = '@user.home/eclipse-workspace-2019-09'
+
+
+def append_plugins(eclipse: Element):
+    plugins = ET.SubElement(eclipse, Tag.plugins)
+    plugin = ET.SubElement(plugins, Tag.plugin)
+    plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
+    '''
+    version = ET.SubElement(eclipse, Tag.version)
+    version.text = '2019-09'
+    eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    installer_file = ET.SubElement(eclipse, Tag.installer_file)
+    installer_file.text = 'eclipse-javascript-{version}-R-win32-x86_64.zip'
+    eclipse.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
+    installer_url = ET.SubElement(eclipse, Tag.installer_url)
+    installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
+    eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    install_path = ET.SubElement(eclipse, Tag.install_path)
+    install_path.text = 'C:\\Program Files\\eclipse-{version}'
+    '''
 
 
 def parse():
