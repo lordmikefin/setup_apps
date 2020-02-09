@@ -146,8 +146,6 @@ def parse():
 
 
 def parse_apps(elem_apps: Element):
-    global APPS
-
     # TODO: is there better way to fix auto complete within the for loop ?
     if False:  # for Eclipse auto complete only :)
         elem = Element()
@@ -209,18 +207,22 @@ def parse_eclipse(elem: Element):
                 file['confs'] = key_vals
                 for kvs in key_values:
                     if kvs.tag == Tag.key_value:
-                        key_val = {}
+                        key_val = parse_key_value(kvs)
                         key_vals.append(key_val)
-                        #key_value = c_elem.find(Tag.key_value)
-                        key = kvs.find(Tag.key)
-                        key_val['key'] = key.text
-                        value = kvs.find(Tag.value)
-                        key_val['value'] = value.text
-                        print('key: ' + str(key.text) + ' value: ' + str(value.text))
 
     eclipse_list = list(APPS.get('eclipse', []))
     eclipse_list.append(eclipse)
     APPS['eclipse'] = eclipse_list
+
+
+def parse_key_value(kvs: Element):
+    key_val = {}
+    key = kvs.find(Tag.key)
+    key_val['key'] = key.text
+    value = kvs.find(Tag.value)
+    key_val['value'] = value.text
+    print('key: ' + str(key.text) + ' value: ' + str(value.text))
+    return key_val
 
 
 # TODO: should this be a class ?
