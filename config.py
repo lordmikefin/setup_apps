@@ -153,76 +153,81 @@ def parse_apps(elem_apps: Element):
         elem = Element()
     for elem in elem_apps:
         if elem.tag == Tag.eclipse:
-            eclipse = Eclipse()
-            elem_version = elem.find(Tag.version)
-            if not elem_version is None:
-                eclipse.version = elem_version.text
-            elem_file = elem.find(Tag.installer_file)
-            if not elem_file is None:
-                eclipse.installer_file = elem_file.text
-            elem_url = elem.find(Tag.installer_url)
-            if not elem_url is None:
-                eclipse.installer_url = elem_url.text
-            elem_path = elem.find(Tag.install_path)
-            if not elem_path is None:
-                eclipse.install_path = elem_path.text
+            parse_eclipse(elem)
 
-            print('version                  : ' + str(eclipse.version))
-            print('installer_file           : ' + str(eclipse.installer_file))
-            print('installer_url            : ' + str(eclipse.installer_url))
-            print('installer_full_url       : ' + str(eclipse.installer_full_url))
 
-            eclipse.generate_full_url()
-            print('installer_full_url       : ' + str(eclipse.installer_full_url))
+def parse_eclipse(elem: Element):
+    global APPS
 
-            eclipse.generate_installer_path()
-            print('installer_path           : ' + str(eclipse.installer_path))
+    eclipse = Eclipse()
+    elem_version = elem.find(Tag.version)
+    if not elem_version is None:
+        eclipse.version = elem_version.text
+    elem_file = elem.find(Tag.installer_file)
+    if not elem_file is None:
+        eclipse.installer_file = elem_file.text
+    elem_url = elem.find(Tag.installer_url)
+    if not elem_url is None:
+        eclipse.installer_url = elem_url.text
+    elem_path = elem.find(Tag.install_path)
+    if not elem_path is None:
+        eclipse.install_path = elem_path.text
 
-            eclipse.generate_install_path()
-            print('install_path_full        : ' + str(eclipse.install_path_full))
+    print('version                  : ' + str(eclipse.version))
+    print('installer_file           : ' + str(eclipse.installer_file))
+    print('installer_url            : ' + str(eclipse.installer_url))
+    print('installer_full_url       : ' + str(eclipse.installer_full_url))
 
-            configure = elem.find(Tag.configure)
-            if not configure is None:
-                conf_file_list = []
-                eclipse.config = conf_file_list
-                #eclipse.install_path = elem_path.text
-                print('Has configure')
-                for c_elem in configure:
-                    if c_elem.tag == Tag.file:
-                        file = {}
-                        conf_file_list.append(file)
-                        print('Found file')
-                        name = c_elem.find(Tag.name)
-                        file['name'] = name.text
-                        print('name: ' + str(name.text))
-                        file_type = c_elem.find(Tag.type)
-                        file['type'] = file_type.text
-                        print('type: ' + str(file_type.text))
-                        key_values = c_elem.find(Tag.key_values)
-                        key_vals = []
-                        file['confs'] = key_vals
-                        for kvs in key_values:
-                            if kvs.tag == Tag.key_value:
-                                key_val = {}
-                                key_vals.append(key_val)
-                                #key_value = c_elem.find(Tag.key_value)
-                                key = kvs.find(Tag.key)
-                                key_val['key'] = key.text
-                                value = kvs.find(Tag.value)
-                                key_val['value'] = value.text
-                                print('key: ' + str(key.text) + ' value: ' + str(value.text))
+    eclipse.generate_full_url()
+    print('installer_full_url       : ' + str(eclipse.installer_full_url))
 
-                    #file = c_elem.find(Tag.file)
-                    #print('file: ' + str(file))
+    eclipse.generate_installer_path()
+    print('installer_path           : ' + str(eclipse.installer_path))
 
-            eclipse_list = list(APPS.get('eclipse', []))
-            eclipse_list.append(eclipse)
-            APPS['eclipse'] = eclipse_list
+    eclipse.generate_install_path()
+    print('install_path_full        : ' + str(eclipse.install_path_full))
+
+    configure = elem.find(Tag.configure)
+    if not configure is None:
+        conf_file_list = []
+        eclipse.config = conf_file_list
+        #eclipse.install_path = elem_path.text
+        print('Has configure')
+        for c_elem in configure:
+            if c_elem.tag == Tag.file:
+                file = {}
+                conf_file_list.append(file)
+                print('Found file')
+                name = c_elem.find(Tag.name)
+                file['name'] = name.text
+                print('name: ' + str(name.text))
+                file_type = c_elem.find(Tag.type)
+                file['type'] = file_type.text
+                print('type: ' + str(file_type.text))
+                key_values = c_elem.find(Tag.key_values)
+                key_vals = []
+                file['confs'] = key_vals
+                for kvs in key_values:
+                    if kvs.tag == Tag.key_value:
+                        key_val = {}
+                        key_vals.append(key_val)
+                        #key_value = c_elem.find(Tag.key_value)
+                        key = kvs.find(Tag.key)
+                        key_val['key'] = key.text
+                        value = kvs.find(Tag.value)
+                        key_val['value'] = value.text
+                        print('key: ' + str(key.text) + ' value: ' + str(value.text))
+
+    eclipse_list = list(APPS.get('eclipse', []))
+    eclipse_list.append(eclipse)
+    APPS['eclipse'] = eclipse_list
+
 
 # TODO: should this be a class ?
 APPS = {
     'eclipse': []
     }
+
 
 def download():
     """ Download all app installers """
