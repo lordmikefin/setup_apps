@@ -85,8 +85,8 @@ class Tag():
 
 
 def create_sample():
-    print('create the sample config XML file')
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
+    print('create the sample config XML file: ' + str(file))
     root = ET.Element(Tag.setup)
     tree = ET.ElementTree(root)
     #tree._setroot(root)
@@ -98,7 +98,14 @@ def create_sample():
     version.text = __version__
 
     apps = ET.SubElement(root, Tag.apps)
+    append_eclipse(apps)
 
+    indent(root)
+    util.mkdir(CONFIG_PATH)
+    tree.write(file, encoding="UTF-8", xml_declaration=True)
+
+
+def append_eclipse(apps):
     eclipse = ET.SubElement(apps, Tag.eclipse)
     version = ET.SubElement(eclipse, Tag.version)
     version.text = '2019-09'
@@ -125,10 +132,6 @@ def create_sample():
     key.text = '-Dosgi.instance.area.default'
     value = ET.SubElement(key_value, Tag.value)
     value.text = '@user.home/eclipse-workspace-2019-09'
-
-    indent(root)
-    util.mkdir(CONFIG_PATH)
-    tree.write(file, encoding="UTF-8", xml_declaration=True)
 
 
 def parse():
@@ -244,9 +247,9 @@ def configure():
 
 
 def print_sample():
-    print('print the sample config XML file')
-    print()
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
+    print('print the sample config XML file: ' + str(file))
+    print()
     tree = ET.parse(file)
     #print(tree)
     print(str(ET.tostring(tree.getroot()), 'utf-8'))
