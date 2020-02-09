@@ -189,30 +189,33 @@ def parse_eclipse(elem: Element):
     if not configure is None:
         conf_file_list = []
         eclipse.config = conf_file_list
-        #eclipse.install_path = elem_path.text
-        print('Has configure')
-        for c_elem in configure:
-            if c_elem.tag == Tag.file:
-                file = {}
-                conf_file_list.append(file)
-                print('Found file')
-                name = c_elem.find(Tag.name)
-                file['name'] = name.text
-                print('name: ' + str(name.text))
-                file_type = c_elem.find(Tag.type)
-                file['type'] = file_type.text
-                print('type: ' + str(file_type.text))
-                key_values = c_elem.find(Tag.key_values)
-                key_vals = []
-                file['confs'] = key_vals
-                for kvs in key_values:
-                    if kvs.tag == Tag.key_value:
-                        key_val = parse_key_value(kvs)
-                        key_vals.append(key_val)
+        parse_configure(configure, conf_file_list)
 
     eclipse_list = list(APPS.get('eclipse', []))
     eclipse_list.append(eclipse)
     APPS['eclipse'] = eclipse_list
+
+
+def parse_configure(configure: Element, conf_file_list: list):
+    print('Has configure')
+    for c_elem in configure:
+        if c_elem.tag == Tag.file:
+            file = {}
+            conf_file_list.append(file)
+            print('Found file')
+            name = c_elem.find(Tag.name)
+            file['name'] = name.text
+            print('name: ' + str(name.text))
+            file_type = c_elem.find(Tag.type)
+            file['type'] = file_type.text
+            print('type: ' + str(file_type.text))
+            key_values = c_elem.find(Tag.key_values)
+            key_vals = []
+            file['confs'] = key_vals
+            for kvs in key_values:
+                if kvs.tag == Tag.key_value:
+                    key_val = parse_key_value(kvs)
+                    key_vals.append(key_val)
 
 
 def parse_key_value(kvs: Element):
