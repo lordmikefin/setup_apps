@@ -105,7 +105,7 @@ def create_sample():
     tree.write(file, encoding="UTF-8", xml_declaration=True)
 
 
-def append_eclipse(apps):
+def append_eclipse(apps: Element):
     eclipse = ET.SubElement(apps, Tag.eclipse)
     version = ET.SubElement(eclipse, Tag.version)
     version.text = '2019-09'
@@ -118,7 +118,10 @@ def append_eclipse(apps):
     eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     install_path = ET.SubElement(eclipse, Tag.install_path)
     install_path.text = 'C:\\Program Files\\eclipse-{version}'
+    append_configure(eclipse)
 
+
+def append_configure(eclipse: Element):
     configure = ET.SubElement(eclipse, Tag.configure)
     configure.append(ET.Comment(' "file" is realative path of "install_path" '))
     configure_file = ET.SubElement(configure, Tag.file)
