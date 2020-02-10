@@ -146,7 +146,10 @@ def append_configure(eclipse: Element):
 def append_plugins(eclipse: Element):
     plugins = ET.SubElement(eclipse, Tag.plugins)
     plugin = ET.SubElement(plugins, Tag.plugin)
-    plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
+    #plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
+    plugin_pydev = plugin  # TODO: is there realy need for separate tag for each plugin?
+    name = ET.SubElement(plugin_pydev, Tag.name)
+    name.text = 'pydev'
     version = ET.SubElement(plugin_pydev, Tag.version)
     version.text = '7.4.0'
     plugin_pydev.append(ET.Comment(' {version} is replaced with value from tag "version" '))
@@ -222,9 +225,31 @@ def parse_eclipse(elem: Element):
         eclipse.config = conf_file_list
         parse_configure(configure, conf_file_list)
 
+    plugins = elem.find(Tag.plugins)
+    if not plugins is None:
+        plugins_list = []
+        eclipse.plugins = plugins_list
+        parse_plugins(plugins, plugins_list)
+        eclipse.init_plugins()
+
     eclipse_list = list(APPS.get('eclipse', []))
     eclipse_list.append(eclipse)
     APPS['eclipse'] = eclipse_list
+
+
+def parse_plugins(plugins: Element, plugins_list: list):
+    print('Has plugins')
+    for elem in plugins:
+        if elem.tag == Tag.plugin:
+            print('Found plugin')
+            '''
+            name = elem.find(Tag.name)
+            if not name is None:
+                eclipse.name = name.text
+            version = elem.find(Tag.version)
+            if not version is None:
+                eclipse.version = version.text
+            '''
 
 
 def parse_configure(configure: Element, conf_file_list: list):
