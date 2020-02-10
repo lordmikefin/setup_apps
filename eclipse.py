@@ -53,6 +53,7 @@ class Eclipse():
         self.is_downloaded = False
 
         self.config = None
+        self.plugins = None
 
     def _insert_file_into_url(self, file: str):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
@@ -224,19 +225,22 @@ class Eclipse():
 
     def configure(self):
         print('Configure')
-        if self.config:
-            print('self.config' + str(self.config))
-            #self.config = None
-            for file in self.config:
-                name = file.get('name')
-                f_type = file.get('type')
-                print('name: ' + str(name) + ' type: ' + str(f_type))
-                confs = file.get('confs', [])
-                for conf in confs:
-                    key = conf.get('key')
-                    value = conf.get('value')
-                    print('key: ' + str(key) + ' value: ' + str(value))
-                    self.config_apply(self.install_path_full + name, key, value)
+        if not self.config:
+            print('No configures')
+            return
+
+        print('self.config ' + str(self.config))
+        #self.config = None
+        for file in self.config:
+            name = file.get('name')
+            f_type = file.get('type')
+            print('name: ' + str(name) + ' type: ' + str(f_type))
+            confs = file.get('confs', [])
+            for conf in confs:
+                key = conf.get('key')
+                value = conf.get('value')
+                print('key: ' + str(key) + ' value: ' + str(value))
+                self.config_apply(self.install_path_full + name, key, value)
 
     def configure_hc(self):
         #self.config_eclipse_ini
@@ -311,6 +315,14 @@ class Eclipse():
             with open(self.config_eclipse_ini, 'w') as f:
                 f.write(new_eclipse_ini) 
 
+    def init_plugins(self):
+        print('Initialize plugins')
+        if not self.plugins:
+            print('No plugins')
+            return
+
+        print('self.plugins ' + str(self.plugins))
+        #self.plugins = None
 
 _installer_file_fullname = ''
 _file_name = ''
