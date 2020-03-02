@@ -18,6 +18,7 @@
     :copyright: (c) 2020, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
     :license: MIT License
 """
+from setup_apps.tag import Tag
 
 class Base:
     def __init__(self):
@@ -35,5 +36,6 @@ class Base:
             #print('ERROR: Incorrect Eclipse config: Missing tag "installer_url"')
             #print('TEST : ' + str(self.__class__.__name__))
             #print('TEST : ' + str(self.__name__))
-            print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "installer_url"')
+            #print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "installer_url"')
+            print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.installer_url + '"')
             return

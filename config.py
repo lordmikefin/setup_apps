@@ -22,6 +22,7 @@
 import xml.etree.ElementTree as ET
 from setup_apps import util, __version__, eclipse
 from xml.etree.ElementTree import Element
+from setup_apps.tag import Tag
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -61,31 +62,6 @@ def indent(elem, level=0):
     else:
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
-
-
-class Tag():
-    setup = 'setup'
-    version = 'version'
-
-    apps = 'apps'
-    eclipse = 'eclipse'
-
-    installer_file = 'installer_file'
-    installer_url = 'installer_url'
-    install_path = 'install_path'
-
-    configure = 'configure'
-    file = 'file'
-    name = 'name'
-    type = 'type'
-    key_values = 'key_values'
-    key_value = 'key_value'
-    key = 'key'
-    value = 'value'
-
-    plugins = 'plugins'
-    plugin = 'plugin'
-    plugin_pydev = 'plugin_pydev'
 
 
 def create_sample():
