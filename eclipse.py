@@ -114,6 +114,7 @@ class Eclipse(Base):
         #self.init_plugins()
 
     def generate_full_url(self):
+        super().generate_full_url()
         if self.installer_url is None:
             # TODO: log error
             print('ERROR: Incorrect Eclipse config: Missing tag "installer_url"')
