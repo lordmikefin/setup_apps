@@ -24,11 +24,14 @@ import sys
 
 from . import PATH_APP_ECLIPSE, PATH_INSTALLERS, PATH_APP_PYDEV
 from . import util
+from setup_apps.base import Base
 
 
-class Eclipse():
+class Eclipse(Base):
 
     def __init__(self):
+        super().__init__()
+        '''
         self.url_ok = False
 
         self.version = None
@@ -36,6 +39,7 @@ class Eclipse():
         self.installer_url = None
         self.installer_full_url = None
         self.installer_full_url_md5 = None
+        '''
 
         # TODO: set PATH_INSTALLERS from config xml
         # self.installer_path = PATH_INSTALLERS
