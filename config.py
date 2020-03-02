@@ -22,7 +22,6 @@
 import xml.etree.ElementTree as ET
 from setup_apps import util, __version__, eclipse
 from xml.etree.ElementTree import Element
-from setup_apps.eclipse import Eclipse
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -191,46 +190,46 @@ def parse_apps(elem_apps: Element):
 def parse_eclipse(elem: Element):
     global APPS
 
-    eclipse = Eclipse()
+    ecli = eclipse.Eclipse()
     elem_version = elem.find(Tag.version)
     if not elem_version is None:
-        eclipse.version = elem_version.text
+        ecli.version = elem_version.text
     elem_file = elem.find(Tag.installer_file)
     if not elem_file is None:
-        eclipse.installer_file = elem_file.text
+        ecli.installer_file = elem_file.text
     elem_url = elem.find(Tag.installer_url)
     if not elem_url is None:
-        eclipse.installer_url = elem_url.text
+        ecli.installer_url = elem_url.text
     elem_path = elem.find(Tag.install_path)
     if not elem_path is None:
-        eclipse.install_path = elem_path.text
+        ecli.install_path = elem_path.text
 
-    print('version                  : ' + str(eclipse.version))
-    print('installer_file           : ' + str(eclipse.installer_file))
-    print('installer_url            : ' + str(eclipse.installer_url))
-    print('installer_full_url       : ' + str(eclipse.installer_full_url))
+    print('version                  : ' + str(ecli.version))
+    print('installer_file           : ' + str(ecli.installer_file))
+    print('installer_url            : ' + str(ecli.installer_url))
+    print('installer_full_url       : ' + str(ecli.installer_full_url))
 
-    eclipse.generate_full_url()
-    print('installer_full_url       : ' + str(eclipse.installer_full_url))
+    ecli.generate_full_url()
+    print('installer_full_url       : ' + str(ecli.installer_full_url))
 
-    eclipse.generate_installer_path()
-    print('installer_path           : ' + str(eclipse.installer_path))
+    ecli.generate_installer_path()
+    print('installer_path           : ' + str(ecli.installer_path))
 
-    eclipse.generate_install_path()
-    print('install_path_full        : ' + str(eclipse.install_path_full))
+    ecli.generate_install_path()
+    print('install_path_full        : ' + str(ecli.install_path_full))
 
     configure = elem.find(Tag.configure)
     if not configure is None:
         conf_file_list = []
-        eclipse.config = conf_file_list
+        ecli.config = conf_file_list
         parse_configure(configure, conf_file_list)
 
     plugins = elem.find(Tag.plugins)
     if not plugins is None:
         plugins_list = []
-        eclipse.plugins = plugins_list
+        ecli.plugins = plugins_list
         parse_plugins(plugins, plugins_list)
-        eclipse.init_plugins()
+        ecli.init_plugins()
 
     eclipse_list = list(APPS.get('eclipse', []))
     eclipse_list.append(eclipse)
