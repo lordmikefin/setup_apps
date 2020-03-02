@@ -302,32 +302,32 @@ APPS = {
 def init():
     """ Initialize all app objects """
     eclipse_list = list(APPS.get('eclipse', []))
-    for eclipse in eclipse_list:
+    for ecli in eclipse_list:
         # NOTE: for now just init plugins
         # TODO: move stuff from parse into this?
-        eclipse.init_plugins()
+        ecli.init_plugins()
 
 
 def download():
     """ Download all app installers """
     eclipse_list = list(APPS.get('eclipse', []))
-    for eclipse in eclipse_list:
-        eclipse.download()
+    for ecli in eclipse_list:
+        ecli.download()
 
 
 def install():
     """ install all app """
     eclipse_list = list(APPS.get('eclipse', []))
-    for eclipse in eclipse_list:
-        eclipse.install()
+    for ecli in eclipse_list:
+        ecli.install()
 
 
 def configure():
     """ configure all app """
     eclipse_list = list(APPS.get('eclipse', []))
-    for eclipse in eclipse_list:
-        eclipse.configure()
-        #eclipse.configure_hc()
+    for ecli in eclipse_list:
+        ecli.configure()
+        #ecli.configure_hc()
 
 
 def print_sample():
