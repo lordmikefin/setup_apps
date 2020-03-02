@@ -110,24 +110,24 @@ def create_sample():
 
 
 def append_eclipse(apps: Element):
-    eclipse = ET.SubElement(apps, Tag.eclipse)
-    version = ET.SubElement(eclipse, Tag.version)
+    ecli_elem = ET.SubElement(apps, Tag.eclipse)
+    version = ET.SubElement(ecli_elem, Tag.version)
     version.text = '2019-09'
-    eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    installer_file = ET.SubElement(eclipse, Tag.installer_file)
+    ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    installer_file = ET.SubElement(ecli_elem, Tag.installer_file)
     installer_file.text = 'eclipse-javascript-{version}-R-win32-x86_64.zip'
-    eclipse.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
-    installer_url = ET.SubElement(eclipse, Tag.installer_url)
+    ecli_elem.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
+    installer_url = ET.SubElement(ecli_elem, Tag.installer_url)
     installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
-    eclipse.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    install_path = ET.SubElement(eclipse, Tag.install_path)
+    ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    install_path = ET.SubElement(ecli_elem, Tag.install_path)
     install_path.text = 'C:\\Program Files\\eclipse-{version}'
-    append_configure(eclipse)
-    append_plugins(eclipse)
+    append_configure(ecli_elem)
+    append_plugins(ecli_elem)
 
 
-def append_configure(eclipse: Element):
-    configure = ET.SubElement(eclipse, Tag.configure)
+def append_configure(ecli_elem: Element):
+    configure = ET.SubElement(ecli_elem, Tag.configure)
     configure.append(ET.Comment(' "file" is realative path of "install_path" '))
     configure_file = ET.SubElement(configure, Tag.file)
     name = ET.SubElement(configure_file, Tag.name)
@@ -142,8 +142,8 @@ def append_configure(eclipse: Element):
     value.text = '@user.home/eclipse-workspace-2019-09'
 
 
-def append_plugins(eclipse: Element):
-    plugins = ET.SubElement(eclipse, Tag.plugins)
+def append_plugins(ecli_elem: Element):
+    plugins = ET.SubElement(ecli_elem, Tag.plugins)
     plugin = ET.SubElement(plugins, Tag.plugin)
     #plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
     plugin_pydev = plugin  # TODO: is there realy need for separate tag for each plugin?
