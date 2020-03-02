@@ -235,7 +235,7 @@ def parse_eclipse(elem: Element):
         #ecli.init_plugins()
 
     eclipse_list = list(APPS.get('eclipse', []))
-    eclipse_list.append(eclipse)
+    eclipse_list.append(ecli)
     APPS['eclipse'] = eclipse_list
 
 
