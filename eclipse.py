@@ -98,6 +98,16 @@ class Eclipse():
         self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
         self.install_path_ok = True
 
+    def generate_all(self):
+        self.generate_full_url()
+        print('installer_full_url       : ' + str(self.installer_full_url))
+    
+        self.generate_installer_path()
+        print('installer_path           : ' + str(self.installer_path))
+    
+        self.generate_install_path()
+        print('install_path_full        : ' + str(self.install_path_full))
+
     def generate_full_url(self):
         if self.installer_url is None:
             # TODO: log error
