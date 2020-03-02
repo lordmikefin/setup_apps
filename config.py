@@ -232,7 +232,7 @@ def parse_eclipse(elem: Element):
         plugins_list = []
         ecli.plugins = plugins_list
         parse_plugins(plugins, plugins_list)
-        ecli.init_plugins()
+        #ecli.init_plugins()
 
     eclipse_list = list(APPS.get('eclipse', []))
     eclipse_list.append(eclipse)
@@ -298,6 +298,14 @@ def parse_key_value(kvs: Element):
 APPS = {
     'eclipse': []
     }
+
+def init():
+    """ Initialize all app objects """
+    eclipse_list = list(APPS.get('eclipse', []))
+    for eclipse in eclipse_list:
+        # NOTE: for now just init plugins
+        # TODO: move stuff from parse into this?
+        eclipse.init_plugins()
 
 
 def download():

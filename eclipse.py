@@ -107,6 +107,7 @@ class Eclipse():
     
         self.generate_install_path()
         print('install_path_full        : ' + str(self.install_path_full))
+        #self.init_plugins()
 
     def generate_full_url(self):
         if self.installer_url is None:
