@@ -63,6 +63,7 @@ class Eclipse(Base):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
         self.installer_full_url_md5 = self.installer_full_url + '.md5'
 
+    '''
     def is_installer_file(self) -> bool:
         if self.installer_file:
             return True
@@ -70,6 +71,7 @@ class Eclipse(Base):
         # TODO: log error
         print('ERROR: Incorrect Eclipse config: Missing tag "installer_file"')
         return False
+    '''
 
     def generate_installer_path(self):
         if not self.is_installer_file():
