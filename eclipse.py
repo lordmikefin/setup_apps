@@ -327,12 +327,16 @@ class Eclipse():
 
     def init_plugins(self):
         print('Initialize plugins')
+        print('self.plugins ' + str(self.plugins))
         if not self.plugins:
             print('No plugins')
             return
 
-        print('self.plugins ' + str(self.plugins))
-        #self.plugins = None
+        for plug in self.plugins:
+            print('plug.version: ' + str(plug.version))
+            print('plug.installer_file: ' + str(plug.installer_file))
+            print('plug.installer_url: ' + str(plug.installer_url))
+            #print('plug.install_path: ' + str(plug.install_path))
 
 
 class Plugin():

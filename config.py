@@ -246,13 +246,19 @@ def parse_plugins(plugins: Element, plugins_list: list):
             print('Found plugin')
             plug = eclipse.Plugin()
             plugins_list.append(plug)
+            elem_version = elem.find(Tag.version)
+            if not elem_version is None:
+                plug.version = elem_version.text
+            elem_file = elem.find(Tag.installer_file)
+            if not elem_file is None:
+                plug.installer_file = elem_file.text
+            elem_url = elem.find(Tag.installer_url)
+            if not elem_url is None:
+                plug.installer_url = elem_url.text
             '''
-            name = elem.find(Tag.name)
-            if not name is None:
-                eclipse.name = name.text
-            version = elem.find(Tag.version)
-            if not version is None:
-                eclipse.version = version.text
+            elem_path = elem.find(Tag.install_path)
+            if not elem_path is None:
+                plug.install_path = elem_path.text
             '''
 
 
