@@ -59,10 +59,11 @@ class Eclipse(Base):
         self.config = None
         self.plugins = None
 
+    '''
     def _insert_file_into_url(self, file: str):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
         self.installer_full_url_md5 = self.installer_full_url + '.md5'
-
+    '''
     '''
     def is_installer_file(self) -> bool:
         if self.installer_file:

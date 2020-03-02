@@ -29,6 +29,11 @@ class Base:
         self.installer_file = None
         self.installer_url = None
         self.installer_full_url = None
+        self.installer_full_url_md5 = None
+
+    def _insert_file_into_url(self, file: str):
+        self.installer_full_url = str(self.installer_url).format(installer_file=file)
+        self.installer_full_url_md5 = self.installer_full_url + '.md5'
 
     def is_installer_file(self) -> bool:
         if self.installer_file:
@@ -55,4 +60,9 @@ class Base:
             return
 
         if not self.is_installer_file():
+            return
+
+        if not '{version}' in self.installer_file:
+            self._insert_file_into_url(file=self.installer_file)
+            self.url_ok = True
             return
