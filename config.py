@@ -20,7 +20,7 @@
 """
 
 import xml.etree.ElementTree as ET
-from setup_apps import util, __version__
+from setup_apps import util, __version__, eclipse
 from xml.etree.ElementTree import Element
 from setup_apps.eclipse import Eclipse
 #from lxml import etree as ET
@@ -242,6 +242,8 @@ def parse_plugins(plugins: Element, plugins_list: list):
     for elem in plugins:
         if elem.tag == Tag.plugin:
             print('Found plugin')
+            plug = eclipse.Plugin()
+            plugins_list.append(plug)
             '''
             name = elem.find(Tag.name)
             if not name is None:

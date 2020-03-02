@@ -324,6 +324,20 @@ class Eclipse():
         print('self.plugins ' + str(self.plugins))
         #self.plugins = None
 
+
+class Plugin():
+
+    def __init__(self):
+        self.url_ok = False
+
+        self.version = None
+        self.installer_file = None
+        self.installer_url = None
+        self.installer_full_url = None
+        self.installer_full_url_md5 = None
+
+
+
 _installer_file_fullname = ''
 _file_name = ''
 
