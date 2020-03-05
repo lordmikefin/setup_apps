@@ -66,3 +66,13 @@ class Base:
             self._insert_file_into_url(file=self.installer_file)
             self.url_ok = True
             return
+
+        if self.version is None:
+            # TODO: log error
+            print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
+            return
+
+        self.installer_file = str(self.installer_file).format(version=self.version)
+        self._insert_file_into_url(file=self.installer_file)
+        self.url_ok = True
+        return
