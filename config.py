@@ -186,16 +186,6 @@ def parse_eclipse(elem: Element):
     print('installer_full_url       : ' + str(ecli.installer_full_url))
 
     ecli.generate_all()
-    '''
-    ecli.generate_full_url()
-    print('installer_full_url       : ' + str(ecli.installer_full_url))
-
-    ecli.generate_installer_path()
-    print('installer_path           : ' + str(ecli.installer_path))
-
-    ecli.generate_install_path()
-    print('install_path_full        : ' + str(ecli.install_path_full))
-    '''
 
     configure = elem.find(Tag.configure)
     if not configure is None:
