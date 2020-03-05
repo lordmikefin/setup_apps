@@ -185,7 +185,7 @@ def parse_eclipse(elem: Element):
     print('installer_url            : ' + str(ecli.installer_url))
     print('installer_full_url       : ' + str(ecli.installer_full_url))
 
-    ecli.generate_all()
+    #ecli.generate_all()
 
     configure = elem.find(Tag.configure)
     if not configure is None:
@@ -269,6 +269,7 @@ def init():
     """ Initialize all app objects """
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list:
+        ecli.generate_all()
         # NOTE: for now just init plugins
         # TODO: move stuff from parse into this?
         ecli.init_plugins()
