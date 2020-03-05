@@ -46,8 +46,19 @@ class Base:
         self.path_ok = True
 
     def _insert_file_into_url(self, file: str):
-        self.installer_full_url = str(self.installer_url).format(installer_file=file)
+        if '{version}' in self.installer_url:
+            if self.version is None:
+                # TODO: log error
+                print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
+                return
+            self.installer_full_url = str(self.installer_url).format(
+                installer_file=file, version=self.version)
+        else:
+            self.installer_full_url = str(self.installer_url).format(installer_file=file)
+
+        # TODO: Is there always md5 file? Optional?
         self.installer_full_url_md5 = self.installer_full_url + '.md5'
+        self.url_ok = True
 
     def is_installer_file(self) -> bool:
         if self.installer_file:
@@ -88,5 +99,5 @@ class Base:
 
         self.installer_file = str(self.installer_file).format(version=self.version)
         self._insert_file_into_url(file=self.installer_file)
-        self.url_ok = True
+        #self.url_ok = True
         return
