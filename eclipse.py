@@ -44,9 +44,11 @@ class Eclipse(Base):
         # TODO: set PATH_INSTALLERS from config xml
         # self.installer_path = PATH_INSTALLERS
         # _installer_file_fullname = str(installer_path) + str(installer_file)
+        '''
         self.path_ok = False
         self.installer_path = None
         self.installer_path_md5 = None
+        '''
 
         self.install_path_ok = False
         self.install_path = None
@@ -73,15 +75,6 @@ class Eclipse(Base):
         print('ERROR: Incorrect Eclipse config: Missing tag "installer_file"')
         return False
     '''
-
-    def generate_installer_path(self):
-        if not self.is_installer_file():
-            return
-
-        # file = str(self.installer_file).format(version=self.version)
-        self.installer_path = PATH_INSTALLERS + self.installer_file
-        self.installer_path_md5 = self.installer_path + '.md5'
-        self.path_ok = True
 
     def generate_install_path(self):
         if self.install_path is None:

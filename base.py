@@ -18,6 +18,7 @@
     :copyright: (c) 2020, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
     :license: MIT License
 """
+from . import PATH_INSTALLERS  # TODO: improve how installer path is defined
 from setup_apps.tag import Tag
 
 class Base:
@@ -30,6 +31,19 @@ class Base:
         self.installer_url = None
         self.installer_full_url = None
         self.installer_full_url_md5 = None
+
+        self.path_ok = False
+        self.installer_path = None
+        self.installer_path_md5 = None
+
+    def generate_installer_path(self):
+        if not self.is_installer_file():
+            return
+
+        # file = str(self.installer_file).format(version=self.version)
+        self.installer_path = PATH_INSTALLERS + self.installer_file
+        self.installer_path_md5 = self.installer_path + '.md5'
+        self.path_ok = True
 
     def _insert_file_into_url(self, file: str):
         self.installer_full_url = str(self.installer_url).format(installer_file=file)
