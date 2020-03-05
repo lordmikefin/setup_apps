@@ -116,36 +116,6 @@ class Eclipse(Base):
         print('install_path_full        : ' + str(self.install_path_full))
         #self.init_plugins()
 
-    def generate_full_url(self):
-        super().generate_full_url()
-        if self.installer_url is None:
-            # TODO: log error
-            print('ERROR: Incorrect Eclipse config: Missing tag "installer_url"')
-            return
-
-        if not '{installer_file}' in self.installer_url:
-            self.installer_full_url = self.installer_url
-            self.url_ok = True
-            return
-
-        if not self.is_installer_file():
-            return
-
-        if not '{version}' in self.installer_file:
-            self._insert_file_into_url(file=self.installer_file)
-            self.url_ok = True
-            return
-
-        if self.version is None:
-            # TODO: log error
-            print('ERROR: Incorrect Eclipse config: Missing tag "version"')
-            return
-
-        self.installer_file = str(self.installer_file).format(version=self.version)
-        self._insert_file_into_url(file=self.installer_file)
-        self.url_ok = True
-        return
-
     def download(self):
         if not (self.url_ok and self.path_ok):
             # TODO: log error
