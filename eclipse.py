@@ -315,6 +315,19 @@ class Eclipse(Base):
             #print('plug.install_path: ' + str(plug.install_path))
             plug.generate_all(self.install_path_full)
 
+    def download_plugins(self):
+        print('Download plugins')
+        print('self.plugins ' + str(self.plugins))
+        if not self.plugins:
+            print('No plugins')
+            return
+
+        if False:  # Definition only for Eclipse auto complete
+            plug = Plugin()
+
+        for plug in self.plugins:
+            plug.download()
+
 
 class Plugin(Base):
 
@@ -359,6 +372,46 @@ class Plugin(Base):
         '''
         self.install_path_full = str(self.install_path)
         self.install_path_ok = True
+
+    def download(self):
+        if not (self.url_ok and self.path_ok):
+            # TODO: log plugin name?
+            print('ERROR: Can not download Eclipse plugin installer.')
+
+        if util.is_file(self.installer_path):
+            print('Eclipse plugin installer file exists.')
+            print('Calculate md5sum')
+            md5 = util.md5sum(self.installer_path, show_progress=True)
+            # md5 = util.md5sum(self.installer_path, callback=util.print_progress)
+            # md5 = util.md5sum(self.installer_path)
+            print('md5 hash: ' + str(md5))
+            if util.is_file(self.installer_path_md5):
+                print('md5 file exists')
+                if util.is_md5_in_file(self.installer_path_md5, md5):
+                    print('md5 is in file')
+                    self.is_downloaded = True
+                    return  # file is downloaded
+                else:
+                    print('md5 does not match')
+                    print('download file again')
+
+        print('Download Eclipse plugin installer.')
+        util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        print('Download complete.')
+        print('Download Eclipse plugin installer md5.')
+        util.download(self.installer_full_url_md5, self.installer_path_md5)
+        print('Calculate md5sum')
+        md5 = util.md5sum(self.installer_path, show_progress=True)
+        print('md5 hash: ' + str(md5))
+        if util.is_file(self.installer_path_md5):
+            print('md5 file exists')
+            if util.is_md5_in_file(self.installer_path_md5, md5):
+                print('md5 is in file')
+                self.is_downloaded = True
+            else:
+                print('md5 does not match')
+                print('download failed !  TODO: interrupt the process?')
+                self.is_downloaded = False
 
 
 _installer_file_fullname = ''

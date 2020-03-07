@@ -286,6 +286,7 @@ def download():
 
     for ecli in eclipse_list:
         ecli.download()
+        ecli.download_plugins()
 
 
 def install():
