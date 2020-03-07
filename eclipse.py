@@ -305,12 +305,15 @@ class Eclipse(Base):
             print('No plugins')
             return
 
+        if False:  # Definition only for Eclipse auto complete
+            plug = Plugin()
+
         for plug in self.plugins:
             print('plug.version: ' + str(plug.version))
             print('plug.installer_file: ' + str(plug.installer_file))
             print('plug.installer_url: ' + str(plug.installer_url))
             #print('plug.install_path: ' + str(plug.install_path))
-            plug.generate_all()
+            plug.generate_all(self.install_path_full)
 
 
 class Plugin(Base):
@@ -321,7 +324,8 @@ class Plugin(Base):
         self.install_path = None
         self.install_path_full = None
 
-    def generate_all(self):
+    def generate_all(self, install_path: str=None):
+        self.install_path = install_path
         self.generate_full_url()
         print('installer_full_url       : ' + str(self.installer_full_url))
     
