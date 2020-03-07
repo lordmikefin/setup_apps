@@ -268,6 +268,9 @@ APPS = {
 def init():
     """ Initialize all app objects """
     eclipse_list = list(APPS.get('eclipse', []))
+    if False:  # Definition only for Eclipse auto complete
+        ecli = eclipse.Eclipse()
+
     for ecli in eclipse_list:
         ecli.generate_all()
         # NOTE: for now just init plugins
@@ -278,12 +281,18 @@ def init():
 def download():
     """ Download all app installers """
     eclipse_list = list(APPS.get('eclipse', []))
+    if False:  # Definition only for Eclipse auto complete
+        ecli = eclipse.Eclipse()
+
     for ecli in eclipse_list:
         ecli.download()
 
 
 def install():
     """ install all app """
+    if False:  # Definition only for Eclipse auto complete
+        ecli = eclipse.Eclipse()
+
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list:
         ecli.install()
@@ -291,6 +300,9 @@ def install():
 
 def configure():
     """ configure all app """
+    if False:  # Definition only for Eclipse auto complete
+        ecli = eclipse.Eclipse()
+
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list:
         ecli.configure()
