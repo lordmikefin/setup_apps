@@ -292,6 +292,11 @@ def is_md5_in_file(file: str, md5: str) -> bool:
 
     if md5 == md5_from_file:
         return True
+    return is_md5_equal(md5, md5_from_file)
+
+def is_md5_equal(md5_1: str, md5_2: str) -> bool:
+    if md5_1 == md5_2:
+        return True
     return False
 
 

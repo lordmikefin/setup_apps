@@ -378,6 +378,14 @@ class Plugin(Base):
             # TODO: log plugin name?
             print('ERROR: Can not download Eclipse plugin installer.')
 
+        '''
+        NOTE: There is no ms5 file for PyDev plugin.
+        For now hard code the md5sum: 
+          722dfe4a9bf1f50a2766c4d58eb6dd4d
+        TODO: Calculate own list of md5sums.
+        '''
+        hard_code_md5_for_pydev = '722dfe4a9bf1f50a2766c4d58eb6dd4d'
+
         if util.is_file(self.installer_path):
             print('Eclipse plugin installer file exists.')
             print('Calculate md5sum')
@@ -385,9 +393,13 @@ class Plugin(Base):
             # md5 = util.md5sum(self.installer_path, callback=util.print_progress)
             # md5 = util.md5sum(self.installer_path)
             print('md5 hash: ' + str(md5))
+            '''
             if util.is_file(self.installer_path_md5):
                 print('md5 file exists')
                 if util.is_md5_in_file(self.installer_path_md5, md5):
+            '''
+            if True:
+                if util.is_md5_equal(hard_code_md5_for_pydev, md5):
                     print('md5 is in file')
                     self.is_downloaded = True
                     return  # file is downloaded
@@ -398,14 +410,20 @@ class Plugin(Base):
         print('Download Eclipse plugin installer.')
         util.download(self.installer_full_url, self.installer_path, show_progress=True)
         print('Download complete.')
+        '''
         print('Download Eclipse plugin installer md5.')
         util.download(self.installer_full_url_md5, self.installer_path_md5)
+        '''
         print('Calculate md5sum')
         md5 = util.md5sum(self.installer_path, show_progress=True)
         print('md5 hash: ' + str(md5))
+        '''
         if util.is_file(self.installer_path_md5):
             print('md5 file exists')
             if util.is_md5_in_file(self.installer_path_md5, md5):
+        '''
+        if True:
+            if util.is_md5_equal(hard_code_md5_for_pydev, md5):
                 print('md5 is in file')
                 self.is_downloaded = True
             else:
