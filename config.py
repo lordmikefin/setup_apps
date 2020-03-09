@@ -20,9 +20,10 @@
 """
 
 import xml.etree.ElementTree as ET
-from setup_apps import util, __version__, eclipse
+from setup_apps import util, __version__, eclipse, PATH_INSTALLERS
 from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
+import app_source_handler
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -143,7 +144,9 @@ def append_plugins(ecli_elem: Element):
     #_jar_file = _eclipse_path + '\\plugins\\org.python.pydev_7.4.0.201910251334\\pydev.jar'
 
 
-def parse():
+def parse(source_file: str=''):
+    download_source_xml()
+    parse_source_xml(source_file)
     print('parse the config XML file')
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
     tree = ET.parse(file)
@@ -152,6 +155,28 @@ def parse():
         # TODO: check version
         if elem.tag == Tag.apps:
             parse_apps(elem)
+
+
+SOURCE_FILE = util.fix_path(PATH_INSTALLERS + '/' + 'app_source.xml')
+SOURCE_FILE_OK = False
+def download_source_xml():
+    global SOURCE_FILE_OK
+    print('download the source XML file')
+    file = SOURCE_FILE
+    url = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml'
+    util.download(url, file, show_progress=True)
+    # TODO: create real verification with md5sum
+    if util.is_file(file):
+        SOURCE_FILE_OK = True
+
+
+def parse_source_xml(source_file: str=''):
+    print('parse the source XML file')
+    # app_source_handler.source.parse(source_file)
+    if SOURCE_FILE_OK:
+        app_source_handler.source.parse(SOURCE_FILE)
+    else:
+        print('parsing failed')
 
 
 def parse_apps(elem_apps: Element):
