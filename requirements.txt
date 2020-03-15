@@ -1,3 +1,8 @@
+# requires non-library lib :)
+# app_source_handler
+#   https://github.com/lordmikefin/app_source_handler
+
+
 requests==2.22.0
 tqdm==4.42.0
 
