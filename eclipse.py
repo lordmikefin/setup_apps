@@ -131,13 +131,15 @@ class Eclipse(Base):
         url = ver.get('url', '')
         md5url = ver.get('md5url', '')
         md5sum = ver.get('md5sum', '')
+        file = ver.get('file', '')
         print('url: ' + str(url))
         print('md5url: ' + str(md5url))
         print('md5sum: ' + str(md5sum))
-        self.installer_file = None
+        print('file: ' + str(file))
+        self.installer_file = file
         self.installer_full_url = url
         self.installer_full_url_md5 = md5url
-        self.url_ok = False
+        self.url_ok = True
         return
 
     def download(self):
