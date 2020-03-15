@@ -379,7 +379,8 @@ def read_write():
     tree = ET.parse(XML_TEST)
     root = tree.getroot()
     #root.
-    items = ET.SubElement(root, 'items')
+    #items = ET.SubElement(root, 'items')
+    ET.SubElement(root, 'items')
     #pretty_xml_as_string = root.toprettyxml()
     #pretty_xml_as_string = ET.tostring(root, pretty_print=True)
     #print('pretty_xml_as_string: ' + str(pretty_xml_as_string))
