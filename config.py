@@ -47,6 +47,7 @@ XML_TEST = 'test.xml'
 def indent(elem, level=0):
     ''' Indent the xml tree '''
     # TODO: this should be part of 'xml.etree.ElementTree'
+    # TODO: Create common code base! And move this there.
 
     # NOTE: code copied from stackoverflow
     # https://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
