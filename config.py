@@ -24,6 +24,7 @@ from setup_apps import util, __version__, eclipse, PATH_INSTALLERS
 from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
 import app_source_handler
+import json
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -176,6 +177,8 @@ def parse_source_xml(source_file: str=''):
     # app_source_handler.source.parse(source_file)
     if SOURCE_FILE_OK:
         app_source_handler.source.parse(SOURCE_FILE)
+        print('APPS: ' + json.dumps(app_source_handler.source.APPS,
+                                     sort_keys=True, indent=2))
     else:
         print('parsing failed')
 
