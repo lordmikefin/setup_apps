@@ -26,6 +26,7 @@ from . import PATH_APP_ECLIPSE, PATH_INSTALLERS, PATH_APP_PYDEV
 from . import util
 from setup_apps.base import Base
 from setup_apps.tag import Tag
+import app_source_handler
 
 
 class Eclipse(Base):
@@ -100,7 +101,14 @@ class Eclipse(Base):
         self.install_path_ok = True
 
     def generate_all(self):
-        self.generate_full_url()
+        # TODO: get url from the source file
+        #app_source_handler.source.APPS
+        source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
+        if not source_eclipse:
+            print('ERROR: the source xml failed.')
+            print('Get Eclipse data from config xml.')
+            self.generate_full_url()
+        self.generate_full_url_from_source(source_eclipse)
         print('installer_full_url       : ' + str(self.installer_full_url))
     
         self.generate_installer_path()
@@ -109,6 +117,28 @@ class Eclipse(Base):
         self.generate_install_path()
         print('install_path_full        : ' + str(self.install_path_full))
         #self.init_plugins()
+
+    def generate_full_url_from_source(self, source_eclipse: dict):
+        #self.generate_full_url()
+        if self.version is None:
+            # TODO: log error
+            print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
+            return
+
+        # TODO: if version is 'latest' then get ver from source
+        vers = source_eclipse.get('versions', {})
+        ver = vers.get(self.version, {})
+        url = ver.get('url', '')
+        md5url = ver.get('md5url', '')
+        md5sum = ver.get('md5sum', '')
+        print('url: ' + str(url))
+        print('md5url: ' + str(md5url))
+        print('md5sum: ' + str(md5sum))
+        self.installer_file = None
+        self.installer_full_url = url
+        self.installer_full_url_md5 = md5url
+        self.url_ok = False
+        return
 
     def download(self):
         if not (self.url_ok and self.path_ok):
