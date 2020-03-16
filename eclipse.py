@@ -139,8 +139,29 @@ class Eclipse(Base):
         self.installer_file = file
         self.installer_full_url = url
         self.installer_full_url_md5 = md5url
-        self.url_ok = True
+        self.md5sum = md5sum
+        self.set_url_ok()
+        #self.url_ok = True
         return
+
+    def set_url_ok(self):
+        if not self.installer_file:
+            print('ERROR: "installer_file" must be defined')
+            return
+        if not self.installer_full_url:
+            print('ERROR: "installer_full_url" must be defined')
+            return
+        if not self.is_md5():
+            print('ERROR: "installer_full_url_md5" or "md5sum" must be defined')
+            return
+        self.url_ok = True
+
+    def is_md5(self):
+        if self.installer_full_url_md5:
+            return True
+        if self.md5sum:
+            return True
+        return False
 
     def download(self):
         if not (self.url_ok and self.path_ok):

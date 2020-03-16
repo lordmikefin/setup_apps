@@ -31,6 +31,7 @@ class Base:
         self.installer_url = None
         self.installer_full_url = None
         self.installer_full_url_md5 = None
+        self.md5sum = None
 
         self.path_ok = False
         self.installer_path = None
