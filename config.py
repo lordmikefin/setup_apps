@@ -92,12 +92,14 @@ def append_eclipse(apps: Element):
     ecli_elem = ET.SubElement(apps, Tag.eclipse)
     version = ET.SubElement(ecli_elem, Tag.version)
     version.text = '2019-09'
+    '''
     ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(ecli_elem, Tag.installer_file)
     installer_file.text = 'eclipse-javascript-{version}-R-win32-x86_64.zip'
     ecli_elem.append(ET.Comment(' {installer_file} is replaced with value from tag "installer_file" '))
     installer_url = ET.SubElement(ecli_elem, Tag.installer_url)
     installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
+    '''
     ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     install_path = ET.SubElement(ecli_elem, Tag.install_path)
     install_path.text = 'C:\\Program Files\\eclipse-{version}'
