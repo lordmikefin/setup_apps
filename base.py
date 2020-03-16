@@ -20,6 +20,7 @@
 """
 from . import PATH_INSTALLERS  # TODO: improve how installer path is defined
 from setup_apps.tag import Tag
+import app_source_handler
 
 class Base:
     def __init__(self):
@@ -100,5 +101,40 @@ class Base:
 
         self.installer_file = str(self.installer_file).format(version=self.version)
         self._insert_file_into_url(file=self.installer_file)
+        #self.url_ok = True
+        return
+
+    def generate_full_url_from_source(self, source_eclipse: dict):
+        #app_source_handler.source.APPS
+        #source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
+        if not source_eclipse:
+            print('ERROR: the source xml failed.')
+            print('Get Eclipse data from config xml.')
+            self.generate_full_url()
+            return
+        #self.generate_full_url_from_source(source_eclipse)
+
+        #self.generate_full_url()
+        if self.version is None:
+            # TODO: log error
+            print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
+            return
+
+        # TODO: if version is 'latest' then get ver from source
+        vers = source_eclipse.get('versions', {})
+        ver = vers.get(self.version, {})
+        url = ver.get('url', '')
+        md5url = ver.get('md5url', '')
+        md5sum = ver.get('md5sum', '')
+        file = ver.get('file', '')
+        print('url: ' + str(url))
+        print('md5url: ' + str(md5url))
+        print('md5sum: ' + str(md5sum))
+        print('file: ' + str(file))
+        self.installer_file = file
+        self.installer_full_url = url
+        self.installer_full_url_md5 = md5url
+        self.md5sum = md5sum
+        self.set_url_ok()
         #self.url_ok = True
         return
