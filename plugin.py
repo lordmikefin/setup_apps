@@ -21,20 +21,33 @@
 
 from . import util
 from setup_apps.base import Base
+import app_source_handler
 
 
 class Plugin(Base):
 
     def __init__(self):
         super().__init__()
+        self.name = None
+
         self.install_path_ok = False
 
         self.install_path = None
         self.install_path_full = None
 
     def generate_all(self, install_path: str=None):
+        # TODO: how to get source data?
+        #source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
+        # NOTE: using the name set in config xml
+        # TODO: how to share plugin names elegantly between 'setup_apps' and 'app_source'?
+        #Tag.name
+        if not self.name:
+            print('"name" tag missing ?!')
+        source = app_source_handler.source.APPS.get(self.name, {})
+
         self.install_path = install_path
-        self.generate_full_url()
+        #self.generate_full_url()
+        self.generate_full_url_from_source(source)
         print('installer_full_url       : ' + str(self.installer_full_url))
     
         self.generate_installer_path()

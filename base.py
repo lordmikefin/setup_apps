@@ -104,15 +104,15 @@ class Base:
         #self.url_ok = True
         return
 
-    def generate_full_url_from_source(self, source_eclipse: dict):
+    def generate_full_url_from_source(self, source: dict):
         #app_source_handler.source.APPS
-        #source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
-        if not source_eclipse:
+        #source = app_source_handler.source.APPS.get('eclipse', {})
+        if not source:
             print('ERROR: the source xml failed.')
-            print('Get Eclipse data from config xml.')
+            print('Get ' + str(self.__name__) + ' data from config xml.')
             self.generate_full_url()
             return
-        #self.generate_full_url_from_source(source_eclipse)
+        #self.generate_full_url_from_source(source)
 
         #self.generate_full_url()
         if self.version is None:
@@ -121,7 +121,7 @@ class Base:
             return
 
         # TODO: if version is 'latest' then get ver from source
-        vers = source_eclipse.get('versions', {})
+        vers = source.get('versions', {})
         ver = vers.get(self.version, {})
         url = ver.get('url', '')
         md5url = ver.get('md5url', '')

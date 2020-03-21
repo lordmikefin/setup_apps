@@ -129,6 +129,8 @@ def append_plugins(ecli_elem: Element):
     #plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
     plugin_pydev = plugin  # TODO: is there realy need for separate tag for each plugin?
     name = ET.SubElement(plugin_pydev, Tag.name)
+    # TODO: how to share plugin names elegantly between 'setup_apps' and 'app_source'?
+    # NOTE: for now it is hard code :(
     name.text = 'pydev'
     version = ET.SubElement(plugin_pydev, Tag.version)
     version.text = '7.4.0'
@@ -252,6 +254,10 @@ def parse_plugins(plugins: Element, plugins_list: list):
             elem_url = elem.find(Tag.installer_url)
             if not elem_url is None:
                 plug.installer_url = elem_url.text
+            #Tag.name
+            elem_name = elem.find(Tag.name)
+            if not elem_name is None:
+                plug.name = elem_name.text
             '''
             elem_path = elem.find(Tag.install_path)
             if not elem_path is None:
