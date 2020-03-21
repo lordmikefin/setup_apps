@@ -101,8 +101,8 @@ class Eclipse(Base):
         self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
         self.install_path_ok = True
 
-    def generate_all(self):
-        source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
+    def generate_all(self, source_eclipse: dict):
+        #source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
         self.generate_full_url_from_source(source_eclipse)
         print('installer_full_url       : ' + str(self.installer_full_url))
     
@@ -112,25 +112,6 @@ class Eclipse(Base):
         self.generate_install_path()
         print('install_path_full        : ' + str(self.install_path_full))
         #self.init_plugins()
-
-    def set_url_ok(self):
-        if not self.installer_file:
-            print('ERROR: "installer_file" must be defined')
-            return
-        if not self.installer_full_url:
-            print('ERROR: "installer_full_url" must be defined')
-            return
-        if not self.is_md5():
-            print('ERROR: "installer_full_url_md5" or "md5sum" must be defined')
-            return
-        self.url_ok = True
-
-    def is_md5(self):
-        if self.installer_full_url_md5:
-            return True
-        if self.md5sum:
-            return True
-        return False
 
     def download(self):
         if not (self.url_ok and self.path_ok):
@@ -320,7 +301,7 @@ class Eclipse(Base):
             with open(self.config_eclipse_ini, 'w') as f:
                 f.write(new_eclipse_ini) 
 
-    def init_plugins(self):
+    def init_plugins(self, source_eclipse: dict):
         print('Initialize plugins')
         print('self.plugins ' + str(self.plugins))
         if not self.plugins:
@@ -330,12 +311,17 @@ class Eclipse(Base):
         if False:  # Definition only for Eclipse auto complete
             plug = Plugin()
 
+        # TODO: how elegantly share names between 'setup_apps' and 'app_source'?
+        # NOTE: for now just use hard coded name
+        source_plugins = source_eclipse.get('plugins', {})
         for plug in self.plugins:
             print('plug.version: ' + str(plug.version))
             print('plug.installer_file: ' + str(plug.installer_file))
             print('plug.installer_url: ' + str(plug.installer_url))
             #print('plug.install_path: ' + str(plug.install_path))
-            plug.generate_all(self.install_path_full)
+            # TODO: get plugin by name form the source
+            #source_plugin = source_plugins.get('pydev', {})
+            plug.generate_all(self.install_path_full, source_plugins)
 
     def download_plugins(self):
         print('Download plugins')

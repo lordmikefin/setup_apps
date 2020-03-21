@@ -309,10 +309,11 @@ def init():
         ecli = eclipse.Eclipse()
 
     for ecli in eclipse_list:
-        ecli.generate_all()
+        source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
+        ecli.generate_all(source_eclipse)
         # NOTE: for now just init plugins
         # TODO: move stuff from parse into this?
-        ecli.init_plugins()
+        ecli.init_plugins(source_eclipse)
 
 
 def download():
