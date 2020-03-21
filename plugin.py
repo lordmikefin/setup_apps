@@ -26,6 +26,7 @@ from setup_apps.base import Base
 class Plugin(Base):
 
     def __init__(self):
+        super().__init__()
         self.install_path_ok = False
 
         self.install_path = None
