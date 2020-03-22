@@ -91,7 +91,9 @@ def create_sample():
 def append_eclipse(apps: Element):
     ecli_elem = ET.SubElement(apps, Tag.eclipse)
     version = ET.SubElement(ecli_elem, Tag.version)
-    version.text = '2019-09'
+    # NOTE: use latest version from the source
+    #version.text = '2019-09'
+    version.text = 'latest'
     '''
     ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(ecli_elem, Tag.installer_file)
@@ -100,9 +102,12 @@ def append_eclipse(apps: Element):
     installer_url = ET.SubElement(ecli_elem, Tag.installer_url)
     installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
     '''
+    # TODO: is there better solution? extract to temp?
+    # NOTE: while extracting I got path too long error -> changed install path
     ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     install_path = ET.SubElement(ecli_elem, Tag.install_path)
     install_path.text = 'C:\\Program Files\\eclipse-{version}'
+    #install_path.text = 'C:\\Program Files\\e-{version}'
     append_configure(ecli_elem)
     append_plugins(ecli_elem)
 

@@ -121,6 +121,10 @@ class Base:
             return
 
         # TODO: if version is 'latest' then get ver from source
+        if self.version == 'latest':
+            latest = source.get('latest', {})
+            self.version = latest
+            print('Latest version:  self.version: ' + str(self.version))
         vers = source.get('versions', {})
         ver = vers.get(self.version, {})
         url = ver.get('url', '')

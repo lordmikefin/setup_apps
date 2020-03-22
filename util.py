@@ -311,10 +311,17 @@ def move_win(src: str, dst: str):
         raise OSError('util.move_win() Works only with Windows')
 
     #command = 'move "' + str(src) + '" "' + str(dst) + '"'
-    command = 'xcopy /E /Q /H "' + str(src) + '" "' + str(dst) + '"'
+    # NOTE: xcopy does not move !?
+    #command = 'xcopy /E /Q /H "' + str(src) + '" "' + str(dst) + '"'
     # /E           Copies directories and subdirectories, including empty ones.
     # /H           Copies hidden and system files also.
     # /Q           Does not display file names while copying.
+    # TODO: try 'robocopy'
+    command = 'robocopy "' + str(src) + '" "' + str(dst) + '" *.* /MOVE /E /NFL /NDL'
+    # /MOVE :: MOVE files AND dirs (delete from source after copying).
+    # /E :: copy subdirectories, including Empty ones.
+    # /NFL : No File List - don't log file names.
+    # /NDL : No Directory List - don't log directory names.
     print(command)
     res = int(os.system(command))
 

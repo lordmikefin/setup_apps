@@ -96,7 +96,11 @@ class Eclipse(Base):
             return
 
         self.install_path_full = str(self.install_path).format(version=self.version)
-        self.unzipped = self.install_path_full + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
+        # TODO: is there better solution? extract to temp?
+        # NOTE: while extracting I got path too long error -> changed install path
+        #self.unzipped = self.install_path_full + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
+        self.temp_path = 'C:\\temp'
+        self.unzipped = self.temp_path + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
         self.exe_file = self.install_path_full + '\\eclipse.exe'
         self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
         self.install_path_ok = True
@@ -180,15 +184,19 @@ class Eclipse(Base):
         print(' Installing ... wait ... wait ... ')
         print('')
 
+        # NOTE: while extracting I got path too long error -> changed install path
         # NOTE: This is "offline installer" ;)
         #util.unzip(str(self.installer_path), str(self.install_path_full))
-        util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
+        #util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
+        #self.temp_path
+        util.unzip_py(str(self.installer_path), str(self.temp_path), show_progress=True)
 
         # NOTE: Eclipse is unzipped into subfolder /eclipse/ because zip file contains subfolder /eclipse/
         # TODO: Why python shutil.move() is throwing an error? How it should be used to mimic Win copy?
         #util.move(str(self.unzipped), str(self.install_path_full))  # shutil.Error: Destination path 'C:\Program Files\eclipse-2019-09\eclipse' already exists
         #util.move(str(self.unzipped) + '\\', str(self.install_path_full) + '\\') 
-        util.move_win(str(self.unzipped) + '\\*', str(self.install_path_full) + '\\')
+        #util.move_win(str(self.unzipped) + '\\*', str(self.install_path_full) + '\\')
+        util.move_win(str(self.unzipped) + '', str(self.install_path_full) + '')
 
         if not self.is_installed():
             print('Eclipse is NOT installed!')
