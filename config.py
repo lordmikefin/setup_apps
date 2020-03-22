@@ -124,8 +124,10 @@ def append_configure(ecli_elem: Element):
     key_value = ET.SubElement(key_values, Tag.key_value)
     key = ET.SubElement(key_value, Tag.key)
     key.text = '-Dosgi.instance.area.default'
+    key_value.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     value = ET.SubElement(key_value, Tag.value)
-    value.text = '@user.home/eclipse-workspace-2019-09'
+    #value.text = '@user.home/eclipse-workspace-2019-09'
+    value.text = '@user.home/eclipse-workspace-{version}'
 
 
 def append_plugins(ecli_elem: Element):

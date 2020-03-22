@@ -233,6 +233,10 @@ class Eclipse(Base):
             for conf in confs:
                 key = conf.get('key')
                 value = conf.get('value')
+                # replase {version}
+                if '{version}' in value:
+                    value = value.format(version=self.version)
+                
                 print('key: ' + str(key) + ' value: ' + str(value))
                 self.config_apply(self.install_path_full + name, key, value)
 
