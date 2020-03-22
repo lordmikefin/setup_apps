@@ -138,7 +138,9 @@ def append_plugins(ecli_elem: Element):
     # NOTE: for now it is hard code :(
     name.text = 'pydev'
     version = ET.SubElement(plugin_pydev, Tag.version)
-    version.text = '7.4.0'
+    # NOTE: use latest version from the source
+    #version.text = '7.4.0'
+    version.text = 'latest'
     '''
     plugin_pydev.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(plugin_pydev, Tag.installer_file)
