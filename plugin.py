@@ -64,7 +64,9 @@ class Plugin(Base):
 
         #self.install_path = self.install_path + '\\plugins\\org.python.pydev_7.4.0.201910251334\\pydev.jar'
         # Define 'plugins' install folder
-        self.install_path = self.install_path + '\\plugins'
+        # NOTE: zip file contains the 'plugins' folder.
+        #self.install_path = self.install_path + '\\plugins'
+        self.install_path = self.install_path
 
         # TODO: is there need to set version ?
         '''
@@ -140,3 +142,16 @@ class Plugin(Base):
                 print('md5 does not match')
                 print('download failed !  TODO: interrupt the process?')
                 self.is_downloaded = False
+
+    def install(self):
+        print('Start pydev installer.')
+        print('Start ' + str(self.__name__) + ' ' + str(self.name) + ' installer.')
+        print('')
+        print(' Installing ... wait ... wait ... ')
+        print('')
+        # NOTE: This is "offline installer" ;)
+        #print(str(_installer_file_fullname) + ' :: ' + str(_eclipse_path))
+        #util.unzip(str(self.installer_path), str(self.install_path))
+        util.unzip_py(str(self.installer_path), str(self.install_path))
+
+        return True # TODO: return error?

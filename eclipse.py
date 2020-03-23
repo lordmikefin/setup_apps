@@ -348,6 +348,19 @@ class Eclipse(Base):
         for plug in self.plugins:
             plug.download()
 
+    def install_plugins(self):
+        print('Install plugins')
+        print('self.plugins ' + str(self.plugins))
+        if not self.plugins:
+            print('No plugins')
+            return
+
+        if False:  # Definition only for Eclipse auto complete
+            plug = Plugin()
+
+        for plug in self.plugins:
+            plug.install()
+
 
 _installer_file_fullname = ''
 _file_name = ''

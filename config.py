@@ -346,6 +346,7 @@ def install():
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list:
         ecli.install()
+        ecli.install_plugins()
 
 
 def configure():
