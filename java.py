@@ -63,6 +63,16 @@ def download_jre():
         print('Can not auto download Oracle JRE !!!')
         print('Download "' + str(_file_name) + '" manually into folder: ' + str(_installer_file_fullname))
         print('  https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html')
+        '''
+        # TODO: Use OpenJDK
+        https://openjdk.java.net/
+        https://openjdk.java.net/install/index.html
+        https://en.wikipedia.org/wiki/OpenJDK
+        https://developers.redhat.com/blog/2016/06/27/openjdk-now-available-for-windows/
+        https://developers.redhat.com/products/openjdk
+        https://developers.redhat.com/products/openjdk/download
+        https://developers.redhat.com/download-manager/file/java-1.8.0-openjdk-1.8.0.242-3.b08.redhat.windows.x86_64.msi
+        '''
 
 
 def define_file_jre():
