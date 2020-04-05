@@ -81,21 +81,36 @@ def create_sample():
     version.text = __version__
 
     apps = ET.SubElement(root, Tag.apps)
-    append_eclipse(apps, 'latest')
+    plugins = [
+        {
+            'name': 'pydev',
+            'version': 'latest',
+        }
+    ]
+    append_eclipse(apps, ver='latest', plugins=plugins)
     #append_eclipse(apps, '2019-09')
+
+    plugins = [
+        {
+            'name': 'pydev',
+            'version': '7.4.0',
+        }
+    ]
+    #apps = ET.SubElement(root, Tag.apps)
+    append_eclipse(apps, ver='2019-09', plugins=plugins)
 
     indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
 
 
-def append_eclipse(apps: Element, version_str: str):
+def append_eclipse(apps: Element, ver: str, plugins: list):
     ecli_elem = ET.SubElement(apps, Tag.eclipse)
-    version = ET.SubElement(ecli_elem, Tag.version)
+    version_elem = ET.SubElement(ecli_elem, Tag.version)
     # NOTE: use latest version from the source
-    #version.text = '2019-09'
-    #version.text = 'latest'
-    version.text = version_str
+    #version_elem.text = '2019-09'
+    #version_elem.text = 'latest'
+    version_elem.text = ver
     '''
     ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(ecli_elem, Tag.installer_file)
@@ -111,7 +126,12 @@ def append_eclipse(apps: Element, version_str: str):
     install_path.text = 'C:\\Program Files\\eclipse-{version}'
     #install_path.text = 'C:\\Program Files\\e-{version}'
     append_configure(ecli_elem)
-    append_plugins(ecli_elem, 'latest')
+    for plugin in plugins:
+        # TODO: get name and version
+        name = plugin.get('name')
+        version = plugin.get('version')
+        #append_plugins(ecli_elem, name='pydev', ver='latest')
+        append_plugins(ecli_elem, name, version)
 
 
 def append_configure(ecli_elem: Element):
@@ -132,20 +152,21 @@ def append_configure(ecli_elem: Element):
     value.text = '@user.home/eclipse-workspace-{version}'
 
 
-def append_plugins(ecli_elem: Element, version_str: str):
+def append_plugins(ecli_elem: Element, name: str, ver: str):
     plugins = ET.SubElement(ecli_elem, Tag.plugins)
     plugin = ET.SubElement(plugins, Tag.plugin)
     #plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
     plugin_pydev = plugin  # TODO: is there realy need for separate tag for each plugin?
-    name = ET.SubElement(plugin_pydev, Tag.name)
+    name_elem = ET.SubElement(plugin_pydev, Tag.name)
     # TODO: how to share plugin names elegantly between 'setup_apps' and 'app_source'?
     # NOTE: for now it is hard code :(
-    name.text = 'pydev'
+    #name_elem.text = 'pydev'
+    name_elem.text = name
     version = ET.SubElement(plugin_pydev, Tag.version)
     # NOTE: use latest version from the source
     #version.text = '7.4.0'
     #version.text = 'latest'
-    version.text = version_str
+    version.text = ver
     '''
     plugin_pydev.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(plugin_pydev, Tag.installer_file)
