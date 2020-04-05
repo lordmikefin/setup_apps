@@ -20,8 +20,8 @@
 """
 
 __license__ = "MIT License"
-__version__ = "0.1.9"
-__revision__ = "setup_apps (module)  v" + __version__ + " (2020-03-16)"
+__version__ = "0.1.10"
+__revision__ = "setup_apps (module)  v" + __version__ + " (2020-04-05)"
 
 
 '''
