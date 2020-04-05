@@ -74,6 +74,8 @@ def download_jre():
         https://developers.redhat.com/download-manager/file/java-1.8.0-openjdk-1.8.0.242-3.b08.redhat.windows.x86_64.msi
         https://adoptopenjdk.net/installation.html#x64_win-jdk
         https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.zip
+        https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi
+        https://adoptopenjdk.net/installation.html#windows-msi
         '''
 
 
