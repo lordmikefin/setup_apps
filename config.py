@@ -81,19 +81,21 @@ def create_sample():
     version.text = __version__
 
     apps = ET.SubElement(root, Tag.apps)
-    append_eclipse(apps)
+    append_eclipse(apps, 'latest')
+    #append_eclipse(apps, '2019-09')
 
     indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
 
 
-def append_eclipse(apps: Element):
+def append_eclipse(apps: Element, version_str: str):
     ecli_elem = ET.SubElement(apps, Tag.eclipse)
     version = ET.SubElement(ecli_elem, Tag.version)
     # NOTE: use latest version from the source
     #version.text = '2019-09'
-    version.text = 'latest'
+    #version.text = 'latest'
+    version.text = version_str
     '''
     ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(ecli_elem, Tag.installer_file)
@@ -109,7 +111,7 @@ def append_eclipse(apps: Element):
     install_path.text = 'C:\\Program Files\\eclipse-{version}'
     #install_path.text = 'C:\\Program Files\\e-{version}'
     append_configure(ecli_elem)
-    append_plugins(ecli_elem)
+    append_plugins(ecli_elem, 'latest')
 
 
 def append_configure(ecli_elem: Element):
@@ -130,7 +132,7 @@ def append_configure(ecli_elem: Element):
     value.text = '@user.home/eclipse-workspace-{version}'
 
 
-def append_plugins(ecli_elem: Element):
+def append_plugins(ecli_elem: Element, version_str: str):
     plugins = ET.SubElement(ecli_elem, Tag.plugins)
     plugin = ET.SubElement(plugins, Tag.plugin)
     #plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
@@ -142,7 +144,8 @@ def append_plugins(ecli_elem: Element):
     version = ET.SubElement(plugin_pydev, Tag.version)
     # NOTE: use latest version from the source
     #version.text = '7.4.0'
-    version.text = 'latest'
+    #version.text = 'latest'
+    version.text = version_str
     '''
     plugin_pydev.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(plugin_pydev, Tag.installer_file)
