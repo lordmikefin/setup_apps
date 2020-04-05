@@ -20,7 +20,7 @@
 """
 
 import xml.etree.ElementTree as ET
-from setup_apps import util, __version__, eclipse, PATH_INSTALLERS
+from setup_apps import util, __version__, eclipse, PATH_INSTALLERS, java
 from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
 import app_source_handler
@@ -241,6 +241,27 @@ def parse_apps(elem_apps: Element):
     for elem in elem_apps:
         if elem.tag == Tag.eclipse:
             parse_eclipse(elem)
+        if elem.tag == Tag.java:
+            parse_java(elem)
+
+
+def parse_java(elem: Element):
+    global APPS
+
+    java_obj = java.Java()
+    elem_version = elem.find(Tag.version)
+    if not elem_version is None:
+        java_obj.version = elem_version.text
+    elem_path = elem.find(Tag.install_path)
+    if not elem_path is None:
+        java_obj.install_path = elem_path.text
+
+    print('version                  : ' + str(java_obj.version))
+    print('install_path             : ' + str(java_obj.install_path))
+
+    java_list = list(APPS.get('java', []))
+    java_list.append(java_obj)
+    APPS['java'] = java_list
 
 
 def parse_eclipse(elem: Element):
