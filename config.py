@@ -383,6 +383,14 @@ def init():
         # TODO: move stuff from parse into this?
         ecli.init_plugins(source_eclipse)
 
+    java_list = list(APPS.get('java', []))
+    if False:  # Definition only for Eclipse auto complete
+        java_obj = java.Java()
+
+    for java_obj in java_list:
+        source_java = app_source_handler.source.APPS.get('java', {})
+        print('source_java: ' + str(source_java))
+
 
 def download():
     """ Download all app installers """
