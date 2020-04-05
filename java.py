@@ -23,6 +23,15 @@ from . import PATH_INSTALLERS
 from . import util
 
 import os
+from setup_apps.base import Base
+
+
+class Java(Base):
+
+    def __init__(self):
+        super().__init__()
+
+        self.exe_file = None
 
 
 _installer_file_fullname = ''

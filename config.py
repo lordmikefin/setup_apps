@@ -99,9 +99,21 @@ def create_sample():
     #apps = ET.SubElement(root, Tag.apps)
     append_eclipse(apps, ver='2019-09', plugins=plugins)
 
+    #append_java(apps, ver='8u242b08')
+    append_java(apps, ver='jdk-8.0.242.08-hotspot')
+
     indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
+
+
+def append_java(apps: Element, ver: str):
+    java_elem = ET.SubElement(apps, Tag.java)
+    version_elem = ET.SubElement(java_elem, Tag.version)
+    version_elem.text = ver
+    java_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    install_path = ET.SubElement(java_elem, Tag.install_path)
+    install_path.text = 'C:\\Program Files\\AdoptOpenJDK\\{version}'
 
 
 def append_eclipse(apps: Element, ver: str, plugins: list):
