@@ -367,7 +367,8 @@ def parse_key_value(kvs: Element):
 
 # TODO: should this be a class ?
 APPS = {
-    'eclipse': []
+    'eclipse': [],
+    'java': [],
     }
 
 def init():
