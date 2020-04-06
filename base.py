@@ -31,12 +31,14 @@ class Base:
         self.installer_file = None
         self.installer_url = None
         self.installer_full_url = None
+        # TODO: get md5/sha256 file from the sourse
         self.installer_full_url_md5 = None
         self.md5sum = None
         self.sha256url = None
 
         self.path_ok = False
         self.installer_path = None
+        # TODO: get md5/sha256 file from the sourse
         self.installer_path_md5 = None
 
     def generate_installer_path(self):
@@ -45,6 +47,7 @@ class Base:
 
         # file = str(self.installer_file).format(version=self.version)
         self.installer_path = PATH_INSTALLERS + self.installer_file
+        # TODO: get md5/sha256 file from the sourse
         self.installer_path_md5 = self.installer_path + '.md5'
         self.path_ok = True
 

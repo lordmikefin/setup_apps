@@ -273,14 +273,37 @@ def print_progress(calculated, file_len):
     return print('Progress ' + str(calculated) + ' / ' + str(file_len))
 
 
+def sha256(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None, show_progress: bool=False) -> str:
+    '''
+    Calculate sha256
+
+    based on md5sum(...) -function
+    https://docs.python.org/2/library/hashlib.html
+    '''
+    file_len = Path(src).stat().st_size
+    pbar = None
+    if show_progress:
+        pbar = tqdm(total=file_len)
+    calculated = 0
+    md5 = hashlib.sha256()
+    with io.open(src, mode="rb") as fd:
+        for chunk in iter(lambda: fd.read(length), b''):
+            md5.update(chunk)
+            if not callback is None:
+                calculated += len(chunk)
+                callback(calculated, file_len)
+            elif pbar:
+                pbar.update(len(chunk))
+
+    if pbar:
+        pbar.close()
+
+    return md5.hexdigest()
+
+
 def is_md5_in_file(file: str, md5: str) -> bool:
     '''
     Match file md5 sum to the md5sum file.
-
-    TODO: Get md5sum file from the download site.
-    TODO: If not available then generate it.
-          It should be stored with code base
-          or common loacation (separate github project).
     '''
     f = open(file, "r")
     first_line = str(f.readline())

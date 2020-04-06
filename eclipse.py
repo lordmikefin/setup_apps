@@ -122,6 +122,7 @@ class Eclipse(Base):
             # TODO: log error
             print('ERROR: Can not download Eclipse installer.')
 
+        # TODO: refactor
         if util.is_file(self.installer_path):
             print('Eclipse installer file exists.')
             print('Calculate md5sum')
@@ -129,6 +130,7 @@ class Eclipse(Base):
             # md5 = util.md5sum(self.installer_path, callback=util.print_progress)
             # md5 = util.md5sum(self.installer_path)
             print('md5 hash: ' + str(md5))
+            # TODO: get md5/sha256 file from the sourse
             if util.is_file(self.installer_path_md5):
                 print('md5 file exists')
                 if util.is_md5_in_file(self.installer_path_md5, md5):

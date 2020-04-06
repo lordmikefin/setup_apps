@@ -43,7 +43,15 @@ class Java(Base):
     
         self.generate_installer_path()
         print('installer_path           : ' + str(self.installer_path))
-    
+        # TODO: get md5/sha256 file from the sourse
+        #self.installer_path_md5 = None  # NOTE: this is set in Base class!
+        self.installer_path_md5 = 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'
+        #self.installer_path = PATH_INSTALLERS + self.installer_file
+        #self.installer_path_md5 = self.installer_path + '.md5'  # NOTE: this is set in Base class!
+        self.installer_path_md5 = PATH_INSTALLERS + 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'
+        #self.installer_full_url_md5 = None  # NOTE: this is set in Base class!
+        self.installer_full_url_md5 = self.sha256url
+
         self.generate_install_path()
         print('install_path_full        : ' + str(self.install_path_full))
 
@@ -74,6 +82,46 @@ class Java(Base):
         self.unzipped = self.temp_path + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
         self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
         '''
+
+    def download(self):
+        if not (self.url_ok and self.path_ok):
+            # TODO: log error
+            print('ERROR: Can not download Eclipse installer.')
+
+        # TODO: refactor
+        if util.is_file(self.installer_path):
+            print('Java installer file exists.')
+            print('Calculate sha256')
+            sha = util.sha256(self.installer_path, show_progress=True)
+            print('sha256: ' + str(sha))
+            # TODO: get md5/sha256 file from the sourse
+            if util.is_file(self.installer_path_md5):
+                print('sha256 file exists')
+                if util.is_md5_in_file(self.installer_path_md5, sha):
+                    print('sha256 is in file')
+                    self.is_downloaded = True
+                    return  # file is downloaded
+                else:
+                    print('sha256 does not match')
+                    print('download file again')
+
+        print('Download Java installer.')
+        util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        print('Download complete.')
+        print('Download Java installer sha256 file.')
+        util.download(self.installer_full_url_md5, self.installer_path_md5)
+        print('Calculate sha256')
+        sha = util.sha256(self.installer_path, show_progress=True)
+        print('sha256: ' + str(sha))
+        if util.is_file(self.installer_path_md5):
+            print('sha256 file exists')
+            if util.is_md5_in_file(self.installer_path_md5, sha):
+                print('sha256 is in file')
+                self.is_downloaded = True
+            else:
+                print('sha256 does not match')
+                print('download failed !  TODO: interrupt the process?')
+                self.is_downloaded = False
 
 
 _installer_file_fullname = ''

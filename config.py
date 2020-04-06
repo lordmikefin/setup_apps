@@ -404,6 +404,13 @@ def download():
         ecli.download()
         ecli.download_plugins()
 
+    java_list = list(APPS.get('java', []))
+    if False:  # Definition only for Eclipse auto complete
+        java_obj = java.Java()
+
+    for java_obj in java_list:
+        java_obj.download()
+
 
 def install():
     """ install all app """
