@@ -33,6 +33,7 @@ class Base:
         self.installer_full_url = None
         self.installer_full_url_md5 = None
         self.md5sum = None
+        self.sha256url = None
 
         self.path_ok = False
         self.installer_path = None
@@ -131,14 +132,18 @@ class Base:
         md5url = ver.get('md5url', '')
         md5sum = ver.get('md5sum', '')
         file = ver.get('file', '')
+        sha256url = ver.get('sha256url', '')
         print('url: ' + str(url))
         print('md5url: ' + str(md5url))
         print('md5sum: ' + str(md5sum))
         print('file: ' + str(file))
+        print('sha256url: ' + str(sha256url))
         self.installer_file = file
         self.installer_full_url = url
         self.installer_full_url_md5 = md5url
         self.md5sum = md5sum
+        #TODO: get  'sha256url'
+        self.sha256url = sha256url
         self.set_url_ok()
         #self.url_ok = True
         return
@@ -159,5 +164,8 @@ class Base:
         if self.installer_full_url_md5:
             return True
         if self.md5sum:
+            return True
+        # TODO: is  'sha256url'
+        if self.sha256url:
             return True
         return False

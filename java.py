@@ -24,6 +24,7 @@ from . import util
 
 import os
 from setup_apps.base import Base
+from setup_apps.tag import Tag
 
 
 class Java(Base):
@@ -31,7 +32,48 @@ class Java(Base):
     def __init__(self):
         super().__init__()
 
+        self.install_path_ok = False
+        self.install_path = None
+        self.install_path_full = None
         self.exe_file = None
+
+    def generate_all(self, source: dict):
+        self.generate_full_url_from_source(source)
+        print('installer_full_url       : ' + str(self.installer_full_url))
+    
+        self.generate_installer_path()
+        print('installer_path           : ' + str(self.installer_path))
+    
+        self.generate_install_path()
+        print('install_path_full        : ' + str(self.install_path_full))
+
+    def generate_install_path(self):
+        if self.install_path is None:
+            # TODO: log error
+            print('ERROR: Incorrect Java config: Missing tag "' + Tag.install_path + '"')
+            return
+
+        if self.version is None:
+            # TODO: log error
+            print('ERROR: Incorrect Java config: Missing tag "' + Tag.version + '"')
+            return
+
+        if not '{version}' in self.install_path:
+            self.install_path_full = str(self.install_path)
+            self.install_path_ok = True
+            return
+
+        self.install_path_full = str(self.install_path).format(version=self.version)
+        self.exe_file = self.install_path_full + '\\bin\\java.exe'
+        self.install_path_ok = True
+        '''
+        # TODO: is there better solution? extract to temp?
+        # NOTE: while extracting I got path too long error -> changed install path
+        #self.unzipped = self.install_path_full + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
+        self.temp_path = 'C:\\temp'
+        self.unzipped = self.temp_path + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
+        self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
+        '''
 
 
 _installer_file_fullname = ''

@@ -391,6 +391,7 @@ def init():
     for java_obj in java_list:
         source_java = app_source_handler.source.APPS.get('java', {})
         print('source_java: ' + str(source_java))
+        java_obj.generate_all(source_java)
 
 
 def download():
