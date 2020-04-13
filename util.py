@@ -210,12 +210,32 @@ def run_os_command(command: str) -> bool:
 
     return True
 
-def run_command_alt_1(command: Union[str, list], shell=False) -> CommandRet:
+def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.CompletedProcess:
     # https://docs.python.org/3/library/subprocess.html#subprocess.run
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
+    if isinstance(command, str):
+        print('NOTE: It is safer to pass command as list of parameters.')
+
     if shell:
         # https://docs.python.org/3/library/subprocess.html#security-considerations
         print('TODO: avoid shell injection vulnerabilities')
+
+    try:
+        process = subprocess.run(
+            command,
+            stdout=subprocess.PIPE,
+            shell=shell,
+            universal_newlines=True)
+    except FileNotFoundError as err:
+        print('Command failed')
+        print("Error: {0}".format(err))
+        # https://ss64.com/nt/errorlevel.html
+        # https://shapeshed.com/unix-exit-codes/
+        # NOTE: error code 1 = "the operation was not successful"
+        return subprocess.CompletedProcess(args=command, returncode=1)
+
+    print('' + str(process))
+
 
 def run_command(command: Union[str, list], shell=False) -> CommandRet:
     # TODO: look samples about 'subprocess' from the 'git.py' module
