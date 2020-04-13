@@ -34,8 +34,8 @@ def is_installed_npp():
     #command = str(PATH_APP_NPP) + '\\notepad++ --help'
     command = '"' + str(PATH_APP_NPP) + '\\notepad++" -quickPrint'
     print(str(command))
-    res = int(os.system(command))
-    if res > 0:
+    test = util.run_os_command(command)
+    if test:
         print('Notepad++ NOT installed.')
         return False
 
@@ -106,9 +106,9 @@ def install_npp():
     print('')
     print(' Installing ... wait ... wait ... ')
     print('')
-    res = int(os.system(command))
+    test = util.run_os_command(command)
     print('')
-    if res > 0:
+    if test:
         # TODO: Installer may not throw error ?
         print('notepad++ installation FAILED.')
         #sys.exit(1)

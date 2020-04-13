@@ -115,9 +115,9 @@ def install():
     print('')
     print(' Installing ... wait ... wait ... ')
     print('')
-    res = int(os.system(command))
+    test = util.run_os_command(command)
     print('')
-    if res > 0:
+    if test:
         # TODO: Installer may not throw error ?
         print('python installation FAILED.')
         #sys.exit(1)

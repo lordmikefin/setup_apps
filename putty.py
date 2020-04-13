@@ -37,8 +37,8 @@ def set_env_var():
     #   https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/setx
     command = 'setx GIT_SSH ' + '"' + str(_plink) + '"'
     print(str(command))
-    res = int(os.system(command))
-    if res > 0:
+    test = util.run_os_command(command)
+    if test:
         print('GIT_SSH is not set.')
         return False
 
@@ -54,8 +54,8 @@ def is_installed():
     #command = '"' + str(PATH_APP_PUTTY) + '\\plink' + '"' + ' -V '
     command = '"' + str(_plink) + '"' + ' -V '
     print(str(command))
-    res = int(os.system(command))
-    if res > 0:
+    test = util.run_os_command(command)
+    if test:
         print('Putty NOT installed.')
         return False
 
@@ -110,9 +110,9 @@ def install():
     print('')
     print(' Installing ... wait ... wait ... ')
     print('')
-    res = int(os.system(command))
+    test = util.run_os_command(command)
     print('')
-    if res > 0:
+    if test:
         # TODO: Installer may not throw error ?
         print('Putty installation FAILED.')
         #sys.exit(1)

@@ -129,8 +129,8 @@ class Java(Base):
         #java -version
         command = 'java -version'
         print(str(command))
-        res = int(os.system(command))
-        if res > 0:
+        test = util.run_os_command(command)
+        if test:
             print('Java NOT installed.')
             return False
     
@@ -158,9 +158,9 @@ class Java(Base):
         print('')
         print(' Installing ... wait ... wait ... ')
         print('')
-        #res = int(os.system(command))
+        #test = util.run_os_command(command)
         print('')
-        if res > 0:
+        if test:
             # TODO: Installer may not throw error ?
             print('Java installation FAILED.')
             #sys.exit(1)
@@ -180,8 +180,8 @@ def is_installed_jre():
     #command = str(PATH_APP_NPP) + 'java -version'
     command = 'java -version'
     print(str(command))
-    res = int(os.system(command))
-    if res > 0:
+    test = util.run_os_command(command)
+    if test:
         print('OracleJRE NOT installed.')
         return False
 
@@ -260,9 +260,9 @@ def install_jre():
     print('')
     print(' Installing ... wait ... wait ... ')
     print('')
-    res = int(os.system(command))
+    test = util.run_os_command(command)
     print('')
-    if res > 0:
+    if test:
         # TODO: Installer may not throw error ?
         print('OracleJRE installation FAILED.')
         #sys.exit(1)

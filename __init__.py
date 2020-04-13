@@ -50,6 +50,8 @@ import logging
 import sys
 import os
 
+from . import util
+
 # Listing initialiazion (init.bat) phase paths.
 # TODO: Are these needed?
 INIT_PATH_TOY_BOX = 'C:\\LM_ToyBox\\'
@@ -95,9 +97,9 @@ def connect_samba_share():
     # TODO: Get samba share address from config.
     #command = 'net use W: \\192.168.122.1\sambashare\windows'
     command = 'net use ' + DRIVE_INSTALLER + ' \\192.168.122.1\sambashare\windows'
-    res = int(os.system(command))
+    test = util.run_os_command(command)
     print('')
-    if res > 0:
+    if test:
         print('Samba connection  FAILED.')
         #sys.exit(1)
         return False

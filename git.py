@@ -50,6 +50,7 @@ def define_the_user():
         print('Failed to set user for git!')
     '''
 
+    # TODO: use 'run_command' -function instead
     try:
         test = subprocess.check_output(command, shell=True)
         #print(str(test))
@@ -64,8 +65,8 @@ def define_the_user():
 
     command = _git_cmd + ' config --global user.email ' + _user_mail
     print(str(command))
-    res = int(os.system(command))
-    if res > 0:
+    test = util.run_os_command(command)
+    if test:
         print('Failed to set user email for git!')
 
 
@@ -93,10 +94,11 @@ def is_installed():
 
     command = _git_cmd + ' --version'
     print(str(command))
+    # TODO: use 'run_command' -function instead
     # NOTE: os.system() just runs the process, it doesn't capture the output
     #   https://unix.stackexchange.com/questions/418616/python-how-to-print-value-that-comes-from-os-system
-    res = int(os.system(command))
-    if res > 0:
+    test_res = util.run_os_command(command)
+    if test_res:
         print('git NOT installed.')
         return False
 
@@ -176,9 +178,9 @@ def install():
     print('')
     print(' Installing ... wait ... wait ... ')
     print('')
-    res = int(os.system(command))
+    test = util.run_os_command(command)
     print('')
-    if res > 0:
+    if test:
         # TODO: Installer may not throw error ?
         print('git installation FAILED.')
         #sys.exit(1)
