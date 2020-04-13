@@ -41,6 +41,9 @@ PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
 
 OS_WINDOWS = 'win32'
 
+def python_version_str() -> str:
+    return sys.version
+
 def python_version() -> tuple:
     return sys.version_info
 
