@@ -25,6 +25,7 @@ from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
 import app_source_handler
 import json
+from .util import logger
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -69,7 +70,7 @@ def indent(elem, level=0):
 
 def create_sample():
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
-    print('create the sample config XML file: ' + str(file))
+    logger.info('create the sample config XML file: ' + str(file))
     root = ET.Element(Tag.setup)
     tree = ET.ElementTree(root)
     #tree._setroot(root)

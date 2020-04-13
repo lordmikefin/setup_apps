@@ -52,6 +52,7 @@ SET PATH_APP_PY37=%PATH_APPS%\Python37
 import logging
 import os
 from . import util
+from .util import logger
 
 
 # Listing initialiazion (init.bat) phase paths.
