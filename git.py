@@ -66,7 +66,7 @@ def define_the_user():
     command = _git_cmd + ' config --global user.email ' + _user_mail
     print(str(command))
     test = util.run_os_command(command)
-    if test:
+    if not test:
         print('Failed to set user email for git!')
 
 
@@ -98,7 +98,7 @@ def is_installed():
     # NOTE: os.system() just runs the process, it doesn't capture the output
     #   https://unix.stackexchange.com/questions/418616/python-how-to-print-value-that-comes-from-os-system
     test_res = util.run_os_command(command)
-    if test_res:
+    if not test_res:
         print('git NOT installed.')
         return False
 
@@ -180,7 +180,7 @@ def install():
     print('')
     test = util.run_os_command(command)
     print('')
-    if test:
+    if not test:
         # TODO: Installer may not throw error ?
         print('git installation FAILED.')
         #sys.exit(1)

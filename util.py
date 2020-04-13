@@ -404,7 +404,7 @@ def msiexec(name: str, installer: str, properties: dict=None, log_file: str=None
     print(command)
     test = run_os_command(command)
     #print('')
-    if test:
+    if not test:
         # TODO: Installer may not throw error ?
         #print('XXX installation FAILED.')
         return False

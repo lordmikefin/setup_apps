@@ -38,7 +38,7 @@ def set_env_var():
     command = 'setx GIT_SSH ' + '"' + str(_plink) + '"'
     print(str(command))
     test = util.run_os_command(command)
-    if test:
+    if not test:
         print('GIT_SSH is not set.')
         return False
 
@@ -55,7 +55,7 @@ def is_installed():
     command = '"' + str(_plink) + '"' + ' -V '
     print(str(command))
     test = util.run_os_command(command)
-    if test:
+    if not test:
         print('Putty NOT installed.')
         return False
 
@@ -113,7 +113,7 @@ def install():
     print('')
     test = util.run_os_command(command)
     print('')
-    if test:
+    if not test:
         # TODO: Installer may not throw error ?
         print('Putty installation FAILED.')
         #sys.exit(1)

@@ -99,7 +99,7 @@ def connect_samba_share():
     command = 'net use ' + DRIVE_INSTALLER + ' \\192.168.122.1\sambashare\windows'
     test = util.run_os_command(command)
     print('')
-    if test:
+    if not test:
         print('Samba connection  FAILED.')
         #sys.exit(1)
         return False

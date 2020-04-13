@@ -130,7 +130,7 @@ class Java(Base):
         command = 'java -version'
         print(str(command))
         test = util.run_os_command(command)
-        if test:
+        if not test:
             print('Java NOT installed.')
             return False
     
@@ -186,7 +186,7 @@ def is_installed_jre():
     command = 'java -version'
     print(str(command))
     test = util.run_os_command(command)
-    if test:
+    if not test:
         print('OracleJRE NOT installed.')
         return False
 
@@ -267,7 +267,7 @@ def install_jre():
     print('')
     test = util.run_os_command(command)
     print('')
-    if test:
+    if not test:
         # TODO: Installer may not throw error ?
         print('OracleJRE installation FAILED.')
         #sys.exit(1)
