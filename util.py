@@ -202,6 +202,7 @@ def run_command(command: str) -> CommandRet:
     # TODO: read more about 'subprocess'
     #   https://docs.python.org/3/library/subprocess.html
     #   https://docs.python.org/3/library/subprocess.html#subprocess.check_output
+    print('Run command: ' + command)
     test = ''
     try:
         # test = subprocess.check_output(command, shell=True)
