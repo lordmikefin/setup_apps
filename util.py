@@ -42,6 +42,17 @@ PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
 
 OS_WINDOWS = 'win32'
 
+
+def get_logger():
+    # https://www.toptal.com/python/in-depth-python-logging
+    log = logging.getLogger('setup_apps')
+    # Do not propagate the log up to parent
+    log.propagate = False
+    return log
+
+logger = get_logger()
+
+
 def logging_test():
     # https://docs.python.org/3/library/logging.html
     # https://docs.python.org/3/howto/logging.html
@@ -53,6 +64,8 @@ def logging_test():
     #logging.error('ERROR log from setup_apps.util')
     logging.getLogger('setup_apps').info('INFO log from setup_apps.util')
     logging.getLogger('setup_apps').error('ERROR log from setup_apps.util')
+    logger.info('INFO log from setup_apps.util')
+    logger.error('ERROR log from setup_apps.util')
 
 def python_version_str() -> str:
     return sys.version
