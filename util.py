@@ -34,12 +34,20 @@ from tqdm import tqdm
 
 from .namedtuples import CommandRet
 import shutil
+from typing import Union
 
 # import urllib.request
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
 
 OS_WINDOWS = 'win32'
 
+
+def hint_test(test: str) -> bool:
+    return isinstance(test, str)
+
+def hint_test_complex(test: Union[str, int]) -> bool:
+    # https://stackoverflow.com/questions/33945261/how-to-specify-multiple-return-types-using-type-hints
+    return isinstance(test, str) or isinstance(test, int)
 
 def is_os_windows() -> bool:
     return sys.platform == OS_WINDOWS
