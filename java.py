@@ -123,6 +123,53 @@ class Java(Base):
                 print('download failed !  TODO: interrupt the process?')
                 self.is_downloaded = False
 
+    def is_installed(self):
+        # TODO: Test JDK and JRE
+        # Test if JRE is installed.
+        #java -version
+        command = 'java -version'
+        print(str(command))
+        res = int(os.system(command))
+        if res > 0:
+            print('Java NOT installed.')
+            return False
+    
+        print('Java already installed.')
+        return True
+
+    def install(self):
+        # TODO: install OracleJRE and OracleJDK other variants
+        if not self.is_downloaded:
+            # TODO: log error
+            print('ERROR: Java installer not downloaded.')
+
+        if self.is_installed():
+            print('Java is already installed')
+            return
+
+        # TODO: implement :)
+        # https://adoptopenjdk.net/installation.html#windows-msi
+        
+        #command = str(str(_installer_file_fullname) + ' /s')
+        
+        print('Start Java installer.')
+        '''
+        print(command)
+        print('')
+        print(' Installing ... wait ... wait ... ')
+        print('')
+        #res = int(os.system(command))
+        print('')
+        if res > 0:
+            # TODO: Installer may not throw error ?
+            print('Java installation FAILED.')
+            #sys.exit(1)
+            return False
+        else:
+            print('Java installation done.')
+            return True
+        '''
+
 
 _installer_file_fullname = ''
 _file_name = ''
