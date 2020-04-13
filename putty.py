@@ -99,6 +99,7 @@ def install():
     # http://www.silentinstall.org/msiexec
     # http://mylittlespotinthebigunknown.blogspot.com/2018/04/automating-putty-07-msi-install.html
 
+    # TODO: use util 'msiexec' -function
     command = 'START "Putty Install" /WAIT msiexec /qb '
     command = command + ' /L*V PuttyInstall.log '
     command = command + ' /i ' + str(_installer_file_fullname)

@@ -369,3 +369,45 @@ def move_win(src: str, dst: str):
 def startswith_comment(line: str):
     ''' Is line a comment line of INI file. '''
     return line.startswith('#') or line.startswith(';')
+
+def msiexec(name: str, installer: str, properties: dict=None, log_file: str=None,
+            show_progress=False) -> bool:
+    # https://www.advancedinstaller.com/user-guide/msiexec.html
+    # # http://www.silentinstall.org/msiexec
+
+    if not is_os_windows():
+        # TODO: create custom exception
+        raise OSError('util.msiexec() Works only with Windows')
+
+    command = 'START "' + name + '" /WAIT msiexec'
+    # Install Options
+    #   /i - normal installation
+    command = command + ' /i ' + installer
+    # Display Options
+    #   /passive - unattended mode (the installation shows only a progress bar)
+    #   /q - set the UI level:
+    #      n - no UI
+    if show_progress:
+        command = command + ' /passive '
+    else:
+        command = command + ' /qn '
+    # Logging Options
+    #   /L - enable logging
+    #      v - verbose output
+    #      x - include extra debugging information
+    #      * - log all information, except for v and x options
+    if log_file:
+        command = command + ' /L*V ' + log_file
+    # Set public properties
+    for key, value in properties.items():
+        command = command + ' ' + key + '="' + value + '"'
+    print(command)
+    test = run_os_command(command)
+    #print('')
+    if test:
+        # TODO: Installer may not throw error ?
+        #print('XXX installation FAILED.')
+        return False
+    
+    #print('XXX installation done.')
+    return True
