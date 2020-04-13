@@ -49,6 +49,8 @@ def logging_test():
     # https://www.loggly.com/ultimate-guide/python-logging-basics/
     logging.info('INFO log from setup_apps.util')
     logging.error('ERROR log from setup_apps.util')
+    logging.getLogger('setup_apps').info('INFO log from setup_apps.util')
+    logging.getLogger('setup_apps').error('ERROR log from setup_apps.util')
 
 def python_version_str() -> str:
     return sys.version
