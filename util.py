@@ -91,7 +91,7 @@ def pause():
     '''
     if not is_os_windows():
         raise OSError('util.pause() Works only with Windows')
-    os.system("pause")
+    run_os_command("pause")
 
 
 def is_file(file: str) -> bool:
@@ -107,7 +107,7 @@ def unzip(zip_file: str, dst: str):
     print('Unzip the file')
     print('Unzip to  ' + str(dst))
     command = 'PowerShell -Command "Expand-Archive \'' + str(zip_file) + '\' \'' + str(dst) + '\'"'
-    res = int(os.system(command))
+    res = run_os_command(command)
     # TODO: How to handle possible errors?
 
 
@@ -154,7 +154,7 @@ def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
     command += '$s.Save(); '
     command = PWS + ' -Command "' + command + '"'
     print(command)
-    res = int(os.system(command))
+    test = run_os_command(command)
     # TODO: How to handle possible errors?
 
 
@@ -179,7 +179,25 @@ def compare_version(ver_a: str, ver_b: str) -> int:
     return 0
 
 
+def run_os_command(command: str) -> bool:
+    # https://docs.python.org/3/library/os.html#os.system
+    # Usage:
+    #   from . import util
+    #   test = util.run_os_command(command)
+    # TODO: use 'run_command' -function instead
+
+    # TODO: use 'subprocess' module
+    # https://docs.python.org/3/library/subprocess.html#module-subprocess
+    res = int(os.system(command))
+    if res != 0:
+        # TODO: log the error
+        print('Command failed. [' + command + ']')
+        return False
+
+    return True
+
 def run_command(command: str) -> CommandRet:
+    # TODO: look samples about 'subprocess' from the 'git.py' module
     # TODO: read more about 'subprocess'
     #   https://docs.python.org/3/library/subprocess.html
     #   https://docs.python.org/3/library/subprocess.html#subprocess.check_output
@@ -346,7 +364,7 @@ def move_win(src: str, dst: str):
     # /NFL : No File List - don't log file names.
     # /NDL : No Directory List - don't log directory names.
     print(command)
-    res = int(os.system(command))
+    res = run_os_command(command)
 
 def startswith_comment(line: str):
     ''' Is line a comment line of INI file. '''
