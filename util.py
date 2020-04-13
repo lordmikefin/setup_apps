@@ -205,6 +205,12 @@ def run_os_command(command: str) -> bool:
 
     return True
 
+def run_command_alt_1(command: Union[str, list], shell=False) -> CommandRet:
+    # https://docs.python.org/3/library/subprocess.html#subprocess.run
+    # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
+    if shell:
+        # https://docs.python.org/3/library/subprocess.html#security-considerations
+        print('TODO: avoid shell injection vulnerabilities')
 
 def run_command(command: Union[str, list], shell=False) -> CommandRet:
     # TODO: look samples about 'subprocess' from the 'git.py' module
@@ -214,6 +220,10 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
     #   https://janakiev.com/blog/python-shell-commands/
     if isinstance(command, str):
         print('NOTE: It is safer to pass command as list of parameters.')
+
+    if shell:
+        # https://docs.python.org/3/library/subprocess.html#security-considerations
+        print('TODO: avoid shell injection vulnerabilities')
 
     print('Run command: ' + str(command))
     test = ''
