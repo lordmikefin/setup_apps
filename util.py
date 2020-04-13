@@ -220,6 +220,7 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
         # https://docs.python.org/3/library/subprocess.html#security-considerations
         print('TODO: avoid shell injection vulnerabilities')
 
+    process = None
     try:
         process = subprocess.run(
             command,
@@ -233,9 +234,11 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
         # https://ss64.com/nt/errorlevel.html
         # https://shapeshed.com/unix-exit-codes/
         # NOTE: error code 1 = "the operation was not successful"
-        return subprocess.CompletedProcess(args=command, returncode=1, stderr=str(err))
+        #return subprocess.CompletedProcess(args=command, returncode=1, stderr=str(err))
+        process = subprocess.CompletedProcess(args=command, returncode=1, stderr=str(err))
 
     print('' + str(process))
+    return process
 
 
 def run_command(command: Union[str, list], shell=False) -> CommandRet:
@@ -253,12 +256,19 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
 
     print('Run command: ' + str(command))
     test = ''
+    errorlevel = 0
     try:
         # test = subprocess.check_output(command, shell=True)
-        test = subprocess.check_output(command, shell=shell)
+        #test = subprocess.check_output(command, shell=shell)
+        #test = str(test, 'utf-8')
         # print('Stored output: ' + str(test))
+        c_proc = run_command_alt_1(command=command, shell=shell)
+        if c_proc.stdout:
+            test = c_proc.stdout
+        if c_proc.returncode:
+            errorlevel = c_proc.returncode
         print('Stored output type: ' + str(type(test)))
-        print('Stored output: ' + str(test, 'utf-8'))
+        print('Stored output: ' + str(test))
     except subprocess.CalledProcessError as err:
         print('Command failed')
         print("Error: {0}".format(err))
@@ -283,7 +293,8 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
 
     # TODO: get error code from 'subprocess'
     # return 0
-    return CommandRet(errorlevel=0, stdout=str(test, 'utf-8'))
+    #return CommandRet(errorlevel=0, stdout=str(test, 'utf-8'))
+    return CommandRet(errorlevel=errorlevel, stdout=str(test))
 
 
 def home_path() -> str:
