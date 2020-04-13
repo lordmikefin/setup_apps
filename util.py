@@ -35,11 +35,20 @@ from tqdm import tqdm
 from .namedtuples import CommandRet
 import shutil
 from typing import Union
+import logging
 
 # import urllib.request
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
 
 OS_WINDOWS = 'win32'
+
+def logging_test():
+    # https://docs.python.org/3/library/logging.html
+    # https://docs.python.org/3/howto/logging.html
+    # https://docs.python.org/3/howto/logging.html#configuring-logging-for-a-library
+    # https://www.loggly.com/ultimate-guide/python-logging-basics/
+    logging.info('INFO log from setup_apps.util')
+    logging.error('ERROR log from setup_apps.util')
 
 def python_version_str() -> str:
     return sys.version
