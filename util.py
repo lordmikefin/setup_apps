@@ -197,16 +197,18 @@ def run_os_command(command: str) -> bool:
 
     return True
 
-def run_command(command: str) -> CommandRet:
+
+def run_command(command: str, shell=False) -> CommandRet:
     # TODO: look samples about 'subprocess' from the 'git.py' module
     # TODO: read more about 'subprocess'
     #   https://docs.python.org/3/library/subprocess.html
     #   https://docs.python.org/3/library/subprocess.html#subprocess.check_output
+    #   https://janakiev.com/blog/python-shell-commands/
     print('Run command: ' + command)
     test = ''
     try:
         # test = subprocess.check_output(command, shell=True)
-        test = subprocess.check_output(command, shell=False)
+        test = subprocess.check_output(command, shell=shell)
         # print('Stored output: ' + str(test))
         print('Stored output type: ' + str(type(test)))
         print('Stored output: ' + str(test, 'utf-8'))
