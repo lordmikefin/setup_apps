@@ -224,6 +224,7 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
         process = subprocess.run(
             command,
             stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             shell=shell,
             universal_newlines=True)
     except FileNotFoundError as err:
@@ -232,7 +233,7 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
         # https://ss64.com/nt/errorlevel.html
         # https://shapeshed.com/unix-exit-codes/
         # NOTE: error code 1 = "the operation was not successful"
-        return subprocess.CompletedProcess(args=command, returncode=1)
+        return subprocess.CompletedProcess(args=command, returncode=1, stderr=str(err))
 
     print('' + str(process))
 
