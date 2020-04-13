@@ -188,6 +188,7 @@ def run_os_command(command: str) -> bool:
 
     # TODO: use 'subprocess' module
     # https://docs.python.org/3/library/subprocess.html#module-subprocess
+    print('Run command: ' + command)
     res = int(os.system(command))
     if res != 0:
         # TODO: log the error
