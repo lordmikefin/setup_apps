@@ -23,6 +23,10 @@ __license__ = "MIT License"
 __version__ = "0.1.11"
 __revision__ = "setup_apps (module)  v" + __version__ + " (2020-04-13)"
 
+import sys
+
+# NOTE: This code is tested only with Python version 3.7
+assert sys.version_info >= (3, 7)
 
 '''
 These lines are copied from init.bat (2019-09-30)
@@ -46,11 +50,9 @@ SET PATH_APP_PY37=%PATH_APPS%\Python37
 
 # https://docs.python.org/3.7/howto/logging.html
 import logging
-
-import sys
 import os
-
 from . import util
+
 
 # Listing initialiazion (init.bat) phase paths.
 # TODO: Are these needed?

@@ -41,6 +41,8 @@ PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
 
 OS_WINDOWS = 'win32'
 
+def python_version() -> tuple:
+    return sys.version_info
 
 def hint_test(test: str) -> bool:
     return isinstance(test, str)
