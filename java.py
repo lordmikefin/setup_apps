@@ -137,38 +137,43 @@ class Java(Base):
         print('Java already installed.')
         return True
 
-    def install(self):
+    def install(self) -> bool:
         # TODO: install OracleJRE and OracleJDK other variants
         if not self.is_downloaded:
             # TODO: log error
             print('ERROR: Java installer not downloaded.')
 
+        if not self.install_path_ok:
+            # TODO: log error
+            print('ERROR: Installation path not defined.')
+
         if self.is_installed():
             print('Java is already installed')
             return
 
-        # TODO: implement :)
         # https://adoptopenjdk.net/installation.html#windows-msi
-        
-        #command = str(str(_installer_file_fullname) + ' /s')
-        
         print('Start Java installer.')
-        '''
-        print(command)
         print('')
         print(' Installing ... wait ... wait ... ')
-        print('')
-        #test = util.run_os_command(command)
-        print('')
+        test = util.msiexec(
+            name = 'Java installer',
+            installer = self.installer_path,
+            properties = {
+                'INSTALLDIR': self.install_path_full,
+                'ADDLOCAL': 'FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome',
+                },
+            # TODO: log installation messages
+            log_file = None,
+            show_progress = True
+        )
+
         if test:
-            # TODO: Installer may not throw error ?
             print('Java installation FAILED.')
             #sys.exit(1)
             return False
         else:
             print('Java installation done.')
             return True
-        '''
 
 
 _installer_file_fullname = ''
