@@ -206,13 +206,16 @@ def run_os_command(command: str) -> bool:
     return True
 
 
-def run_command(command: str, shell=False) -> CommandRet:
+def run_command(command: Union[str, list], shell=False) -> CommandRet:
     # TODO: look samples about 'subprocess' from the 'git.py' module
     # TODO: read more about 'subprocess'
     #   https://docs.python.org/3/library/subprocess.html
     #   https://docs.python.org/3/library/subprocess.html#subprocess.check_output
     #   https://janakiev.com/blog/python-shell-commands/
-    print('Run command: ' + command)
+    if isinstance(command, str):
+        print('NOTE: It is safer to pass command as list of parameters.')
+
+    print('Run command: ' + str(command))
     test = ''
     try:
         # test = subprocess.check_output(command, shell=True)
