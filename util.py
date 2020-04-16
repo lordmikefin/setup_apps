@@ -43,14 +43,20 @@ PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
 OS_WINDOWS = 'win32'
 
 
-def get_logger():
+def create_logger():
     # https://www.toptal.com/python/in-depth-python-logging
     log = logging.getLogger('setup_apps')
     # Do not propagate the log up to parent
     log.propagate = False
     return log
 
-logger = get_logger()
+def stop_urllib3_logger():
+    # NOTE: stop 'urllib3' logger
+    # DEBUG:urllib3.connectionpool:Starting new HTTPS connection ...
+    log = logging.getLogger('urllib3')
+    log.propagate = False
+
+logger = create_logger()
 
 
 def logging_test():
