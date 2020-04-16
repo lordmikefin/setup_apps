@@ -21,6 +21,7 @@
 from . import PATH_INSTALLERS  # TODO: improve how installer path is defined
 from setup_apps.tag import Tag
 import app_source_handler
+from setup_apps.util import logger
 
 class Base:
     def __init__(self):
@@ -54,8 +55,7 @@ class Base:
     def _insert_file_into_url(self, file: str):
         if '{version}' in self.installer_url:
             if self.version is None:
-                # TODO: log error
-                print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
+                logger.error('Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
                 return
             self.installer_full_url = str(self.installer_url).format(
                 installer_file=file, version=self.version)
@@ -70,19 +70,12 @@ class Base:
         if self.installer_file:
             return True
 
-        # TODO: log error
-        #print('ERROR: Incorrect Eclipse config: Missing tag "installer_file"')
-        print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.installer_file + '"')
+        logger.error('Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.installer_file + '"')
         return False
 
     def generate_full_url(self):
         if self.installer_url is None:
-            # TODO: log error
-            #print('ERROR: Incorrect Eclipse config: Missing tag "installer_url"')
-            #print('TEST : ' + str(self.__class__.__name__))
-            #print('TEST : ' + str(self.__name__))
-            #print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "installer_url"')
-            print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.installer_url + '"')
+            logger.error('Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.installer_url + '"')
             return
 
         if not '{installer_file}' in self.installer_url:
@@ -99,8 +92,7 @@ class Base:
             return
 
         if self.version is None:
-            # TODO: log error
-            print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
+            logger.error('Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
             return
 
         self.installer_file = str(self.installer_file).format(version=self.version)
@@ -112,23 +104,22 @@ class Base:
         #app_source_handler.source.APPS
         #source = app_source_handler.source.APPS.get('eclipse', {})
         if not source:
-            print('ERROR: the source xml failed.')
-            print('Get ' + str(self.__name__) + ' data from config xml.')
+            logger.error('the source xml failed.')
+            logger.error('Get ' + str(self.__name__) + ' data from config xml.')
             self.generate_full_url()
             return
         #self.generate_full_url_from_source(source)
 
         #self.generate_full_url()
         if self.version is None:
-            # TODO: log error
-            print('ERROR: Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
+            logger.error('Incorrect ' + str(self.__name__) + ' config: Missing tag "' + Tag.version + '"')
             return
 
         # TODO: if version is 'latest' then get ver from source
         if self.version == 'latest':
             latest = source.get('latest', {})
             self.version = latest
-            print('Latest version:  self.version: ' + str(self.version))
+            logger.info('Latest version:  self.version: ' + str(self.version))
         vers = source.get('versions', {})
         ver = vers.get(self.version, {})
         url = ver.get('url', '')
@@ -136,11 +127,11 @@ class Base:
         md5sum = ver.get('md5sum', '')
         file = ver.get('file', '')
         sha256url = ver.get('sha256url', '')
-        print('url: ' + str(url))
-        print('md5url: ' + str(md5url))
-        print('md5sum: ' + str(md5sum))
-        print('file: ' + str(file))
-        print('sha256url: ' + str(sha256url))
+        logger.info('url: ' + str(url))
+        logger.info('md5url: ' + str(md5url))
+        logger.info('md5sum: ' + str(md5sum))
+        logger.info('file: ' + str(file))
+        logger.info('sha256url: ' + str(sha256url))
         self.installer_file = file
         self.installer_full_url = url
         self.installer_full_url_md5 = md5url
@@ -153,13 +144,13 @@ class Base:
 
     def set_url_ok(self):
         if not self.installer_file:
-            print('ERROR: "installer_file" must be defined')
+            logger.error('"installer_file" must be defined')
             return
         if not self.installer_full_url:
-            print('ERROR: "installer_full_url" must be defined')
+            logger.error('"installer_full_url" must be defined')
             return
         if not self.is_md5():
-            print('ERROR: "installer_full_url_md5" or "md5sum" must be defined')
+            logger.error('"installer_full_url_md5" or "md5sum" must be defined')
             return
         self.url_ok = True
 
