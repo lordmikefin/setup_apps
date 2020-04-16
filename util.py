@@ -60,8 +60,9 @@ def logging_test():
     # https://www.loggly.com/ultimate-guide/python-logging-basics/
     # https://docs.python.org/3/library/logging.handlers.html#logging.StreamHandler
     # https://www.toptal.com/python/in-depth-python-logging
-    #logging.info('INFO log from setup_apps.util')
-    #logging.error('ERROR log from setup_apps.util')
+    print('setup_apps.util.logging_test()')
+    logging.info('INFO log from "root" logging from setup_apps.util')
+    logging.error('ERROR log from "root" logging from setup_apps.util')
     logging.getLogger('setup_apps').info('INFO log from setup_apps.util')
     logging.getLogger('setup_apps').error('ERROR log from setup_apps.util')
     logger.info('INFO log from setup_apps.util')
