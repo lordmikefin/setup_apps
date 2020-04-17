@@ -201,7 +201,7 @@ def append_plugins(ecli_elem: Element, name: str, ver: str):
 def parse(source_file: str=''):
     download_source_xml()
     parse_source_xml(source_file)
-    print('parse the config XML file')
+    logger.info('parse the config XML file')
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
     tree = ET.parse(file)
     root = tree.getroot()
@@ -215,7 +215,7 @@ SOURCE_FILE = util.fix_path(PATH_INSTALLERS + '/' + 'app_source.xml')
 SOURCE_FILE_OK = False
 def download_source_xml():
     global SOURCE_FILE_OK
-    print('download the source XML file')
+    logger.info('download the source XML file')
     file = SOURCE_FILE
     url = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml'
     util.download(url, file, show_progress=True)
@@ -225,14 +225,14 @@ def download_source_xml():
 
 
 def parse_source_xml(source_file: str=''):
-    print('parse the source XML file')
+    logger.info('parse the source XML file')
     # app_source_handler.source.parse(source_file)
     if SOURCE_FILE_OK:
         app_source_handler.source.parse(SOURCE_FILE)
-        print('APPS: ' + json.dumps(app_source_handler.source.APPS,
+        logger.info('APPS: ' + json.dumps(app_source_handler.source.APPS,
                                      sort_keys=True, indent=2))
     else:
-        print('parsing failed')
+        logger.error('parsing failed')
 
 
 def parse_apps(elem_apps: Element):
@@ -257,8 +257,8 @@ def parse_java(elem: Element):
     if not elem_path is None:
         java_obj.install_path = elem_path.text
 
-    print('version                  : ' + str(java_obj.version))
-    print('install_path             : ' + str(java_obj.install_path))
+    logger.info('version                  : ' + str(java_obj.version))
+    logger.info('install_path             : ' + str(java_obj.install_path))
 
     java_list = list(APPS.get('java', []))
     java_list.append(java_obj)
@@ -282,10 +282,10 @@ def parse_eclipse(elem: Element):
     if not elem_path is None:
         ecli.install_path = elem_path.text
 
-    print('version                  : ' + str(ecli.version))
-    print('installer_file           : ' + str(ecli.installer_file))
-    print('installer_url            : ' + str(ecli.installer_url))
-    print('installer_full_url       : ' + str(ecli.installer_full_url))
+    logger.info('version                  : ' + str(ecli.version))
+    logger.info('installer_file           : ' + str(ecli.installer_file))
+    logger.info('installer_url            : ' + str(ecli.installer_url))
+    logger.info('installer_full_url       : ' + str(ecli.installer_full_url))
 
     #ecli.generate_all()
 
@@ -308,10 +308,10 @@ def parse_eclipse(elem: Element):
 
 
 def parse_plugins(plugins: Element, plugins_list: list):
-    print('Has plugins')
+    logger.info('Has plugins')
     for elem in plugins:
         if elem.tag == Tag.plugin:
-            print('Found plugin')
+            logger.info('Found plugin')
             plug = eclipse.Plugin()
             plugins_list.append(plug)
             elem_version = elem.find(Tag.version)
@@ -335,18 +335,18 @@ def parse_plugins(plugins: Element, plugins_list: list):
 
 
 def parse_configure(configure: Element, conf_file_list: list):
-    print('Has configure')
+    logger.info('Has configure')
     for c_elem in configure:
         if c_elem.tag == Tag.file:
             file = {}
             conf_file_list.append(file)
-            print('Found file')
+            logger.info('Found file')
             name = c_elem.find(Tag.name)
             file['name'] = name.text
-            print('name: ' + str(name.text))
+            logger.info('name: ' + str(name.text))
             file_type = c_elem.find(Tag.type)
             file['type'] = file_type.text
-            print('type: ' + str(file_type.text))
+            logger.info('type: ' + str(file_type.text))
             key_values = c_elem.find(Tag.key_values)
             key_vals = []
             file['confs'] = key_vals
@@ -362,7 +362,7 @@ def parse_key_value(kvs: Element):
     key_val['key'] = key.text
     value = kvs.find(Tag.value)
     key_val['value'] = value.text
-    print('key: ' + str(key.text) + ' value: ' + str(value.text))
+    logger.info('key: ' + str(key.text) + ' value: ' + str(value.text))
     return key_val
 
 
@@ -391,7 +391,7 @@ def init():
 
     for java_obj in java_list:
         source_java = app_source_handler.source.APPS.get('java', {})
-        print('source_java: ' + str(source_java))
+        logger.info('source_java: ' + str(source_java))
         java_obj.generate_all(source_java)
 
 
@@ -444,19 +444,15 @@ def configure():
 
 def print_sample():
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
-    print('print the sample config XML file: ' + str(file))
-    print()
+    logger.info('print the sample config XML file: ' + str(file))
     tree = ET.parse(file)
-    #print(tree)
-    print(str(ET.tostring(tree.getroot()), 'utf-8'))
-    print()
-    print('  NOTE: declaration and comments are not printed!')
-    print()
+    logger.info(str(ET.tostring(tree.getroot()), 'utf-8'))
+    logger.info('  NOTE: declaration and comments are not printed!')
 
 
 def create_test_xml():
     # create the file structure
-    print('create the XML file structure')
+    logger.info('create the XML file structure')
     tree = ET.ElementTree()
     xml_config = ET.Element('test_element')
     tree._setroot(xml_config)
@@ -469,19 +465,19 @@ def create_test_xml():
     item2.text = 'item2abc'
 
     # create a new XML file with the results
-    print('create a new XML file with the results')
+    logger.info('create a new XML file with the results')
     indent(xml_config)
     tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
     '''
     mydata = str(ET.tostring(xml_config),'utf-8')
-    print('mydata type: ' + str(type(mydata)))
+    logger.info('mydata type: ' + str(type(mydata)))
     myfile = open(XML_CONFIG, "w")
     myfile.write(mydata)
     myfile.close()
     '''
 
 def read_write():
-    print('read from file: ' + str(XML_TEST))
+    logger.info('read from file: ' + str(XML_TEST))
     tree = ET.parse(XML_TEST)
     root = tree.getroot()
     #root.
@@ -489,8 +485,8 @@ def read_write():
     ET.SubElement(root, 'items')
     #pretty_xml_as_string = root.toprettyxml()
     #pretty_xml_as_string = ET.tostring(root, pretty_print=True)
-    #print('pretty_xml_as_string: ' + str(pretty_xml_as_string))
-    print('write to file: ' + str(XML_CONFIG))
+    #logger.info('pretty_xml_as_string: ' + str(pretty_xml_as_string))
+    logger.info('write to file: ' + str(XML_CONFIG))
     indent(root)
     #tree.write(XML_CONFIG)
     tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
