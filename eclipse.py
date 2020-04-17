@@ -28,6 +28,7 @@ from setup_apps.base import Base
 from setup_apps.tag import Tag
 import app_source_handler
 from setup_apps.plugin import Plugin
+from setup_apps.util import logger
 
 
 class Eclipse(Base):
@@ -75,19 +76,17 @@ class Eclipse(Base):
             return True
 
         # TODO: log error
-        print('ERROR: Incorrect Eclipse config: Missing tag "installer_file"')
+        logger.error('Incorrect Eclipse config: Missing tag "installer_file"')
         return False
     '''
 
     def generate_install_path(self):
         if self.install_path is None:
-            # TODO: log error
-            print('ERROR: Incorrect Eclipse config: Missing tag "' + Tag.install_path + '"')
+            logger.error('Incorrect Eclipse config: Missing tag "' + Tag.install_path + '"')
             return
 
         if self.version is None:
-            # TODO: log error
-            print('ERROR: Incorrect Eclipse config: Missing tag "' + Tag.version + '"')
+            logger.error('Incorrect Eclipse config: Missing tag "' + Tag.version + '"')
             return
 
         if not '{version}' in self.install_path:
@@ -108,56 +107,55 @@ class Eclipse(Base):
     def generate_all(self, source_eclipse: dict):
         #source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
         self.generate_full_url_from_source(source_eclipse)
-        print('installer_full_url       : ' + str(self.installer_full_url))
+        logger.info('installer_full_url       : ' + str(self.installer_full_url))
     
         self.generate_installer_path()
-        print('installer_path           : ' + str(self.installer_path))
+        logger.info('installer_path           : ' + str(self.installer_path))
     
         self.generate_install_path()
-        print('install_path_full        : ' + str(self.install_path_full))
+        logger.info('install_path_full        : ' + str(self.install_path_full))
         #self.init_plugins()
 
     def download(self):
         if not (self.url_ok and self.path_ok):
-            # TODO: log error
-            print('ERROR: Can not download Eclipse installer.')
+            logger.error('Can not download Eclipse installer.')
 
         # TODO: refactor
         if util.is_file(self.installer_path):
-            print('Eclipse installer file exists.')
-            print('Calculate md5sum')
+            logger.info('Eclipse installer file exists.')
+            logger.info('Calculate md5sum')
             md5 = util.md5sum(self.installer_path, show_progress=True)
             # md5 = util.md5sum(self.installer_path, callback=util.print_progress)
             # md5 = util.md5sum(self.installer_path)
-            print('md5 hash: ' + str(md5))
+            logger.info('md5 hash: ' + str(md5))
             # TODO: get md5/sha256 file from the sourse
             if util.is_file(self.installer_path_md5):
-                print('md5 file exists')
+                logger.info('md5 file exists')
                 if util.is_md5_in_file(self.installer_path_md5, md5):
-                    print('md5 is in file')
+                    logger.info('md5 is in file')
                     self.is_downloaded = True
                     return  # file is downloaded
                 else:
-                    print('md5 does not match')
-                    print('download file again')
+                    logger.info('md5 does not match')
+                    logger.info('download file again')
 
-        print('Download Eclipse installer.')
+        logger.info('Download Eclipse installer.')
         # util.download(self.installer_full_url, self.installer_path)
         util.download(self.installer_full_url, self.installer_path, show_progress=True)
-        print('Download complete.')
-        print('Download Eclipse installer md5.')
+        logger.info('Download complete.')
+        logger.info('Download Eclipse installer md5.')
         util.download(self.installer_full_url_md5, self.installer_path_md5)
-        print('Calculate md5sum')
+        logger.info('Calculate md5sum')
         md5 = util.md5sum(self.installer_path, show_progress=True)
-        print('md5 hash: ' + str(md5))
+        logger.info('md5 hash: ' + str(md5))
         if util.is_file(self.installer_path_md5):
-            print('md5 file exists')
+            logger.info('md5 file exists')
             if util.is_md5_in_file(self.installer_path_md5, md5):
-                print('md5 is in file')
+                logger.info('md5 is in file')
                 self.is_downloaded = True
             else:
-                print('md5 does not match')
-                print('download failed !  TODO: interrupt the process?')
+                logger.info('md5 does not match')
+                logger.error('download failed !  TODO: interrupt the process?')
                 self.is_downloaded = False
         # self.is_downloaded = True
 
@@ -168,23 +166,18 @@ class Eclipse(Base):
 
     def install(self):
         if not self.is_downloaded:
-            # TODO: log error
-            print('ERROR: Eclipse installer not downloaded.')
+            logger.error('Eclipse installer not downloaded.')
 
         if not self.install_path_ok:
-            # TODO: log error
-            print('ERROR: Installation path not defined.')
+            logger.error('Installation path not defined.')
 
         if self.is_installed():
-            print('Eclipse is already installed')
+            logger.info('Eclipse is already installed')
             self.create_link()
             return
 
-        print('Start Eclipse installer.')
-
-        print('')
-        print(' Installing ... wait ... wait ... ')
-        print('')
+        logger.info('Start Eclipse installer.')
+        logger.info(' Installing ... wait ... wait ... ')
 
         # NOTE: while extracting I got path too long error -> changed install path
         # NOTE: This is "offline installer" ;)
@@ -201,11 +194,11 @@ class Eclipse(Base):
         util.move_win(str(self.unzipped) + '', str(self.install_path_full) + '')
 
         if not self.is_installed():
-            print('Eclipse is NOT installed!')
+            logger.error('Eclipse is NOT installed!')
             return
 
-        print('Eclipse is installed')
-        print('Eclipse exe: ' + str(self.exe_file))
+        logger.info('Eclipse is installed')
+        logger.info('Eclipse exe: ' + str(self.exe_file))
 
         # TODO: Change the default workspace folder (eclipse.ini)
         # -Dosgi.instance.area.default=@user.home/eclipse-workspace
@@ -220,17 +213,17 @@ class Eclipse(Base):
         util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='')
 
     def configure(self):
-        print('Configure')
+        logger.info('Configure')
         if not self.config:
-            print('No configures')
+            logger.info('No configures')
             return
 
-        print('self.config ' + str(self.config))
+        logger.info('self.config ' + str(self.config))
         #self.config = None
         for file in self.config:
             name = file.get('name')
             f_type = file.get('type')
-            print('name: ' + str(name) + ' type: ' + str(f_type))
+            logger.info('name: ' + str(name) + ' type: ' + str(f_type))
             confs = file.get('confs', [])
             for conf in confs:
                 key = conf.get('key')
@@ -239,19 +232,19 @@ class Eclipse(Base):
                 if '{version}' in value:
                     value = value.format(version=self.version)
                 
-                print('key: ' + str(key) + ' value: ' + str(value))
+                logger.info('key: ' + str(key) + ' value: ' + str(value))
                 self.config_apply(self.install_path_full + name, key, value)
 
     def configure_hc(self):
         #self.config_eclipse_ini
-        print('Configure hard coded test')
+        logger.info('Configure hard coded test')
         key = '-Dosgi.instance.area.default'
         new_value = '@user.home/eclipse-workspace-2019-09'
         #self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
         self.config_apply(self.config_eclipse_ini, key, new_value)
 
     def config_apply(self, file: str, key: str, value: str):
-        print('Configure ' + str(file))
+        logger.info('Configure ' + str(file))
         new_key_value = key + '=' + value + '\n'
         has_key_value = False
         found_line = -1
@@ -268,7 +261,7 @@ class Eclipse(Base):
                 has_key = line_txt.startswith(key)
                 if has_key:
                     if line_txt == new_key_value:
-                        print('value already set')
+                        logger.info('value already set')
                         has_key_value = True
                         break  # do not set again
                     else:
@@ -278,14 +271,14 @@ class Eclipse(Base):
             return  # do not set again
 
         if found_line > -1:
-            print('Append line after: ' + str(found_line))
-            #print('lines: ' + str(lines))
+            logger.info('Append line after: ' + str(found_line))
+            #logger.info('lines: ' + str(lines))
             lines.insert(found_line+1, new_key_value)
             lines[found_line] = '#' + lines[found_line]
         else:
-            print('Append line at the end')
+            logger.info('Append line at the end')
             lines.append(new_key_value)
-        #print('lines: ' + str(lines))
+        #logger.info('lines: ' + str(lines))
         with open(file, 'w') as f:
             f.writelines(lines)
 
@@ -293,11 +286,11 @@ class Eclipse(Base):
         # NOTE: this will repet the line for each run
         with open(self.config_eclipse_ini, "r") as f:
             eclipse_ini = f.read()
-            # print(eclipse_ini)
+            # logger.info(eclipse_ini)
         # -Dosgi.instance.area.default=@user.home/eclipse-workspace
         key = '-Dosgi.instance.area.default'
         key_idx = eclipse_ini.find(key)
-        print('key_idx: ' + str(key_idx))
+        logger.info('key_idx: ' + str(key_idx))
         ini_tmp = eclipse_ini[key_idx:]
         next_line_idx = ini_tmp.find('\n')
         old_key_value = ini_tmp[:next_line_idx]
@@ -305,21 +298,21 @@ class Eclipse(Base):
         new_key_value = key + '=' + new_value 
         write_lines = True
         if old_key_value == new_key_value:
-            print('value already set')
+            logger.info('value already set')
             write_lines = False
 
         if write_lines:
             new_data = '#' + old_key_value + '\n' + new_key_value
             new_eclipse_ini = eclipse_ini.replace(old_key_value, new_data, 1)
-            print(new_eclipse_ini)
+            logger.info(new_eclipse_ini)
             with open(self.config_eclipse_ini, 'w') as f:
                 f.write(new_eclipse_ini) 
 
     def init_plugins(self, source_eclipse: dict):
-        print('Initialize plugins')
-        print('self.plugins ' + str(self.plugins))
+        logger.info('Initialize plugins')
+        logger.info('self.plugins ' + str(self.plugins))
         if not self.plugins:
-            print('No plugins')
+            logger.info('No plugins')
             return
 
         if False:  # Definition only for Eclipse auto complete
@@ -329,19 +322,19 @@ class Eclipse(Base):
         # NOTE: for now just use hard coded name
         source_plugins = source_eclipse.get('plugins', {})
         for plug in self.plugins:
-            print('plug.version: ' + str(plug.version))
-            print('plug.installer_file: ' + str(plug.installer_file))
-            print('plug.installer_url: ' + str(plug.installer_url))
-            #print('plug.install_path: ' + str(plug.install_path))
+            logger.info('plug.version: ' + str(plug.version))
+            logger.info('plug.installer_file: ' + str(plug.installer_file))
+            logger.info('plug.installer_url: ' + str(plug.installer_url))
+            #logger.info('plug.install_path: ' + str(plug.install_path))
             # TODO: get plugin by name form the source
             #source_plugin = source_plugins.get('pydev', {})
             plug.generate_all(self.install_path_full, source_plugins)
 
     def download_plugins(self):
-        print('Download plugins')
-        print('self.plugins ' + str(self.plugins))
+        logger.info('Download plugins')
+        logger.info('self.plugins ' + str(self.plugins))
         if not self.plugins:
-            print('No plugins')
+            logger.info('No plugins')
             return
 
         if False:  # Definition only for Eclipse auto complete
@@ -351,10 +344,10 @@ class Eclipse(Base):
             plug.download()
 
     def install_plugins(self):
-        print('Install plugins')
-        print('self.plugins ' + str(self.plugins))
+        logger.info('Install plugins')
+        logger.info('self.plugins ' + str(self.plugins))
         if not self.plugins:
-            print('No plugins')
+            logger.info('No plugins')
             return
 
         if False:  # Definition only for Eclipse auto complete
@@ -385,7 +378,7 @@ def is_installed():
 
 def is_download():
     # Check if we already have the installer
-    # print(str(_installer_file_fullname))
+    # logger.info(str(_installer_file_fullname))
     return util.is_file(_installer_file_fullname)
 
 
@@ -402,7 +395,7 @@ def download():
     https://www.eclipse.org/downloads/download.php?file=/oomph/epp/2019-09/R/eclipse-inst-win64.exe
     https://www.eclipse.org/downloads/download.php?file=/oomph/epp/2019-09/R/eclipse-inst-win64.exe&mirror_id=1099
     '''
-    print('Download Eclipse installer.')
+    logger.info('Download Eclipse installer.')
     
     if _file_name:
         # url = 'https://www.eclipse.org/downloads/download.php?file=/oomph/epp/2019-09/R/' + str(_file_name) + '&mirror_id=1099'
@@ -411,12 +404,12 @@ def download():
         # Download the file from `url` and save it locally under `file_name`
         util.download(url, _installer_file_fullname)
         '''
-        print('')
-        print('I can not download the file :(')
-        print('You need to manually download it into destination: ' + str(_installer_file_fullname))
-        print('  ' + str(url))
-        print('')
-        print('Continue when downloaded.')
+        logger.info('')
+        logger.info('I can not download the file :(')
+        logger.info('You need to manually download it into destination: ' + str(_installer_file_fullname))
+        logger.info('  ' + str(url))
+        logger.info('')
+        logger.info('Continue when downloaded.')
         # TODO: Who installer can be downloaded? Use "Robot Framework"?
         util.pause()
         '''
@@ -435,7 +428,7 @@ def define_file():
     _installer_file_fullname = str(installer_path) + str(installer_file)
 
     _exe_file = str(PATH_APP_PYDEV) + '\\eclipse\\eclipse.exe'
-    print(str(_installer_file_fullname))
+    logger.info(str(_installer_file_fullname))
 
 
 def install():
@@ -459,11 +452,9 @@ def install():
     # command = str(str(_installer_file_fullname))
     # command = str(str(_installer_file_fullname) + ' -vmargs -Doomph.setup.install.root=' + str(PATH_APP_PYDEV))
     # command = str(str(_installer_file_fullname) + ' -vm "C:\Program Files\Java\jre1.8.0_221" EclipsePyDevConfiguration.setup -vmargs -Doomph.setup.install.root=' + str(PATH_APP_PYDEV))
-    print('Start Eclipse installer.')
-    # print(command)
-    print('')
-    print(' Installing ... wait ... wait ... ')
-    print('')
+    logger.info('Start Eclipse installer.')
+    # logger.info(command)
+    logger.info(' Installing ... wait ... wait ... ')
     # res = int(os.system(command))
     # TODO: How to halt command line until installation is completed?
 
@@ -483,27 +474,25 @@ def install():
     return True  # TODO: return error?
 
     '''
-    print('Eclipse installer will not halt command line :(')
-    print('Please let me know when installation is completed.')
+    logger.info('Eclipse installer will not halt command line :(')
+    logger.info('Please let me know when installation is completed.')
     util.pause()
-    print('')
     if res > 0:
         # TODO: Installer may not throw error ?
-        print('Eclipse installation FAILED.')
+        logger.error('Eclipse installation FAILED.')
         #sys.exit(1)
         return False
     else:
-        print('Eclipse installation done.')
+        logger.info('Eclipse installation done.')
         return True
     '''
 
 
 def run():
-    print('')
-    print('Test comment from "eclipse.py"')
+    logger.info('Test comment from "eclipse.py"')
 
-    print('Value of variable "PATH_APP_ECLIPSE": ' + str(PATH_APP_ECLIPSE))
-    print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
+    logger.info('Value of variable "PATH_APP_ECLIPSE": ' + str(PATH_APP_ECLIPSE))
+    logger.info('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
 
     define_file()
     if not is_download():
@@ -511,9 +500,8 @@ def run():
 
     if not is_download():
         # TODO: How we should handle error?
-        print('')
-        print('Installer is still missing!?')
-        print('I will now exit with error :(')
+        logger.info('Installer is still missing!?')
+        logger.info('I will now exit with error :(')
         util.pause()
         sys.exit(1)
 
@@ -523,9 +511,8 @@ def run():
 
     if not is_installed():
         # TODO: How we should handle error?
-        print('')
-        print('Eclipse was not installed!?')
-        print('I will now exit with error :(')
+        logger.info('Eclipse was not installed!?')
+        logger.info('I will now exit with error :(')
         util.pause()
         sys.exit(1)
 
