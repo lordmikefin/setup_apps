@@ -22,6 +22,7 @@
 from . import util
 from setup_apps.base import Base
 import app_source_handler
+from setup_apps.util import logger
 
 
 class Plugin(Base):
@@ -42,24 +43,24 @@ class Plugin(Base):
         # TODO: how to share plugin names elegantly between 'setup_apps' and 'app_source'?
         #Tag.name
         if not self.name:
-            print('"name" tag missing ?!')
+            logger.info('"name" tag missing ?!')
         # TODO: plugins are under the app -> how to get them?
         source = source_plugins.get(self.name, {})
 
         self.install_path = install_path
         #self.generate_full_url()
         self.generate_full_url_from_source(source)
-        print('installer_full_url       : ' + str(self.installer_full_url))
-    
+        logger.info('installer_full_url       : ' + str(self.installer_full_url))
+
         self.generate_installer_path()
-        print('installer_path           : ' + str(self.installer_path))
-    
+        logger.info('installer_path           : ' + str(self.installer_path))
+
         self.generate_install_path()
-        print('install_path_full        : ' + str(self.install_path_full))
+        logger.info('install_path_full        : ' + str(self.install_path_full))
 
     def generate_install_path(self):
         if self.install_path is None:
-            print('ERROR: Incorrect Eclipse plugin config: "install_path" is not defined')
+            logger.error('Incorrect Eclipse plugin config: "install_path" is not defined')
             return
 
         #self.install_path = self.install_path + '\\plugins\\org.python.pydev_7.4.0.201910251334\\pydev.jar'
@@ -71,7 +72,7 @@ class Plugin(Base):
         # TODO: is there need to set version ?
         '''
         if self.version is None:
-            print('ERROR: Incorrect Eclipse plugin config: Missing tag "' + Tag.version + '"')
+            logger.error('Incorrect Eclipse plugin config: Missing tag "' + Tag.version + '"')
             return
 
         if not '{version}' in self.install_path:
@@ -87,7 +88,7 @@ class Plugin(Base):
     def download(self):
         if not (self.url_ok and self.path_ok):
             # TODO: log plugin name?
-            print('ERROR: Can not download Eclipse plugin installer.')
+            logger.error('Can not download Eclipse plugin installer.')
 
         '''
         NOTE: There is no ms5 file for PyDev plugin.
@@ -99,56 +100,54 @@ class Plugin(Base):
         hard_code_md5_for_pydev = self.md5sum
 
         if util.is_file(self.installer_path):
-            print('Eclipse plugin installer file exists.')
-            print('Calculate md5sum')
+            logger.info('Eclipse plugin installer file exists.')
+            logger.info('Calculate md5sum')
             md5 = util.md5sum(self.installer_path, show_progress=True)
             # md5 = util.md5sum(self.installer_path, callback=util.print_progress)
             # md5 = util.md5sum(self.installer_path)
-            print('md5 hash: ' + str(md5))
+            logger.info('md5 hash: ' + str(md5))
             '''
             if util.is_file(self.installer_path_md5):
-                print('md5 file exists')
+                logger.info('md5 file exists')
                 if util.is_md5_in_file(self.installer_path_md5, md5):
             '''
             if True:
                 if util.is_md5_equal(hard_code_md5_for_pydev, md5):
-                    print('md5 is in file')
+                    logger.info('md5 is in file')
                     self.is_downloaded = True
                     return  # file is downloaded
                 else:
-                    print('md5 does not match')
-                    print('download file again')
+                    logger.info('md5 does not match')
+                    logger.info('download file again')
 
-        print('Download Eclipse plugin installer.')
+        logger.info('Download Eclipse plugin installer.')
         util.download(self.installer_full_url, self.installer_path, show_progress=True)
-        print('Download complete.')
+        logger.info('Download complete.')
         '''
-        print('Download Eclipse plugin installer md5.')
+        logger.info('Download Eclipse plugin installer md5.')
         util.download(self.installer_full_url_md5, self.installer_path_md5)
         '''
-        print('Calculate md5sum')
+        logger.info('Calculate md5sum')
         md5 = util.md5sum(self.installer_path, show_progress=True)
-        print('md5 hash: ' + str(md5))
+        logger.info('md5 hash: ' + str(md5))
         '''
         if util.is_file(self.installer_path_md5):
-            print('md5 file exists')
+            logger.info('md5 file exists')
             if util.is_md5_in_file(self.installer_path_md5, md5):
         '''
         if True:
             if util.is_md5_equal(hard_code_md5_for_pydev, md5):
-                print('md5 is in file')
+                logger.info('md5 is in file')
                 self.is_downloaded = True
             else:
-                print('md5 does not match')
-                print('download failed !  TODO: interrupt the process?')
+                logger.info('md5 does not match')
+                logger.error('download failed !  TODO: interrupt the process?')
                 self.is_downloaded = False
 
     def install(self):
-        print('Start pydev installer.')
-        print('Start ' + str(self.__name__) + ' ' + str(self.name) + ' installer.')
-        print('')
-        print(' Installing ... wait ... wait ... ')
-        print('')
+        logger.info('Start pydev installer.')
+        logger.info('Start ' + str(self.__name__) + ' ' + str(self.name) + ' installer.')
+        logger.info(' Installing ... wait ... wait ... ')
         # NOTE: This is "offline installer" ;)
         #print(str(_installer_file_fullname) + ' :: ' + str(_eclipse_path))
         #util.unzip(str(self.installer_path), str(self.install_path))
