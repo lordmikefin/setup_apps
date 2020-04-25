@@ -25,6 +25,7 @@ from . import util
 import os
 from setup_apps.base import Base
 from setup_apps.tag import Tag
+from setup_apps.util import logger
 
 
 class Java(Base):
@@ -39,10 +40,10 @@ class Java(Base):
 
     def generate_all(self, source: dict):
         self.generate_full_url_from_source(source)
-        print('installer_full_url       : ' + str(self.installer_full_url))
+        logger.info('installer_full_url       : ' + str(self.installer_full_url))
     
         self.generate_installer_path()
-        print('installer_path           : ' + str(self.installer_path))
+        logger.info('installer_path           : ' + str(self.installer_path))
         # TODO: get md5/sha256 file from the sourse
         #self.installer_path_md5 = None  # NOTE: this is set in Base class!
         self.installer_path_md5 = 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'
@@ -53,17 +54,15 @@ class Java(Base):
         self.installer_full_url_md5 = self.sha256url
 
         self.generate_install_path()
-        print('install_path_full        : ' + str(self.install_path_full))
+        logger.info('install_path_full        : ' + str(self.install_path_full))
 
     def generate_install_path(self):
         if self.install_path is None:
-            # TODO: log error
-            print('ERROR: Incorrect Java config: Missing tag "' + Tag.install_path + '"')
+            logger.error('Incorrect Java config: Missing tag "' + Tag.install_path + '"')
             return
 
         if self.version is None:
-            # TODO: log error
-            print('ERROR: Incorrect Java config: Missing tag "' + Tag.version + '"')
+            logger.error('Incorrect Java config: Missing tag "' + Tag.version + '"')
             return
 
         if not '{version}' in self.install_path:
@@ -85,42 +84,41 @@ class Java(Base):
 
     def download(self):
         if not (self.url_ok and self.path_ok):
-            # TODO: log error
-            print('ERROR: Can not download Eclipse installer.')
+            logger.error('Can not download Eclipse installer.')
 
         # TODO: refactor
         if util.is_file(self.installer_path):
-            print('Java installer file exists.')
-            print('Calculate sha256')
+            logger.info('Java installer file exists.')
+            logger.info('Calculate sha256')
             sha = util.sha256(self.installer_path, show_progress=True)
-            print('sha256: ' + str(sha))
+            logger.info('sha256: ' + str(sha))
             # TODO: get md5/sha256 file from the sourse
             if util.is_file(self.installer_path_md5):
-                print('sha256 file exists')
+                logger.info('sha256 file exists')
                 if util.is_md5_in_file(self.installer_path_md5, sha):
-                    print('sha256 is in file')
+                    logger.info('sha256 is in file')
                     self.is_downloaded = True
                     return  # file is downloaded
                 else:
-                    print('sha256 does not match')
-                    print('download file again')
+                    logger.info('sha256 does not match')
+                    logger.info('download file again')
 
-        print('Download Java installer.')
+        logger.info('Download Java installer.')
         util.download(self.installer_full_url, self.installer_path, show_progress=True)
-        print('Download complete.')
-        print('Download Java installer sha256 file.')
+        logger.info('Download complete.')
+        logger.info('Download Java installer sha256 file.')
         util.download(self.installer_full_url_md5, self.installer_path_md5)
-        print('Calculate sha256')
+        logger.info('Calculate sha256')
         sha = util.sha256(self.installer_path, show_progress=True)
-        print('sha256: ' + str(sha))
+        logger.info('sha256: ' + str(sha))
         if util.is_file(self.installer_path_md5):
-            print('sha256 file exists')
+            logger.info('sha256 file exists')
             if util.is_md5_in_file(self.installer_path_md5, sha):
-                print('sha256 is in file')
+                logger.info('sha256 is in file')
                 self.is_downloaded = True
             else:
-                print('sha256 does not match')
-                print('download failed !  TODO: interrupt the process?')
+                logger.info('sha256 does not match')
+                logger.error('download failed !?  TODO: interrupt the process?')
                 self.is_downloaded = False
 
     def is_installed(self):
@@ -128,33 +126,30 @@ class Java(Base):
         # Test if JRE is installed.
         #java -version
         command = 'java -version'
-        print(str(command))
+        logger.info(str(command))
         test = util.run_os_command(command)
         if not test:
-            print('Java NOT installed.')
+            logger.info('Java NOT installed.')
             return False
     
-        print('Java already installed.')
+        logger.info('Java already installed.')
         return True
 
     def install(self) -> bool:
         # TODO: install OracleJRE and OracleJDK other variants
         if not self.is_downloaded:
-            # TODO: log error
-            print('ERROR: Java installer not downloaded.')
+            logger.error('Java installer not downloaded.')
 
         if not self.install_path_ok:
-            # TODO: log error
-            print('ERROR: Installation path not defined.')
+            logger.error('Installation path not defined.')
 
         if self.is_installed():
-            print('Java is already installed')
+            logger.info('Java is already installed')
             return
 
         # https://adoptopenjdk.net/installation.html#windows-msi
-        print('Start Java installer.')
-        print('')
-        print(' Installing ... wait ... wait ... ')
+        logger.info('Start Java installer.')
+        logger.info(' Installing ... wait ... wait ... ')
         test = util.msiexec(
             name = 'Java installer',
             installer = self.installer_path,
@@ -168,11 +163,11 @@ class Java(Base):
         )
 
         if test:
-            print('Java installation FAILED.')
+            logger.error('Java installation FAILED.')
             #sys.exit(1)
             return False
         else:
-            print('Java installation done.')
+            logger.info('Java installation done.')
             return True
 
 
@@ -184,19 +179,19 @@ def is_installed_jre():
     #java -version
     #command = str(PATH_APP_NPP) + 'java -version'
     command = 'java -version'
-    print(str(command))
+    logger.info(str(command))
     test = util.run_os_command(command)
     if not test:
-        print('OracleJRE NOT installed.')
+        logger.error('OracleJRE NOT installed.')
         return False
 
-    print('OracleJRE already installed.')
+    logger.info('OracleJRE already installed.')
     return True
 
 
 def is_download_jre():
     # Check if we already have the installer
-    print(str(_installer_file_fullname))
+    logger.info(str(_installer_file_fullname))
     return os.path.isfile(_installer_file_fullname)
 
 
@@ -204,16 +199,15 @@ def download_jre():
     # Download file from web
     # TODO: Verify downloaded file is what we were downloading.
 
-    print('Download Java OracleJRE installer.')
+    logger.info('Download Java OracleJRE installer.')
 
     if _file_name:
         url = 'https://download.oracle.com/otn/java/jdk/8u221-b11/230deb18db3e4014bb8e3e8324f81b43/' + str(_file_name)
         # Download the file from `url` and save it locally under `file_name`
         #util.download(url, _installer_file_fullname)
-        print('')
-        print('Can not auto download Oracle JRE !!!')
-        print('Download "' + str(_file_name) + '" manually into folder: ' + str(_installer_file_fullname))
-        print('  https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html')
+        logger.info('Can not auto download Oracle JRE !!!')
+        logger.info('Download "' + str(_file_name) + '" manually into folder: ' + str(_installer_file_fullname))
+        logger.info('  https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html')
         '''
         # TODO: Use OpenJDK
         https://openjdk.java.net/
@@ -240,7 +234,7 @@ def define_file_jre():
     installer_path = PATH_INSTALLERS
     _installer_file_fullname = str(installer_path) + str(installer_file)
 
-    print(str(_installer_file_fullname))
+    logger.info(str(_installer_file_fullname))
 
 
 def install_jre():
@@ -260,20 +254,17 @@ def install_jre():
     # https://www.java.com/en/download/help/silent_install.xml
     #   /s, if used, indicates a silent installation.
     command = str(str(_installer_file_fullname) + ' /s')
-    print('Start OracleJRE installer.')
-    print(command)
-    print('')
-    print(' Installing ... wait ... wait ... ')
-    print('')
+    logger.info('Start OracleJRE installer.')
+    logger.info(command)
+    logger.info(' Installing ... wait ... wait ... ')
     test = util.run_os_command(command)
-    print('')
     if not test:
         # TODO: Installer may not throw error ?
-        print('OracleJRE installation FAILED.')
+        logger.error('OracleJRE installation FAILED.')
         #sys.exit(1)
         return False
     else:
-        print('OracleJRE installation done.')
+        logger.info('OracleJRE installation done.')
         return True
 
 
@@ -317,12 +308,11 @@ def update_env_var_path():
     #print('PATH : ' + str(os.environ.get('PATH')))
 
 def run():
-    print('')
-    print('Test comment from "java.py"')
+    logger.info('Test comment from "java.py"')
 
     # TODO: Can default installation be changed?  (C:\Program Files\Java\jre1.8.0_221)
     #print('Value of variable "PATH_APP_NPP": ' + str(PATH_APP_NPP))
-    print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
+    logger.info('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
 
     define_file_jre()
     if not is_download_jre():
