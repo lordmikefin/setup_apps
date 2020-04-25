@@ -232,13 +232,14 @@ def run_os_command(command: str) -> bool:
     #   test = util.run_os_command(command)
     # TODO: use 'run_command' -function instead
 
+    logger.debug('TODO: use run_command(...) instead of this.')
+    logger.debug('print out from the command is not captured and can not be redirected!')
     # TODO: use 'subprocess' module
     # https://docs.python.org/3/library/subprocess.html#module-subprocess
-    print('Run command: ' + command)
+    logger.info('Run command: ' + command)
     res = int(os.system(command))
     if res != 0:
-        # TODO: log the error
-        print('Command failed. [' + command + ']')
+        logger.error('Command failed. [' + command + ']')
         return False
 
     return True
