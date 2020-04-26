@@ -166,8 +166,8 @@ def unzip_py(zip_file: str, dst: str, show_progress: bool=False):
     https://thispointer.com/python-how-to-unzip-a-file-extract-single-multiple-or-all-files-from-a-zip-archive/
     https://stackoverflow.com/questions/4341584/extract-zipfile-using-python-display-progress-percentage
     '''
-    print('Unzip the file. Pythonic way.')
-    print('Unzip to  ' + str(dst))
+    logger.info('Unzip the file. Pythonic way.')
+    logger.info('Unzip to  ' + str(dst))
     # ZipFile
     with ZipFile(zip_file, 'r') as zip_obj:
         if not show_progress:
