@@ -36,6 +36,7 @@ from .namedtuples import CommandRet
 import shutil
 from typing import Union
 import logging
+import inspect
 
 # import urllib.request
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
@@ -89,6 +90,31 @@ def hint_test_complex(test: Union[str, int]) -> bool:
 
 def is_os_windows() -> bool:
     return sys.platform == OS_WINDOWS
+
+def windows_only():
+    """ Raise error if OS is not Windows """
+    if not is_os_windows():
+        # TODO: create custom exception
+        #raise OSError('util.move_win() Works only with Windows')
+        meg = 'util.' + print_this_func_name() + '() Works only with Windows'
+        logger.critical(meg)
+        raise OSError(meg)
+
+
+def print_this_func_name():
+    # TODO: Optimize. 'inspect' is processing all kind of info!
+    # TODO: 'timeit' before and after optimization :)
+    # https://stackoverflow.com/questions/900392/getting-the-caller-function-name-inside-another-function-in-python
+    caller = inspect.stack()[1]
+    '''
+    logger.debug('caller.frame       : ' + str(caller.frame))
+    logger.debug('caller.filename    : ' + str(caller.filename))
+    logger.debug('caller.lineno      : ' + str(caller.lineno))
+    logger.debug('caller.function    : ' + str(caller.function))
+    logger.debug('caller.code_context: ' + str(caller.code_context))
+    logger.debug('caller.index       : ' + str(caller.index))
+    '''
+    return caller.function
 
 
 def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progress: bool=False):
@@ -443,9 +469,7 @@ def move(src: str, dst: str):
 
 
 def move_win(src: str, dst: str):
-    if not is_os_windows():
-        # TODO: create custom exception
-        raise OSError('util.move_win() Works only with Windows')
+    windows_only()
 
     #command = 'move "' + str(src) + '" "' + str(dst) + '"'
     # NOTE: xcopy does not move !?
