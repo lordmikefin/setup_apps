@@ -96,16 +96,21 @@ def windows_only():
     if not is_os_windows():
         # TODO: create custom exception
         #raise OSError('util.move_win() Works only with Windows')
-        meg = 'util.' + print_this_func_name() + '() Works only with Windows'
+        #meg = 'util.' + print_this_func_name() + '() Works only with Windows'
+        meg = 'util.' + print_caller_func_name() + '() Works only with Windows'
         logger.critical(meg)
         raise OSError(meg)
 
 
-def print_this_func_name():
+def print_caller_func_name():
+    return print_this_func_name(caller_in_stack=3)
+
+def print_this_func_name(caller_in_stack=1):
     # TODO: Optimize. 'inspect' is processing all kind of info!
     # TODO: 'timeit' before and after optimization :)
     # https://stackoverflow.com/questions/900392/getting-the-caller-function-name-inside-another-function-in-python
-    caller = inspect.stack()[1]
+    #caller = inspect.stack()[1]
+    caller = inspect.stack()[caller_in_stack]
     '''
     logger.debug('caller.frame       : ' + str(caller.frame))
     logger.debug('caller.filename    : ' + str(caller.filename))
@@ -161,8 +166,7 @@ def pause():
 
     https://stackoverflow.com/questions/11552320/correct-way-to-pause-python-program
     '''
-    if not is_os_windows():
-        raise OSError('util.pause() Works only with Windows')
+    windows_only()
     run_os_command("pause")
 
 
@@ -174,8 +178,7 @@ def is_file(file: str) -> bool:
 
 
 def unzip(zip_file: str, dst: str):
-    if not is_os_windows():
-        raise OSError('util.unzip() Works only with Windows')
+    windows_only()
     print('Unzip the file')
     print('Unzip to  ' + str(dst))
     command = 'PowerShell -Command "Expand-Archive \'' + str(zip_file) + '\' \'' + str(dst) + '\'"'
@@ -213,9 +216,7 @@ def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
     https://superuser.com/questions/392061/how-to-make-a-shortcut-from-cmd/392066
     https://stackoverflow.com/questions/346107/creating-a-shortcut-for-a-exe-from-a-batch-file
     '''
-    if not is_os_windows():
-        # TODO: create custom exception
-        raise OSError('util.shortcut() Works only with Windows')
+    windows_only()
     print('Creating the shortcut file')
     command = '$ws = New-Object -ComObject WScript.Shell; '
     command += '$s = $ws.CreateShortcut(\'' + dst_link_file + '\'); '
@@ -494,10 +495,7 @@ def msiexec(name: str, installer: str, properties: dict=None, log_file: str=None
             show_progress=False) -> bool:
     # https://www.advancedinstaller.com/user-guide/msiexec.html
     # # http://www.silentinstall.org/msiexec
-
-    if not is_os_windows():
-        # TODO: create custom exception
-        raise OSError('util.msiexec() Works only with Windows')
+    windows_only()
 
     command = 'START "' + name + '" /WAIT msiexec'
     # Install Options
