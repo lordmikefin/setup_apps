@@ -208,6 +208,7 @@ class Eclipse(Base):
         self.create_link()
 
     def create_link(self):
+        util.windows_only()
         # Create link into Desktop.
         dst_link_file = os.environ.get('USERPROFILE') + '\\Desktop\\Eclipse - ' + self.version + '.lnk'
         util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='')
