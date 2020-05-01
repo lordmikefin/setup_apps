@@ -179,8 +179,8 @@ def is_file(file: str) -> bool:
 
 def unzip(zip_file: str, dst: str):
     windows_only()
-    print('Unzip the file')
-    print('Unzip to  ' + str(dst))
+    logger.info('Unzip the file')
+    logger.info('Unzip to  ' + str(dst))
     command = 'PowerShell -Command "Expand-Archive \'' + str(zip_file) + '\' \'' + str(dst) + '\'"'
     res = run_os_command(command)
     # TODO: How to handle possible errors?
