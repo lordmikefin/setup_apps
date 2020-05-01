@@ -177,12 +177,39 @@ def is_file(file: str) -> bool:
     return os.path.isfile(file)
 
 
+def power_shell(command: str) -> int:
+    windows_only()
+    if command.__contains__('"'):
+        # TODO: create custom exception
+        msg = 'For now PowerShell command can not contain character "'
+        logger.critical(msg)
+        raise OSError(msg)
+
+    # TODO: PowerShell will not return the errorlevel !?!?!?
+    #   PowerShell -Command "Expand-Archive 'W:\spacesniffer_1_3_0_2.zip' 'C:\temp\spacesniffer_1_3_0_2'"
+    # TODO: test PowerShell command with try-catch
+    # https://stackoverflow.com/questions/36943318/how-to-get-the-error-code-errorlevel-from-powershell-into-windows-command-prom 
+
+    #command = 'PowerShell -Command "' + command + '"'
+    command = 'PowerShell -Command "try { ' + command + ' -ErrorAction stop } catch {$_; exit 123 }"'
+    ret = run_os_command(command)
+    logger.debug('success: ' + str(ret))
+    return ret
+
 def unzip(zip_file: str, dst: str):
     windows_only()
     logger.info('Unzip the file')
     logger.info('Unzip to  ' + str(dst))
-    command = 'PowerShell -Command "Expand-Archive \'' + str(zip_file) + '\' \'' + str(dst) + '\'"'
-    res = run_os_command(command)
+
+    # TODO: PowerShell will not return the errorlevel !?!?!?
+    #   PowerShell -Command "Expand-Archive 'W:\spacesniffer_1_3_0_2.zip' 'C:\temp\spacesniffer_1_3_0_2'"
+    # TODO: test PowerShell command with try-catch
+    # https://stackoverflow.com/questions/36943318/how-to-get-the-error-code-errorlevel-from-powershell-into-windows-command-prom 
+
+    #command = 'PowerShell -Command "Expand-Archive \'' + str(zip_file) + '\' \'' + str(dst) + '\'"'
+    #res = run_os_command(command)
+    command = 'Expand-Archive \'' + str(zip_file) + '\' \'' + str(dst) + '\''
+    res = power_shell(command)
     # TODO: How to handle possible errors?
 
 
@@ -270,6 +297,7 @@ def run_os_command(command: str) -> bool:
     # https://docs.python.org/3/library/subprocess.html#module-subprocess
     logger.info('Run command: ' + command)
     res = int(os.system(command))
+    logger.debug('Errorlevel: ' + str(res))
     if res != 0:
         logger.error('Command failed. [' + command + ']')
         return False
