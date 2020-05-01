@@ -259,6 +259,11 @@ def run_os_command(command: str) -> bool:
     #   test = util.run_os_command(command)
     # TODO: use 'run_command' -function instead
 
+    # TODO: PowerShell will not return the errorlevel !?!?!?
+    #   PowerShell -Command "Expand-Archive 'W:\spacesniffer_1_3_0_2.zip' 'C:\temp\spacesniffer_1_3_0_2'"
+    # TODO: test PowerShell command with try-catch
+    # https://stackoverflow.com/questions/36943318/how-to-get-the-error-code-errorlevel-from-powershell-into-windows-command-prom 
+
     logger.debug('TODO: use run_command(...) instead of this.')
     logger.debug('print out from the command is not captured and can not be redirected!')
     # TODO: use 'subprocess' module
