@@ -138,12 +138,14 @@ def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progre
     # data = requests.get(url)
     # open(dst, 'wb').write(data.content)
 
+    logger.info('Downloading from "' + str(url) + '"')
+    logger.info('Downloading into "' + str(dst) + '"')
     with open(dst, "wb") as f:
         response = requests.get(url, stream=True)
         total_length = response.headers.get('content-length')
 
         if total_length is None:
-            print('no content length header')
+            logger.info('no content length header')
             f.write(response.content)
         else:
             pbar = None
@@ -244,7 +246,9 @@ def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
     https://stackoverflow.com/questions/346107/creating-a-shortcut-for-a-exe-from-a-batch-file
     '''
     windows_only()
-    print('Creating the shortcut file')
+    logger.info('Creating the shortcut file')
+    logger.info('Exec file: ' + str(exe_file))
+    logger.info('Link file: ' + str(dst_link_file))
     command = '$ws = New-Object -ComObject WScript.Shell; '
     command += '$s = $ws.CreateShortcut(\'' + dst_link_file + '\'); '
     command += '$s.TargetPath = \'' + exe_file + '\'; '
@@ -253,7 +257,7 @@ def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
     # command += '$s.WorkingDirectory = \'' + dir + '\'; '
     command += '$s.Save(); '
     command = PWS + ' -Command "' + command + '"'
-    print(command)
+    logger.info(command)
     test = run_os_command(command)
     # TODO: How to handle possible errors?
 
