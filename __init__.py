@@ -93,7 +93,7 @@ PATH_APP_PYDEV = PATH_APPS + '\\eclipse\\pydev'
 PATH_APP_PUTTY = PATH_APPS + '\\putty'
 
 
-def connect_samba_share(src_samba: str='\\192.168.122.1\sambashare\windows',
+def connect_samba_share(src_samba: str='\\\\192.168.122.1\\sambashare\\windows',
                         dst_drive=DRIVE_INSTALLER) -> bool:
     """ Connect samba share. """
     # TODO: remove this function
