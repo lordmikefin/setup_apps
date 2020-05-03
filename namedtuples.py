@@ -37,4 +37,5 @@ from typing import NamedTuple
 class CommandRet(NamedTuple):
     stdout: str = ''
     errorlevel: int = 0  # 0, no error
+    stderr: str = ''
 
