@@ -405,8 +405,10 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
         '''
     except:
         logger.error('Command failed')
-        print("Unexpected error:", sys.exc_info()[0])
-        print("Unexpected error:", sys.exc_info())
+        logger.error("Unexpected error: " + str(sys.exc_info()[0]))
+        logger.error("Unexpected error: " + str(sys.exc_info()))
+        #print("Unexpected error:", sys.exc_info()[0])
+        #print("Unexpected error:", sys.exc_info())
         # exc_type, exc_value, exc_traceback = sys.exc_info()
         traceback.print_exc()
         # TODO: get error code from 'subprocess'
