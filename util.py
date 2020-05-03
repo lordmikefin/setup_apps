@@ -603,3 +603,22 @@ def msiexec(name: str, installer: str, properties: dict=None, log_file: str=None
     
     #print('XXX installation done.')
     return True
+
+
+def connect_samba_share(src_samba: str, dst_drive: str) -> bool:
+    """ Connect samba share. """
+    windows_only()
+    logger.debug('TODO: Test if drive exists')
+    logger.debug('TODO: Get samba share address from config')
+    #command = 'net use W: \\192.168.122.1\sambashare\windows'
+    #command = 'net use ' + DRIVE_INSTALLER + ' \\192.168.122.1\sambashare\windows'
+    command = 'net use ' + str(dst_drive) + ' ' + str(src_samba)
+    #test = util.run_os_command(command)
+    test = run_os_command(command)
+    if not test:
+        logger.info('Samba connection  FAILED.')
+        #sys.exit(1)
+        return False
+    else:
+        logger.info('Samba share connected.')
+        return True

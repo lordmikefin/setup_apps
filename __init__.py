@@ -93,11 +93,15 @@ PATH_APP_PYDEV = PATH_APPS + '\\eclipse\\pydev'
 PATH_APP_PUTTY = PATH_APPS + '\\putty'
 
 
-def connect_samba_share():
+def connect_samba_share() -> bool:
     """ Connect samba share. """
-    # TODO: Test if drive exists.
-    
+    # TODO: remove this function
+    # TODO: Test if destination drive exists.
     # TODO: Get samba share address from config.
+    return util.connect_samba_share(
+        src_samba='\\192.168.122.1\sambashare\windows',
+        dst_drive=DRIVE_INSTALLER)
+    '''
     #command = 'net use W: \\192.168.122.1\sambashare\windows'
     command = 'net use ' + DRIVE_INSTALLER + ' \\192.168.122.1\sambashare\windows'
     test = util.run_os_command(command)
@@ -109,6 +113,7 @@ def connect_samba_share():
     else:
         print('Samba share connected.')
         return True
+    '''
 
 
 #connect_samba_share()
