@@ -341,6 +341,7 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
         '''
     except Exception as err:
         logger.error('Command failed')
+        logger.error("Unexpected error: " + str(type(err)))
         logger.error("Unexpected error: " + str(err))
         #print("Unexpected error:", sys.exc_info()[0])
         #print("Unexpected error:", sys.exc_info())
@@ -403,6 +404,12 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
         logger.error(ret)
         return ret
         '''
+    except Exception as err:
+        logger.error('Command failed')
+        logger.error("Unexpected error: " + str(type(err)))
+        logger.error("Unexpected error: " + str(err))
+        raise err
+        '''
     except:
         logger.error('Command failed')
         logger.error("Unexpected error: " + str(sys.exc_info()[0]))
@@ -417,6 +424,7 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
         ret = CommandRet(errorlevel=1, stderr=str(sys.exc_info()[0]))
         logger.error(ret)
         return ret
+        '''
 
     # TODO: get error code from 'subprocess'
     # return 0
