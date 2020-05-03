@@ -300,9 +300,9 @@ def update_env_var_path():
     #print('PATH : ' + _path)
     '''
     command = str('PATH=' + str(_javapath) + ';%PATH%')
-    print(command)
+    #print(command)
     res = int(os.system(command))
-    print('result : ' + str(res))
+    #print('result : ' + str(res))
     '''
     os.environ['PATH'] = str(_javapath) + ';' + _path
     #print('PATH : ' + str(os.environ.get('PATH')))
