@@ -312,11 +312,11 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
     # https://docs.python.org/3/library/subprocess.html#subprocess.run
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
     if isinstance(command, str):
-        print('NOTE: It is safer to pass command as list of parameters.')
+        logger.debug('NOTE: It is safer to pass command as list of parameters.')
 
     if shell:
         # https://docs.python.org/3/library/subprocess.html#security-considerations
-        print('TODO: avoid shell injection vulnerabilities')
+        logger.debug('TODO: avoid shell injection vulnerabilities')
 
     process = None
     try:
@@ -327,15 +327,17 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
             shell=shell,
             universal_newlines=True)
     except FileNotFoundError as err:
-        print('Command failed')
-        print("Error: {0}".format(err))
+        logger.error('Command failed')
+        logger.error("{0}".format(err))
         # https://ss64.com/nt/errorlevel.html
         # https://shapeshed.com/unix-exit-codes/
         # NOTE: error code 1 = "the operation was not successful"
         #return subprocess.CompletedProcess(args=command, returncode=1, stderr=str(err))
         process = subprocess.CompletedProcess(args=command, returncode=1, stderr=str(err))
+        logger.error(process)
+        #raise err
 
-    print('' + str(process))
+    logger.debug(str(process))
     return process
 
 
@@ -346,53 +348,65 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
     #   https://docs.python.org/3/library/subprocess.html#subprocess.check_output
     #   https://janakiev.com/blog/python-shell-commands/
     if isinstance(command, str):
-        print('NOTE: It is safer to pass command as list of parameters.')
+        logger.debug('NOTE: It is safer to pass command as list of parameters.')
 
     if shell:
         # https://docs.python.org/3/library/subprocess.html#security-considerations
-        print('TODO: avoid shell injection vulnerabilities')
+        logger.debug('TODO: avoid shell injection vulnerabilities')
 
-    print('Run command: ' + str(command))
-    test = ''
+    logger.info('Run command: ' + str(command))
+    stderr = ''
+    stdout = ''
     errorlevel = 0
     try:
         # test = subprocess.check_output(command, shell=True)
         #test = subprocess.check_output(command, shell=shell)
-        #test = str(test, 'utf-8')
+        #stdout = str(test, 'utf-8')
         # print('Stored output: ' + str(test))
         c_proc = run_command_alt_1(command=command, shell=shell)
         if c_proc.stdout:
-            test = c_proc.stdout
+            stdout = c_proc.stdout
         if c_proc.returncode:
             errorlevel = c_proc.returncode
-        print('Stored output type: ' + str(type(test)))
-        print('Stored output: ' + str(test))
+        if c_proc.stderr:
+            stderr = c_proc.stderr
+        #logger.info('Stored output type: ' + str(type(stdout)))
+        #logger.info('Stored output: ' + str(stdout))
     except subprocess.CalledProcessError as err:
-        print('Command failed')
-        print("Error: {0}".format(err))
+        logger.error('Command failed')
+        logger.error("{0}".format(err))
         # TODO: get error code from 'subprocess'
         # return 1
-        return CommandRet(errorlevel=1)
+        ret = CommandRet(errorlevel=1, stderr=str(err))
+        logger.error(ret)
+        return ret
     except FileNotFoundError as err:
-        print('Command failed')
-        print("Error: {0}".format(err))
+        logger.error('Command failed')
+        logger.error("{0}".format(err))
         # TODO: get error code from 'subprocess'
         # return 1
-        return CommandRet(errorlevel=1)
+        ret = CommandRet(errorlevel=1, stderr=str(err))
+        logger.error(ret)
+        return ret
     except:
-        print('Command failed')
-        print("Unexpected error:", sys.exc_info()[0])
-        print("Unexpected error:", sys.exc_info())
+        logger.error('Command failed')
+        logger.error("Unexpected error:", sys.exc_info()[0])
+        logger.error("Unexpected error:", sys.exc_info())
         # exc_type, exc_value, exc_traceback = sys.exc_info()
         traceback.print_exc()
         # TODO: get error code from 'subprocess'
         # return 1 # what is default error code ?
-        return CommandRet(errorlevel=1)
+        #return CommandRet(errorlevel=1)
+        ret = CommandRet(errorlevel=1, stderr=str(sys.exc_info()[0]))
+        logger.error(ret)
+        return ret
 
     # TODO: get error code from 'subprocess'
     # return 0
     #return CommandRet(errorlevel=0, stdout=str(test, 'utf-8'))
-    return CommandRet(errorlevel=errorlevel, stdout=str(test))
+    ret = CommandRet(errorlevel=errorlevel, stdout=str(stdout), stderr=str(stderr))
+    logger.debug(str(ret))
+    return ret
 
 
 def home_path() -> str:
