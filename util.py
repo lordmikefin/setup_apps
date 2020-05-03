@@ -558,7 +558,7 @@ def move_win(src: str, dst: str):
     # /E :: copy subdirectories, including Empty ones.
     # /NFL : No File List - don't log file names.
     # /NDL : No Directory List - don't log directory names.
-    print(command)
+    #print(command)
     res = run_os_command(command)
 
 def startswith_comment(line: str):
@@ -593,7 +593,7 @@ def msiexec(name: str, installer: str, properties: dict=None, log_file: str=None
     # Set public properties
     for key, value in properties.items():
         command = command + ' ' + key + '="' + value + '"'
-    print(command)
+    #print(command)
     test = run_os_command(command)
     #print('')
     if not test:
