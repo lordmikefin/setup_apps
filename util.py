@@ -327,7 +327,6 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
             stderr=subprocess.PIPE,
             shell=shell,
             universal_newlines=True)
-        '''
     except FileNotFoundError as err:
         logger.error('Command failed')
         logger.error("{0}".format(err))
@@ -338,7 +337,6 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
         process = subprocess.CompletedProcess(args=command, returncode=1, stderr=str(err))
         logger.error(process)
         #raise err
-        '''
     except Exception as err:
         logger.error('Command failed')
         logger.error("Unexpected error: " + str(type(err)))
@@ -395,6 +393,7 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
         ret = CommandRet(errorlevel=1, stderr=str(err))
         logger.error(ret)
         return ret
+        '''
     except FileNotFoundError as err:
         logger.error('Command failed')
         logger.error("{0}".format(err))
@@ -403,7 +402,6 @@ def run_command(command: Union[str, list], shell=False) -> CommandRet:
         ret = CommandRet(errorlevel=1, stderr=str(err))
         logger.error(ret)
         return ret
-        '''
     except Exception as err:
         logger.error('Command failed')
         logger.error("Unexpected error: " + str(type(err)))
