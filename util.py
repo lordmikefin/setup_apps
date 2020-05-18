@@ -613,12 +613,15 @@ def connect_samba_share(src_samba: str, dst_drive: str) -> bool:
     #command = 'net use W: \\192.168.122.1\sambashare\windows'
     #command = 'net use ' + DRIVE_INSTALLER + ' \\192.168.122.1\sambashare\windows'
     command = 'net use ' + str(dst_drive) + ' ' + str(src_samba)
-    #test = util.run_os_command(command)
-    test = run_os_command(command)
+    #test = run_os_command(command)
+    ret = run_command(command)
+    test = ret.errorlevel == 0
     if not test:
         logger.info('Samba connection  FAILED.')
+        logger.error(ret.stderr)
         #sys.exit(1)
         return False
     else:
         logger.info('Samba share connected.')
+        logger.info(ret.stdout)
         return True
