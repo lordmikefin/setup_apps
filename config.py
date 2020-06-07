@@ -428,6 +428,7 @@ def parse_key_value(kvs: Element):
 APPS = {
     'eclipse': [],
     'java': [],
+    'npp': [],
     }
 
 def init():
@@ -439,6 +440,7 @@ def init():
 
     for ecli in eclipse_list:
         source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
+        logger.debug('source_eclipse: ' + str(source_eclipse))
         ecli.generate_all(source_eclipse)
         # NOTE: for now just init plugins
         # TODO: move stuff from parse into this?
@@ -450,8 +452,17 @@ def init():
 
     for java_obj in java_list:
         source_java = app_source_handler.source.APPS.get('java', {})
-        logger.info('source_java: ' + str(source_java))
+        logger.debug('source_java: ' + str(source_java))
         java_obj.generate_all(source_java)
+
+    npp_list = list(APPS.get('npp', []))
+    if False:  # Definition only for Eclipse auto complete
+        npp_obj = npp.Npp()
+
+    for npp_obj in npp_list:
+        source_npp = app_source_handler.source.APPS.get('npp', {})
+        logger.debug('source_npp: ' + str(source_npp))
+        npp_obj.generate_all(source_npp)
 
 
 def download():

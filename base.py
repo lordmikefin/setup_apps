@@ -103,6 +103,11 @@ class Base:
         #self.url_ok = True
         return
 
+    def generate_all(self, source: dict):
+        self.log_init()
+        self.generate_full_url_from_source(source)
+        logger.info('installer_full_url       : ' + str(self.installer_full_url))
+        
     def generate_full_url_from_source(self, source: dict):
         #app_source_handler.source.APPS
         #source = app_source_handler.source.APPS.get('eclipse', {})

@@ -30,6 +30,8 @@ class Npp(Base):
     def __init__(self):
         super().__init__()
 
+    def generate_all(self, source: dict):
+        super().generate_all(source)
 
 _installer_file_fullname = ''
 _file_name = ''
