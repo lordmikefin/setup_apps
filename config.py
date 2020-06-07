@@ -283,6 +283,13 @@ def parse_install_path(elem: Element, base_obj: Base):
         base_obj.install_path = elem_path.text
 
 
+def append_app(app_name: str, app_obj: Base):
+    global APPS
+    obj_list = list(APPS.get(app_name, []))
+    obj_list.append(app_obj)
+    APPS[app_name] = obj_list
+
+
 def parse_npp(elem: Element):
     global APPS
 
@@ -292,6 +299,7 @@ def parse_npp(elem: Element):
     parse_install_path(elem, npp_obj)
     logger.info('version                  : ' + str(npp_obj.version))
     logger.info('install_path             : ' + str(npp_obj.install_path))
+    append_app('npp', npp_obj)
 
 
 def parse_java(elem: Element):
@@ -312,9 +320,10 @@ def parse_java(elem: Element):
     logger.info('version                  : ' + str(java_obj.version))
     logger.info('install_path             : ' + str(java_obj.install_path))
 
-    java_list = list(APPS.get('java', []))
-    java_list.append(java_obj)
-    APPS['java'] = java_list
+    #java_list = list(APPS.get('java', []))
+    #java_list.append(java_obj)
+    #APPS['java'] = java_list
+    append_app('java', java_obj)
 
 
 def parse_eclipse(elem: Element):
@@ -358,9 +367,10 @@ def parse_eclipse(elem: Element):
         parse_plugins(plugins, plugins_list)
         #ecli.init_plugins()
 
-    eclipse_list = list(APPS.get('eclipse', []))
-    eclipse_list.append(ecli)
-    APPS['eclipse'] = eclipse_list
+    #eclipse_list = list(APPS.get('eclipse', []))
+    #eclipse_list.append(ecli)
+    #APPS['eclipse'] = eclipse_list
+    append_app('eclipse', ecli)
 
 
 def parse_plugins(plugins: Element, plugins_list: list):
