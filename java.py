@@ -44,8 +44,8 @@ class Java(Base):
         #self.generate_full_url_from_source(source)
         #logger.info('installer_full_url       : ' + str(self.installer_full_url))
     
-        self.generate_installer_path()
-        logger.info('installer_path           : ' + str(self.installer_path))
+        #self.generate_installer_path()
+        #logger.info('installer_path           : ' + str(self.installer_path))
         # TODO: get md5/sha256 file from the sourse
         #self.installer_path_md5 = None  # NOTE: this is set in Base class!
         self.installer_path_md5 = 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'

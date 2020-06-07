@@ -42,6 +42,14 @@ class Base:
         # TODO: get md5/sha256 file from the sourse
         self.installer_path_md5 = None
 
+    def generate_all(self, source: dict):
+        self.log_init()
+        self.generate_full_url_from_source(source)
+        logger.info('installer_full_url       : ' + str(self.installer_full_url))
+
+        self.generate_installer_path()
+        logger.info('installer_path           : ' + str(self.installer_path))
+
     def log_init(self):
         logger.info('Initialize application object: ' + self.__name__)
 
@@ -103,11 +111,6 @@ class Base:
         #self.url_ok = True
         return
 
-    def generate_all(self, source: dict):
-        self.log_init()
-        self.generate_full_url_from_source(source)
-        logger.info('installer_full_url       : ' + str(self.installer_full_url))
-        
     def generate_full_url_from_source(self, source: dict):
         #app_source_handler.source.APPS
         #source = app_source_handler.source.APPS.get('eclipse', {})

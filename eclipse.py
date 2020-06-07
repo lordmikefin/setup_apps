@@ -111,8 +111,8 @@ class Eclipse(Base):
         #self.generate_full_url_from_source(source_eclipse)
         #logger.info('installer_full_url       : ' + str(self.installer_full_url))
     
-        self.generate_installer_path()
-        logger.info('installer_path           : ' + str(self.installer_path))
+        #self.generate_installer_path()
+        #logger.info('installer_path           : ' + str(self.installer_path))
     
         self.generate_install_path()
         logger.info('install_path_full        : ' + str(self.install_path_full))
