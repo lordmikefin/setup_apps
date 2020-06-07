@@ -253,7 +253,7 @@ def parse_source_xml(source_file: str=''):
     # app_source_handler.source.parse(source_file)
     if SOURCE_FILE_OK:
         app_source_handler.source.parse(SOURCE_FILE)
-        logger.info('APPS: ' + json.dumps(app_source_handler.source.APPS,
+        logger.debug('APPS: \n' + json.dumps(app_source_handler.source.APPS,
                                      sort_keys=True, indent=2))
     else:
         logger.error('parsing failed')
@@ -504,8 +504,8 @@ def print_sample():
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
     logger.info('print the sample config XML file: ' + str(file))
     tree = ET.parse(file)
-    logger.info(str(ET.tostring(tree.getroot()), 'utf-8'))
-    logger.info('  NOTE: declaration and comments are not printed!')
+    logger.debug(CONFIG_FILE + ' content:\n' + str(ET.tostring(tree.getroot()), 'utf-8'))
+    logger.debug('  NOTE: declaration and comments are not printed!')
 
 
 def create_test_xml():
