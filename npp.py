@@ -24,14 +24,63 @@ from . import util
 
 import os
 from setup_apps.base import Base
+from setup_apps.util import logger
+from setup_apps.tag import Tag
 
 class Npp(Base):
 
     def __init__(self):
         super().__init__()
 
+        self.install_path_ok = False
+        self.install_path = None
+        self.install_path_full = None
+        self.exe_file = None
+
     def generate_all(self, source: dict):
         super().generate_all(source)
+        self.generate_install_path()
+        logger.info('install_path_full        : ' + str(self.install_path_full))
+
+    def generate_install_path(self):
+        if self.install_path is None:
+            logger.error('Incorrect Npp config: Missing tag "' + Tag.install_path + '"')
+            return
+
+        if self.version is None:
+            logger.error('Incorrect Npp config: Missing tag "' + Tag.version + '"')
+            return
+
+        if not '{version}' in self.install_path:
+            self.install_path_full = str(self.install_path)
+            self.install_path_ok = True
+            return
+
+        self.install_path_full = str(self.install_path).format(version=self.version)
+        self.exe_file = self.install_path_full + '\\notepad++.exe'
+        self.install_path_ok = True
+
+    def download(self):
+        if not (self.url_ok and self.path_ok):
+            logger.error('Can not download Notepad++ installer.')
+
+        # TODO: refactor
+        if util.is_file(self.installer_path):
+            logger.info('Notepad++ installer file exists.')
+            logger.info('Calculate sha256')
+            sha = util.sha256(self.installer_path, show_progress=True)
+            logger.info('sha256: ' + str(sha))
+            # TODO: get md5/sha256 file from the sourse
+            if util.is_file(self.installer_path_md5):
+                logger.info('sha256 file exists')
+                if util.is_md5_in_file(self.installer_path_md5, sha):
+                    logger.info('sha256 is in file')
+                    self.is_downloaded = True
+                    return  # file is downloaded
+                else:
+                    logger.info('sha256 does not match')
+                    logger.info('download file again')
+
 
 _installer_file_fullname = ''
 _file_name = ''

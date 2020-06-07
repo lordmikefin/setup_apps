@@ -86,7 +86,7 @@ class Java(Base):
 
     def download(self):
         if not (self.url_ok and self.path_ok):
-            logger.error('Can not download Eclipse installer.')
+            logger.error('Can not download Java installer.')
 
         # TODO: refactor
         if util.is_file(self.installer_path):

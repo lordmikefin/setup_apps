@@ -492,6 +492,13 @@ def download():
     for java_obj in java_list:
         java_obj.download()
 
+    npp_list = list(APPS.get('npp', []))
+    if False:  # Definition only for Eclipse auto complete
+        npp_obj = npp.Npp()
+
+    for npp_obj in npp_list:
+        npp_obj.download()
+
 
 def install():
     """ install all app """
