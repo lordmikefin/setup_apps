@@ -22,8 +22,13 @@
 from . import PATH_APP_NPP, PATH_INSTALLERS
 from . import util
 
-
 import os
+from setup_apps.base import Base
+
+class Npp(Base):
+
+    def __init__(self):
+        super().__init__()
 
 
 _installer_file_fullname = ''

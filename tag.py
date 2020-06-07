@@ -26,6 +26,7 @@ class Tag():
     apps = 'apps'
     eclipse = 'eclipse'
     java = 'java'
+    npp = 'npp'
 
     installer_file = 'installer_file'
     installer_url = 'installer_url'

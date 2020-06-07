@@ -20,12 +20,13 @@
 """
 
 import xml.etree.ElementTree as ET
-from setup_apps import util, __version__, eclipse, PATH_INSTALLERS, java
+from setup_apps import util, __version__, eclipse, PATH_INSTALLERS, java, npp
 from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
 import app_source_handler
 import json
 from .util import logger
+from setup_apps.base import Base
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -103,27 +104,49 @@ def create_sample():
     #append_java(apps, ver='8u242b08')
     append_java(apps, ver='jdk-8.0.242.08-hotspot')
 
+    # Notepad ++
+    append_npp(apps, ver='7.7.1')
+
     indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
 
 
+def set_version(elem: Element, ver: str):
+    version_elem = ET.SubElement(elem, Tag.version)
+    version_elem.text = ver
+
+
+def set_install_path(elem: Element, path: str):
+    install_path = ET.SubElement(elem, Tag.install_path)
+    install_path.text = path
+
+
+def append_npp(apps: Element, ver: str):
+    npp_elem = ET.SubElement(apps, Tag.npp)
+    set_version(npp_elem, ver)
+    set_install_path(npp_elem, 'C:\\Program Files\\Notepad++')
+
+
 def append_java(apps: Element, ver: str):
     java_elem = ET.SubElement(apps, Tag.java)
-    version_elem = ET.SubElement(java_elem, Tag.version)
-    version_elem.text = ver
+    #version_elem = ET.SubElement(java_elem, Tag.version)
+    #version_elem.text = ver
+    set_version(java_elem, ver)
     java_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    install_path = ET.SubElement(java_elem, Tag.install_path)
-    install_path.text = 'C:\\Program Files\\AdoptOpenJDK\\{version}'
+    #install_path = ET.SubElement(java_elem, Tag.install_path)
+    #install_path.text = 'C:\\Program Files\\AdoptOpenJDK\\{version}'
+    set_install_path(java_elem, 'C:\\Program Files\\AdoptOpenJDK\\{version}')
 
 
 def append_eclipse(apps: Element, ver: str, plugins: list):
     ecli_elem = ET.SubElement(apps, Tag.eclipse)
-    version_elem = ET.SubElement(ecli_elem, Tag.version)
+    #version_elem = ET.SubElement(ecli_elem, Tag.version)
     # NOTE: use latest version from the source
     #version_elem.text = '2019-09'
     #version_elem.text = 'latest'
-    version_elem.text = ver
+    #version_elem.text = ver
+    set_version(ecli_elem, ver)
     '''
     ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(ecli_elem, Tag.installer_file)
@@ -135,9 +158,10 @@ def append_eclipse(apps: Element, ver: str, plugins: list):
     # TODO: is there better solution? extract to temp?
     # NOTE: while extracting I got path too long error -> changed install path
     ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    install_path = ET.SubElement(ecli_elem, Tag.install_path)
-    install_path.text = 'C:\\Program Files\\eclipse-{version}'
+    #install_path = ET.SubElement(ecli_elem, Tag.install_path)
+    #install_path.text = 'C:\\Program Files\\eclipse-{version}'
     #install_path.text = 'C:\\Program Files\\e-{version}'
+    set_install_path(ecli_elem, 'C:\\Program Files\\eclipse-{version}')
     append_configure(ecli_elem)
     for plugin in plugins:
         # TODO: get name and version
@@ -244,18 +268,46 @@ def parse_apps(elem_apps: Element):
             parse_eclipse(elem)
         if elem.tag == Tag.java:
             parse_java(elem)
+        if elem.tag == Tag.npp:
+            parse_npp(elem)
+
+
+def parse_version(elem: Element, base_obj: Base):
+    elem_version = elem.find(Tag.version)
+    if not elem_version is None:
+        base_obj.version = elem_version.text
+
+def parse_install_path(elem: Element, base_obj: Base):
+    elem_path = elem.find(Tag.install_path)
+    if not elem_path is None:
+        base_obj.install_path = elem_path.text
+
+
+def parse_npp(elem: Element):
+    global APPS
+
+    npp_obj = npp.Npp()
+    logger.info('parse app                : ' + str(npp_obj.__name__))
+    parse_version(elem, npp_obj)
+    parse_install_path(elem, npp_obj)
+    logger.info('version                  : ' + str(npp_obj.version))
+    logger.info('install_path             : ' + str(npp_obj.install_path))
 
 
 def parse_java(elem: Element):
     global APPS
 
     java_obj = java.Java()
-    elem_version = elem.find(Tag.version)
-    if not elem_version is None:
-        java_obj.version = elem_version.text
-    elem_path = elem.find(Tag.install_path)
-    if not elem_path is None:
-        java_obj.install_path = elem_path.text
+    logger.info('parse app                : ' + str(java_obj.__name__))
+    #elem_version = elem.find(Tag.version)
+    #if not elem_version is None:
+    #    java_obj.version = elem_version.text
+    parse_version(elem, java_obj)
+
+    #elem_path = elem.find(Tag.install_path)
+    #if not elem_path is None:
+    #    java_obj.install_path = elem_path.text
+    parse_install_path(elem, java_obj)
 
     logger.info('version                  : ' + str(java_obj.version))
     logger.info('install_path             : ' + str(java_obj.install_path))
@@ -269,18 +321,22 @@ def parse_eclipse(elem: Element):
     global APPS
 
     ecli = eclipse.Eclipse()
-    elem_version = elem.find(Tag.version)
-    if not elem_version is None:
-        ecli.version = elem_version.text
+    logger.info('parse app                : ' + str(ecli.__name__))
+    #elem_version = elem.find(Tag.version)
+    #if not elem_version is None:
+    #    ecli.version = elem_version.text
+    parse_version(elem, ecli)
+
     elem_file = elem.find(Tag.installer_file)
     if not elem_file is None:
         ecli.installer_file = elem_file.text
     elem_url = elem.find(Tag.installer_url)
     if not elem_url is None:
         ecli.installer_url = elem_url.text
-    elem_path = elem.find(Tag.install_path)
-    if not elem_path is None:
-        ecli.install_path = elem_path.text
+    #elem_path = elem.find(Tag.install_path)
+    #if not elem_path is None:
+    #    ecli.install_path = elem_path.text
+    parse_install_path(elem, ecli)
 
     logger.info('version                  : ' + str(ecli.version))
     logger.info('installer_file           : ' + str(ecli.installer_file))
@@ -314,9 +370,11 @@ def parse_plugins(plugins: Element, plugins_list: list):
             logger.info('Found plugin')
             plug = eclipse.Plugin()
             plugins_list.append(plug)
-            elem_version = elem.find(Tag.version)
-            if not elem_version is None:
-                plug.version = elem_version.text
+            #elem_version = elem.find(Tag.version)
+            #if not elem_version is None:
+            #    plug.version = elem_version.text
+            parse_version(elem, plug)
+
             elem_file = elem.find(Tag.installer_file)
             if not elem_file is None:
                 plug.installer_file = elem_file.text
