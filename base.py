@@ -42,6 +42,9 @@ class Base:
         # TODO: get md5/sha256 file from the sourse
         self.installer_path_md5 = None
 
+    def log_init(self):
+        logger.info('Initialize application object: ' + self.__name__)
+
     def generate_installer_path(self):
         if not self.is_installer_file():
             return

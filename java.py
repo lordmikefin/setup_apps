@@ -39,6 +39,7 @@ class Java(Base):
         self.exe_file = None
 
     def generate_all(self, source: dict):
+        self.log_init()
         self.generate_full_url_from_source(source)
         logger.info('installer_full_url       : ' + str(self.installer_full_url))
     

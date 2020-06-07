@@ -431,7 +431,8 @@ APPS = {
     }
 
 def init():
-    """ Initialize all app objects """
+    """ Initialize all applications objects """
+    logger.info('Initialize all applications objects')
     eclipse_list = list(APPS.get('eclipse', []))
     if False:  # Definition only for Eclipse auto complete
         ecli = eclipse.Eclipse()

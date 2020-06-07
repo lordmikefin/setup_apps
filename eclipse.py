@@ -105,6 +105,7 @@ class Eclipse(Base):
         self.install_path_ok = True
 
     def generate_all(self, source_eclipse: dict):
+        self.log_init()
         #source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
         self.generate_full_url_from_source(source_eclipse)
         logger.info('installer_full_url       : ' + str(self.installer_full_url))
