@@ -42,6 +42,10 @@ class Npp(Base):
         self.generate_install_path()
         logger.info('install_path_full        : ' + str(self.install_path_full))
 
+        # TODO: this should be done in Base
+        self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file
+        logger.info('installer_path_md5        : ' + str(self.installer_path_md5))
+
     def generate_install_path(self):
         if self.install_path is None:
             logger.error('Incorrect Npp config: Missing tag "' + Tag.install_path + '"')
@@ -73,6 +77,7 @@ class Npp(Base):
             # TODO: get md5/sha256 file from the sourse
             if util.is_file(self.installer_path_md5):
                 logger.info('sha256 file exists')
+                # TODO: calculate sha256 not md5
                 if util.is_md5_in_file(self.installer_path_md5, sha):
                     logger.info('sha256 is in file')
                     self.is_downloaded = True
@@ -80,6 +85,9 @@ class Npp(Base):
                 else:
                     logger.info('sha256 does not match')
                     logger.info('download file again')
+
+            logger.info('Download Notepad++ installer sha256 file.')
+            util.download(self.checksum.url, self.installer_path_md5)
 
 
 _installer_file_fullname = ''
