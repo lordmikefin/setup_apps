@@ -48,12 +48,13 @@ class Java(Base):
         #logger.info('installer_path           : ' + str(self.installer_path))
         # TODO: get md5/sha256 file from the sourse
         #self.installer_path_md5 = None  # NOTE: this is set in Base class!
-        self.installer_path_md5 = 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'
+        #self.installer_path_md5 = 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'
         #self.installer_path = PATH_INSTALLERS + self.installer_file
         #self.installer_path_md5 = self.installer_path + '.md5'  # NOTE: this is set in Base class!
-        self.installer_path_md5 = PATH_INSTALLERS + 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'
+        #self.installer_path_md5 = PATH_INSTALLERS + 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'
+        self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file
         #self.installer_full_url_md5 = None  # NOTE: this is set in Base class!
-        self.installer_full_url_md5 = self.sha256url
+        #self.installer_full_url_md5 = self.sha256url
 
         self.generate_install_path()
         logger.info('install_path_full        : ' + str(self.install_path_full))
@@ -109,7 +110,8 @@ class Java(Base):
         util.download(self.installer_full_url, self.installer_path, show_progress=True)
         logger.info('Download complete.')
         logger.info('Download Java installer sha256 file.')
-        util.download(self.installer_full_url_md5, self.installer_path_md5)
+        #util.download(self.installer_full_url_md5, self.installer_path_md5)
+        util.download(self.checksum.url, self.installer_path_md5)
         logger.info('Calculate sha256')
         sha = util.sha256(self.installer_path, show_progress=True)
         logger.info('sha256: ' + str(sha))

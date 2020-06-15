@@ -97,7 +97,10 @@ class Plugin(Base):
         TODO: Calculate own list of md5sums.
         '''
         #hard_code_md5_for_pydev = '722dfe4a9bf1f50a2766c4d58eb6dd4d'
-        hard_code_md5_for_pydev = self.md5sum
+        #hard_code_md5_for_pydev = self.md5sum
+        hard_code_md5_for_pydev = ''
+        if self.checksum.has_sum:
+            hard_code_md5_for_pydev = self.checksum.sum
 
         if util.is_file(self.installer_path):
             logger.info('Eclipse plugin installer file exists.')
