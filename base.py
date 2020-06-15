@@ -40,13 +40,14 @@ class Checksum:
         self.has_sum = False
 
     def set(self, url: str=None, file: str=None, summ: str=None,
-            sum_type: int=Checksum.Type.NOT_SET):
+            sum_type: int=None):
         if url and file:
             self.ok = True
         if summ:
             self.ok = True
             self.has_sum = True
-        self.type = sum_type
+        if sum_type:
+            self.type = sum_type
         self.url = url
         self.file = file
         self.sum = summ
