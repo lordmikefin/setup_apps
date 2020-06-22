@@ -519,6 +519,9 @@ def sha256(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None, show_pro
 def is_md5_in_file(file: str, md5: str) -> bool:
     '''
     Match file md5 sum to the md5sum file.
+
+    TODO: Chect all lines. This will assume the 1st is correct one.
+     -> md5 file might contain multiple rows!
     '''
     f = open(file, "r")
     first_line = str(f.readline())
