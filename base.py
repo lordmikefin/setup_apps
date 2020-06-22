@@ -22,6 +22,7 @@ from . import PATH_INSTALLERS  # TODO: improve how installer path is defined
 from setup_apps.tag import Tag
 import app_source_handler
 from setup_apps.util import logger
+from setup_apps import util
 
 
 class Checksum:
@@ -52,6 +53,40 @@ class Checksum:
         self.file = file
         self.sum = summ
 
+    def download(self):
+        # TODO: was download successfull ?
+        logger.info('Download hash file.')
+        util.download(self.url, self.file)
+
+    def is_hash_correct(self, hashsum: str) -> bool:
+        # TODO: refactor
+        if self.type == Checksum.Type.MD5SUM:
+            if self.has_sum:
+                if util.is_md5_equal(self.sum, hashsum):
+                    return True
+            self.download()
+            if util.is_md5_in_file(self.file, hashsum):
+                return True
+        if self.type == Checksum.Type.SHA256SUM:
+            if self.has_sum:
+                if util.is_md5_equal(self.sum, hashsum):
+                    return True
+            self.download()
+            if util.is_md5_in_file(self.file, hashsum):
+                return True
+        return False
+
+    def create_hash(self, file_installer: str) -> str:
+        hashsum = None
+        if self.type == Checksum.Type.MD5SUM:
+            logger.info('Calculate md5')
+            hashsum = util.md5sum(file_installer, show_progress=True)
+        if self.type == Checksum.Type.SHA256SUM:
+            logger.info('Calculate sha256')
+            hashsum = util.sha256(file_installer, show_progress=True)
+        else:
+            logger.error('Checksum type is not set.')
+        return hashsum
 
 class Base:
     def __init__(self):
