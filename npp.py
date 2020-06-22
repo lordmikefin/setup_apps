@@ -73,10 +73,11 @@ class Npp(Base):
             return False
 
         installer_hashsum = checksum.create_hash(self.installer_path)
-        if checksum.is_hash_correct(installer_hashsum):
+        if checksum.is_hash_correct(installer_hashsum, self.installer_path):
             logger.info('Hash check ok.')
             return True
 
+        logger.info('Hash check failed.')
         return False
 
 

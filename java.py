@@ -98,7 +98,7 @@ class Java(Base):
             # TODO: get md5/sha256 file from the sourse
             if util.is_file(self.installer_path_md5):
                 logger.info('sha256 file exists')
-                if util.is_md5_in_file(self.installer_path_md5, sha):
+                if util.is_md5_in_file(self.installer_path_md5, sha, self.installer_path):
                     logger.info('sha256 is in file')
                     self.is_downloaded = True
                     return  # file is downloaded
@@ -117,7 +117,7 @@ class Java(Base):
         logger.info('sha256: ' + str(sha))
         if util.is_file(self.installer_path_md5):
             logger.info('sha256 file exists')
-            if util.is_md5_in_file(self.installer_path_md5, sha):
+            if util.is_md5_in_file(self.installer_path_md5, sha, self.installer_path):
                 logger.info('sha256 is in file')
                 self.is_downloaded = True
             else:

@@ -133,7 +133,7 @@ class Eclipse(Base):
             # TODO: get md5/sha256 file from the sourse
             if util.is_file(self.installer_path_md5):
                 logger.info('md5 file exists')
-                if util.is_md5_in_file(self.installer_path_md5, md5):
+                if util.is_md5_in_file(self.installer_path_md5, md5, self.installer_path):
                     logger.info('md5 is in file')
                     self.is_downloaded = True
                     return  # file is downloaded
@@ -153,7 +153,7 @@ class Eclipse(Base):
         logger.info('md5 hash: ' + str(md5))
         if util.is_file(self.installer_path_md5):
             logger.info('md5 file exists')
-            if util.is_md5_in_file(self.installer_path_md5, md5):
+            if util.is_md5_in_file(self.installer_path_md5, md5, self.installer_path):
                 logger.info('md5 is in file')
                 self.is_downloaded = True
             else:

@@ -516,26 +516,36 @@ def sha256(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None, show_pro
     return md5.hexdigest()
 
 
-def is_md5_in_file(file: str, md5: str) -> bool:
+def is_md5_in_file(file: str, md5: str, file_installer: str) -> bool:
     '''
     Match file md5 sum to the md5sum file.
-
-    TODO: Chect all lines. This will assume the 1st is correct one.
-     -> md5 file might contain multiple rows!
     '''
-    f = open(file, "r")
-    first_line = str(f.readline())
-    # print(first_line)
-    f.close()
-    test = first_line.split(sep=' ', maxsplit=1)
-    md5_from_file = test[0]
-    # print(md5_from_file)
+    file_src = Path(file)
+    file_inst = Path(file_installer)
+    logger.debug('is_file : ' + str(file_inst.is_file()))
+    logger.debug('name    : ' + str(file_inst.name))
+    file_name_installer = file_inst.name
 
-    if md5 == md5_from_file:
-        return True
+    # TODO: can I use  file_inst.read_bytes() ... will it close file with break ?
+
+    md5_from_file = ''
+    with open(file_src, 'r') as lines:
+        for line in lines:
+            logger.debug('Line :: ' + str(line))
+            test = line.split(sep=' ', maxsplit=1)
+            if len(test) > 1:
+                if str(test[1]).strip() == file_name_installer:
+                    md5_from_file = test[0]
+                    break
+
     return is_md5_equal(md5, md5_from_file)
 
+
 def is_md5_equal(md5_1: str, md5_2: str) -> bool:
+    if not md5_1:
+        return False
+    if not md5_2:
+        return False
     if md5_1 == md5_2:
         return True
     return False

@@ -58,21 +58,23 @@ class Checksum:
         logger.info('Download hash file.')
         util.download(self.url, self.file)
 
-    def is_hash_correct(self, hashsum: str) -> bool:
+    def is_hash_correct(self, hashsum: str, installer_path: str) -> bool:
         # TODO: refactor
+
+        # TODO: self.file has no path ???
         if self.type == Checksum.Type.MD5SUM:
             if self.has_sum:
                 if util.is_md5_equal(self.sum, hashsum):
                     return True
             self.download()
-            if util.is_md5_in_file(self.file, hashsum):
+            if util.is_md5_in_file(self.file, hashsum, installer_path):
                 return True
         if self.type == Checksum.Type.SHA256SUM:
             if self.has_sum:
                 if util.is_md5_equal(self.sum, hashsum):
                     return True
             self.download()
-            if util.is_md5_in_file(self.file, hashsum):
+            if util.is_md5_in_file(self.file, hashsum, installer_path):
                 return True
         return False
 
