@@ -23,7 +23,7 @@ from . import PATH_APP_NPP, PATH_INSTALLERS
 from . import util
 
 import os
-from setup_apps.base import Base
+from setup_apps.base import Base, Checksum
 from setup_apps.util import logger
 from setup_apps.tag import Tag
 
@@ -36,6 +36,9 @@ class Npp(Base):
         self.install_path = None
         self.install_path_full = None
         self.exe_file = None
+
+        self.is_downloaded = False
+
 
     def generate_all(self, source: dict):
         super().generate_all(source)
@@ -64,31 +67,42 @@ class Npp(Base):
         self.exe_file = self.install_path_full + '\\notepad++.exe'
         self.install_path_ok = True
 
-    def download(self):
+
+    def is_installer_downloaded(self, checksum: Checksum):
+        if not util.is_file(self.installer_path):
+            return False
+
+        installer_hashsum = checksum.create_hash(self.installer_path)
+        if checksum.is_hash_correct(installer_hashsum):
+            logger.info('Hash check ok.')
+            return True
+
+        return False
+
+
+    def download(self) -> bool:
         if not (self.url_ok and self.path_ok):
             logger.error('Can not download Notepad++ installer.')
 
-        # TODO: refactor
-        if util.is_file(self.installer_path):
-            logger.info('Notepad++ installer file exists.')
-            logger.info('Calculate sha256')
-            sha = util.sha256(self.installer_path, show_progress=True)
-            logger.info('sha256: ' + str(sha))
-            # TODO: get md5/sha256 file from the sourse
-            if util.is_file(self.installer_path_md5):
-                logger.info('sha256 file exists')
-                # TODO: calculate sha256 not md5
-                if util.is_md5_in_file(self.installer_path_md5, sha):
-                    logger.info('sha256 is in file')
-                    self.is_downloaded = True
-                    return  # file is downloaded
-                else:
-                    logger.info('sha256 does not match')
-                    logger.info('download file again')
+        if not self.checksum:
+            logger.error('Checksum data missing.')
+            return False
 
-            logger.info('Download Notepad++ installer sha256 file.')
-            util.download(self.checksum.url, self.installer_path_md5)
+        if self.is_installer_downloaded(self.checksum):
+            self.is_downloaded = True
+            return True
 
+        logger.info('Download Notepad++ installer.')
+        util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        logger.info('Download complete.')
+
+        if self.is_installer_downloaded(self.checksum):
+            logger.info('Download is verified.')
+            self.is_downloaded = True
+            return True
+
+        logger.error('Download of Notepad++ installer failed.')
+        return False
 
 _installer_file_fullname = ''
 _file_name = ''
