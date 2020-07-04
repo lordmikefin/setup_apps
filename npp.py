@@ -84,6 +84,7 @@ class Npp(Base):
     def download(self) -> bool:
         if not (self.url_ok and self.path_ok):
             logger.error('Can not download Notepad++ installer.')
+            return False
 
         if not self.checksum:
             logger.error('Checksum data missing.')
