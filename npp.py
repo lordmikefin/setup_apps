@@ -37,6 +37,7 @@ class Npp(Base):
         self.install_path_full = None
         self.exe_file = None
 
+        # TODO: move 'self.is_downloaded' into Base 
         self.is_downloaded = False
 
 
@@ -107,8 +108,23 @@ class Npp(Base):
         logger.error('Download of Notepad++ installer failed.')
         return False
 
+    def is_installed(self):
+        logger.error('Notepad++ implement installation test.')
+        return False
 
     def install(self) -> bool:
+        if not self.is_downloaded:
+            logger.error('Notepad++ installer not downloaded.')
+            return False
+
+        if not self.install_path_ok:
+            logger.error('Installation path not defined.')
+            return False
+
+        if self.is_installed():
+            logger.info('Notepad++ is already installed')
+            return False
+
         logger.error('Notepad++ installation not yet implemented.')
         return False
 

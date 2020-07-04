@@ -38,6 +38,10 @@ class Java(Base):
         self.install_path_full = None
         self.exe_file = None
 
+        # TODO: move 'self.is_downloaded' into Base 
+        self.is_downloaded = False
+
+
     def generate_all(self, source: dict):
         super().generate_all(source)
         #self.log_init()
