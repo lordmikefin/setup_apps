@@ -86,9 +86,10 @@ class Java(Base):
         self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
         '''
 
-    def download(self):
+    def download(self) -> bool:
         if not (self.url_ok and self.path_ok):
             logger.error('Can not download Java installer.')
+            return False
 
         # TODO: refactor
         if util.is_file(self.installer_path):

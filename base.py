@@ -217,7 +217,7 @@ class Base:
         sha256file = ver.get('sha256file', '')
 
         logger.info('url: ' + str(url))
-        logger.info('file: ' + str(file))
+        logger.info('installer file: ' + str(file))
         logger.info('md5url: ' + str(md5url))
         logger.info('md5file: ' + str(md5file))
         logger.info('md5sum: ' + str(md5sum))
