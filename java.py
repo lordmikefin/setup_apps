@@ -176,9 +176,9 @@ class Java(Base):
             logger.error('Java installation FAILED.')
             #sys.exit(1)
             return False
-        else:
-            logger.info('Java installation done.')
-            return True
+
+        logger.info('Java installation done.')
+        return True
 
 
 _installer_file_fullname = ''

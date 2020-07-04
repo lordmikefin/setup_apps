@@ -134,8 +134,20 @@ class Npp(Base):
             logger.info('Notepad++ is already installed')
             return False
 
-        logger.error('Notepad++ installation not yet implemented.')
-        return False
+        logger.info('Start Notepad++ installer.')
+        logger.info('Installing ... wait ... wait ... ')
+        # https://silentinstallhq.com/notepad-7-silent-install-how-to-guide/
+        command = self.installer_path + ' /S /D=' + str(self.install_path_full)
+        #CommandRet = util.run_command(command)
+        com_res = util.run_command(command)
+        res_err = com_res.errorlevel
+        logger.debug('Install command error level: ' + str(res_err))
+        if res_err != 0:
+            logger.error('Notepad++ installation FAILED.')
+            return False
+
+        logger.info('Notepad++ installation done.')
+        return True
 
 
 _installer_file_fullname = ''
