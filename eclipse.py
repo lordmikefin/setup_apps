@@ -60,8 +60,6 @@ class Eclipse(Base):
         self.exe_file = None
         self.config_eclipse_ini = None
 
-        self.is_downloaded = False
-
         self.config = None
         self.plugins = None
 

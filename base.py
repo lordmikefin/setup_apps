@@ -113,6 +113,8 @@ class Base:
         # TODO: get md5/sha256 file from the sourse
         self.installer_path_md5 = None
 
+        self.is_downloaded = False
+
     def generate_all(self, source: dict):
         self.log_init()
         self.generate_full_url_from_source(source)
