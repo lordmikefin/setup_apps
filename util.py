@@ -531,11 +531,12 @@ def is_md5_in_file(file: str, md5: str, file_installer: str) -> bool:
     md5_from_file = ''
     with open(file_src, 'r') as lines:
         for line in lines:
-            logger.debug('Line :: ' + str(line))
+            #logger.debug('Line :: ' + str(line))
             test = line.split(sep=' ', maxsplit=1)
             if len(test) > 1:
                 if str(test[1]).strip() == file_name_installer:
                     md5_from_file = test[0]
+                    logger.debug('md5 from file : ' + str(md5_from_file))
                     break
 
     return is_md5_equal(md5, md5_from_file)
