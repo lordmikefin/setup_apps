@@ -143,13 +143,15 @@ class Java(Base):
         # TODO: install OracleJRE and OracleJDK other variants
         if not self.is_downloaded:
             logger.error('Java installer not downloaded.')
+            return False
 
         if not self.install_path_ok:
             logger.error('Installation path not defined.')
+            return False
 
         if self.is_installed():
             logger.info('Java is already installed')
-            return
+            return False
 
         # https://adoptopenjdk.net/installation.html#windows-msi
         logger.info('Start Java installer.')

@@ -82,6 +82,7 @@ class Npp(Base):
 
 
     def download(self) -> bool:
+        # TODO: this is improved function -> copy this logic for other apps
         if not (self.url_ok and self.path_ok):
             logger.error('Can not download Notepad++ installer.')
             return False
@@ -105,6 +106,12 @@ class Npp(Base):
 
         logger.error('Download of Notepad++ installer failed.')
         return False
+
+
+    def install(self) -> bool:
+        logger.error('Notepad++ installation not yet implemented.')
+        return False
+
 
 _installer_file_fullname = ''
 _file_name = ''
