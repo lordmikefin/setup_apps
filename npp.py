@@ -112,6 +112,9 @@ class Npp(Base):
         logger.error('Notepad++ implement installation test.')
         # TODO: How to print version? Following command will show 'help' window.
         # > "C:\Program Files\Notepad++\notepad++.exe" --help
+        file = 'C:\\Program Files\\Notepad++\\notepad++.exe'
+        if util.is_file(file):
+            return True
         return False
 
     def install(self) -> bool:
