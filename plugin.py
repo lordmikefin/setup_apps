@@ -85,16 +85,37 @@ class Plugin(Base):
         self.install_path_full = str(self.install_path)
         self.install_path_ok = True
 
-    def download(self):
+    def download(self) -> bool:
         if not (self.url_ok and self.path_ok):
             # TODO: log plugin name?
             logger.error('Can not download Eclipse plugin installer.')
+            return False
 
+        if not self.checksum:
+            logger.error('Checksum data missing.')
+            return False
+
+        if self.is_installer_downloaded(self.checksum):
+            self.is_downloaded = True
+            return True
+
+        logger.info('Download Eclipse plugin installer.')
+        util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        logger.info('Download complete.')
+
+        if self.is_installer_downloaded(self.checksum):
+            logger.info('Download is verified.')
+            self.is_downloaded = True
+            return True
+
+        logger.error('Download of Eclipse plugin installer failed.')
+        return False
         '''
         NOTE: There is no ms5 file for PyDev plugin.
         For now hard code the md5sum: 
           722dfe4a9bf1f50a2766c4d58eb6dd4d
         TODO: Calculate own list of md5sums.
+        '''
         '''
         #hard_code_md5_for_pydev = '722dfe4a9bf1f50a2766c4d58eb6dd4d'
         #hard_code_md5_for_pydev = self.md5sum
@@ -109,11 +130,11 @@ class Plugin(Base):
             # md5 = util.md5sum(self.installer_path, callback=util.print_progress)
             # md5 = util.md5sum(self.installer_path)
             logger.info('md5 hash: ' + str(md5))
-            '''
+            ''' '''
             if util.is_file(self.installer_path_md5):
                 logger.info('md5 file exists')
                 if util.is_md5_in_file(self.installer_path_md5, md5):
-            '''
+            ''' '''
             if True:
                 if util.is_md5_equal(hard_code_md5_for_pydev, md5):
                     logger.info('md5 is in file')
@@ -126,18 +147,18 @@ class Plugin(Base):
         logger.info('Download Eclipse plugin installer.')
         util.download(self.installer_full_url, self.installer_path, show_progress=True)
         logger.info('Download complete.')
-        '''
+        ''' '''
         logger.info('Download Eclipse plugin installer md5.')
         util.download(self.installer_full_url_md5, self.installer_path_md5)
-        '''
+        ''' '''
         logger.info('Calculate md5sum')
         md5 = util.md5sum(self.installer_path, show_progress=True)
         logger.info('md5 hash: ' + str(md5))
-        '''
+        ''' '''
         if util.is_file(self.installer_path_md5):
             logger.info('md5 file exists')
             if util.is_md5_in_file(self.installer_path_md5, md5):
-        '''
+        ''' '''
         if True:
             if util.is_md5_equal(hard_code_md5_for_pydev, md5):
                 logger.info('md5 is in file')
@@ -146,6 +167,7 @@ class Plugin(Base):
                 logger.info('md5 does not match')
                 logger.error('download failed !  TODO: interrupt the process?')
                 self.is_downloaded = False
+        '''
 
     def install(self):
         logger.info('Start pydev installer.')
