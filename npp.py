@@ -66,19 +66,6 @@ class Npp(Base):
         self.install_path_ok = True
 
 
-    def is_installer_downloaded(self, checksum: Checksum):
-        if not util.is_file(self.installer_path):
-            return False
-
-        installer_hashsum = checksum.create_hash(self.installer_path)
-        if checksum.is_hash_correct(installer_hashsum, self.installer_path):
-            logger.info('Hash check ok.')
-            return True
-
-        logger.info('Hash check failed.')
-        return False
-
-
     def download(self) -> bool:
         # TODO: this is improved function -> copy this logic for other apps
         if not (self.url_ok and self.path_ok):

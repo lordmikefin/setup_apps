@@ -91,6 +91,26 @@ class Java(Base):
             logger.error('Can not download Java installer.')
             return False
 
+        if not self.checksum:
+            logger.error('Checksum data missing.')
+            return False
+
+        if self.is_installer_downloaded(self.checksum):
+            self.is_downloaded = True
+            return True
+
+        logger.info('Download Java installer.')
+        util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        logger.info('Download complete.')
+
+        if self.is_installer_downloaded(self.checksum):
+            logger.info('Download is verified.')
+            self.is_downloaded = True
+            return True
+
+        logger.error('Download of Java installer failed.')
+        return False
+        '''
         # TODO: refactor
         if util.is_file(self.installer_path):
             logger.info('Java installer file exists.')
@@ -126,6 +146,7 @@ class Java(Base):
                 logger.info('sha256 does not match')
                 logger.error('download failed !?  TODO: interrupt the process?')
                 self.is_downloaded = False
+        '''
 
     def is_installed(self):
         # TODO: Test JDK and JRE
