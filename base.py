@@ -85,7 +85,7 @@ class Checksum:
         if self.type == Checksum.Type.MD5SUM:
             logger.info('Calculate md5')
             hashsum = util.md5sum(file_installer, show_progress=True)
-        if self.type == Checksum.Type.SHA256SUM:
+        elif self.type == Checksum.Type.SHA256SUM:
             logger.info('Calculate sha256')
             hashsum = util.sha256(file_installer, show_progress=True)
         else:
