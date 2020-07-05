@@ -116,10 +116,32 @@ class Eclipse(Base):
         logger.info('install_path_full        : ' + str(self.install_path_full))
         #self.init_plugins()
 
-    def download(self):
+    def download(self) -> bool:
         if not (self.url_ok and self.path_ok):
             logger.error('Can not download Eclipse installer.')
+            return False
 
+        if not self.checksum:
+            logger.error('Checksum data missing.')
+            return False
+
+        if self.is_installer_downloaded(self.checksum):
+            self.is_downloaded = True
+            return True
+
+        logger.info('Download Eclipse installer.')
+        util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        logger.info('Download complete.')
+
+        if self.is_installer_downloaded(self.checksum):
+            logger.info('Download is verified.')
+            self.is_downloaded = True
+            return True
+
+        logger.error('Download of Eclipse installer failed.')
+        return False
+
+        '''
         # TODO: refactor
         if util.is_file(self.installer_path):
             logger.info('Eclipse installer file exists.')
@@ -159,6 +181,7 @@ class Eclipse(Base):
                 logger.error('download failed !  TODO: interrupt the process?')
                 self.is_downloaded = False
         # self.is_downloaded = True
+        '''
 
     def is_installed(self):
         # TODO: how to check Eclipse version?
