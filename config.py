@@ -27,6 +27,8 @@ import app_source_handler
 import json
 from .util import logger
 from setup_apps.base import Base
+from typing import List
+from setup_apps.eclipse import Eclipse
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -441,12 +443,24 @@ APPS = {
     'npp': [],
     }
 
+# NOTE: guide for Python hints:
+# https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html
+
+# NOTE: Eclipse's autocomplete does not work with hint object 'List'  :(
+#def get_app_objects(app_name: str) -> List[Eclipse]:
+def get_app_objects(app_name: str) -> list:
+    return list(APPS.get(app_name, []))
+
 def init():
-    """ Initialize all applications objects """
     logger.info('Initialize all applications objects')
-    eclipse_list = list(APPS.get('eclipse', []))
+
+    #eclipse_list = list(APPS.get('eclipse', []))
+    eclipse_list = get_app_objects('eclipse')
+
+    ''' '''
     if False:  # Definition only for Eclipse auto complete
         ecli = eclipse.Eclipse()
+    ''' '''
 
     for ecli in eclipse_list:
         source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
