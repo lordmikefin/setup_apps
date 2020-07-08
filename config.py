@@ -446,9 +446,13 @@ APPS = {
 # NOTE: guide for Python hints:
 # https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html
 
+# TODO: would docstring hinting work for Eclipse?
+# https://www.pydev.org/manual_adv_type_hints.html
+
 # NOTE: Eclipse's autocomplete does not work with hint object 'List'  :(
 #def get_app_objects(app_name: str) -> List[Eclipse]:
 def get_app_objects(app_name: str) -> list:
+    ':rtype list'
     return list(APPS.get(app_name, []))
 
 def init():
@@ -457,12 +461,12 @@ def init():
     #eclipse_list = list(APPS.get('eclipse', []))
     eclipse_list = get_app_objects('eclipse')
 
-    ''' '''
+    '''
     if False:  # Definition only for Eclipse auto complete
         ecli = eclipse.Eclipse()
-    ''' '''
+    '''
 
-    for ecli in eclipse_list:
+    for ecli in eclipse_list: #: :type ecli: Eclipse
         source_eclipse = app_source_handler.source.APPS.get('eclipse', {})
         logger.debug('source_eclipse: ' + str(source_eclipse))
         ecli.generate_all(source_eclipse)
