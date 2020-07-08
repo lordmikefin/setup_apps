@@ -29,6 +29,8 @@ from .util import logger
 from setup_apps.base import Base
 from typing import List
 from setup_apps.eclipse import Eclipse
+from setup_apps.java import Java
+from setup_apps.npp import Npp
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -231,7 +233,7 @@ def parse(source_file: str=''):
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
     tree = ET.parse(file)
     root = tree.getroot()
-    for elem in root:
+    for elem in root: #: :type elem: Element
         # TODO: check version
         if elem.tag == Tag.apps:
             parse_apps(elem)
@@ -262,10 +264,7 @@ def parse_source_xml(source_file: str=''):
 
 
 def parse_apps(elem_apps: Element):
-    # TODO: is there better way to fix auto complete within the for loop ?
-    if False:  # for Eclipse auto complete only :)
-        elem = Element()
-    for elem in elem_apps:
+    for elem in elem_apps: #: :type elem: Element
         if elem.tag == Tag.eclipse:
             parse_eclipse(elem)
         if elem.tag == Tag.java:
@@ -476,19 +475,13 @@ def init():
         ecli.init_plugins(source_eclipse)
 
     java_list = list(APPS.get('java', []))
-    if False:  # Definition only for Eclipse auto complete
-        java_obj = java.Java()
-
-    for java_obj in java_list:
+    for java_obj in java_list: #: :type java_obj: Java
         source_java = app_source_handler.source.APPS.get('java', {})
         logger.debug('source_java: ' + str(source_java))
         java_obj.generate_all(source_java)
 
     npp_list = list(APPS.get('npp', []))
-    if False:  # Definition only for Eclipse auto complete
-        npp_obj = npp.Npp()
-
-    for npp_obj in npp_list:
+    for npp_obj in npp_list: #: :type npp_obj: Npp
         source_npp = app_source_handler.source.APPS.get('npp', {})
         logger.debug('source_npp: ' + str(source_npp))
         npp_obj.generate_all(source_npp)
@@ -497,62 +490,40 @@ def init():
 def download():
     """ Download all app installers """
     eclipse_list = list(APPS.get('eclipse', []))
-    if False:  # Definition only for Eclipse auto complete
-        ecli = eclipse.Eclipse()
-
-    for ecli in eclipse_list:
+    for ecli in eclipse_list: #: :type ecli: Eclipse
         ecli.download()
         ecli.download_plugins()
 
-    java_list = list(APPS.get('java', []))
-    if False:  # Definition only for Eclipse auto complete
-        java_obj = java.Java()
-
+    java_list = list(APPS.get('java', [])) #: :type java_obj: Java
     for java_obj in java_list:
         java_obj.download()
 
     npp_list = list(APPS.get('npp', []))
-    if False:  # Definition only for Eclipse auto complete
-        npp_obj = npp.Npp()
-
-    for npp_obj in npp_list:
+    for npp_obj in npp_list: #: :type npp_obj: Npp
         npp_obj.download()
 
 
 def install():
     """ install all app """
-    if False:  # Definition only for Eclipse auto complete
-        ecli = eclipse.Eclipse()
-
     eclipse_list = list(APPS.get('eclipse', []))
-    for ecli in eclipse_list:
+    for ecli in eclipse_list: #: :type ecli: Eclipse
         ecli.install()
         ecli.install_plugins()
 
     java_list = list(APPS.get('java', []))
-    if False:  # Definition only for Eclipse auto complete
-        java_obj = java.Java()
-
-    for java_obj in java_list:
+    for java_obj in java_list: #: :type java_obj: Java
         java_obj.install()
 
     npp_list = list(APPS.get('npp', []))
-    if False:  # Definition only for Eclipse auto complete
-        npp_obj = npp.Npp()
-
-    for npp_obj in npp_list:
+    for npp_obj in npp_list: #: :type npp_obj: Npp
         npp_obj.install()
 
 
 def configure():
     """ configure all app """
-    if False:  # Definition only for Eclipse auto complete
-        ecli = eclipse.Eclipse()
-
     eclipse_list = list(APPS.get('eclipse', []))
-    for ecli in eclipse_list:
+    for ecli in eclipse_list: #: :type ecli: Eclipse
         ecli.configure()
-        #ecli.configure_hc()
 
 
 def print_sample():
