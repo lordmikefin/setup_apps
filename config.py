@@ -446,8 +446,9 @@ APPS = {
 # NOTE: guide for Python hints:
 # https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html
 
-# TODO: would docstring hinting work for Eclipse?
+# NOTE: docstring hinting works for Eclipse
 # https://www.pydev.org/manual_adv_type_hints.html
+# https://www.sphinx-doc.org/en/master/
 
 # NOTE: Eclipse's autocomplete does not work with hint object 'List'  :(
 #def get_app_objects(app_name: str) -> List[Eclipse]:
