@@ -1,6 +1,8 @@
-# requires non-library lib :)
+# requires non-library libs :)
 # app_source_handler
 #   https://github.com/lordmikefin/app_source_handler
+# LMToyBoxPython
+#   https://github.com/lordmikefin/LMToyBoxPython
 
 
 requests==2.22.0

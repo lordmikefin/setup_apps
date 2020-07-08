@@ -37,6 +37,7 @@ import shutil
 from typing import Union
 import logging
 import inspect
+import LMToyBoxPython
 
 # import urllib.request
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
@@ -495,25 +496,8 @@ def sha256(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None, show_pro
     based on md5sum(...) -function
     https://docs.python.org/2/library/hashlib.html
     '''
-    file_len = Path(src).stat().st_size
-    pbar = None
-    if show_progress:
-        pbar = tqdm(total=file_len)
-    calculated = 0
-    md5 = hashlib.sha256()
-    with io.open(src, mode="rb") as fd:
-        for chunk in iter(lambda: fd.read(length), b''):
-            md5.update(chunk)
-            if not callback is None:
-                calculated += len(chunk)
-                callback(calculated, file_len)
-            elif pbar:
-                pbar.update(len(chunk))
-
-    if pbar:
-        pbar.close()
-
-    return md5.hexdigest()
+    logger.debug('Calculate sha256 sum for file: ' + str(src))
+    return LMToyBoxPython.sha256(src, length, callback, show_progress)
 
 
 def is_md5_in_file(file: str, md5: str, file_installer: str) -> bool:
