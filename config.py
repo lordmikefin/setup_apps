@@ -253,7 +253,6 @@ def download_source_xml():
     url_sha = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml.sha256'
     util.download(url_sha, file_sha)
     hashsum = LMToyBoxPython.sha256(file, show_progress=True)
-    # TODO: sum does not match -> when xml file was generated (in windows) the line ending is CRLF but git repo has line ending LF
 
     # verification with md5sum
     if util.is_md5_in_file(file_sha, hashsum, SOURCE_FILE):
