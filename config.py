@@ -31,6 +31,7 @@ from typing import List
 from setup_apps.eclipse import Eclipse
 from setup_apps.java import Java
 from setup_apps.npp import Npp
+import LMToyBoxPython
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -251,7 +252,8 @@ def download_source_xml():
     file_sha = util.fix_path(PATH_INSTALLERS + '/' + 'app_source.xml.sha256')
     url_sha = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml.sha256'
     util.download(url_sha, file_sha)
-    hashsum = util.md5sum(file, show_progress=True)
+    hashsum = LMToyBoxPython.sha256(file, show_progress=True)
+    # TODO: sum does not match -> when xml file was generated (in windows) the line ending is CRLF but git repo has line ending LF
 
     # verification with md5sum
     if util.is_md5_in_file(file_sha, hashsum, SOURCE_FILE):
