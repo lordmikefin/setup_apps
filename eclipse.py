@@ -29,6 +29,7 @@ from setup_apps.tag import Tag
 import app_source_handler
 from setup_apps.plugin import Plugin
 from setup_apps.util import logger
+import LMToyBoxPython
 
 
 class Eclipse(Base):
@@ -304,8 +305,9 @@ class Eclipse(Base):
             logger.info('Append line at the end')
             lines.append(new_key_value)
         #logger.info('lines: ' + str(lines))
-        with open(file, 'w') as f:
-            f.writelines(lines)
+        #with open(file, 'w') as f:
+        #    f.writelines(lines)
+        LMToyBoxPython.write_lines_to_file(file, lines)
 
     def configure_test(self):
         # NOTE: this will repet the line for each run
