@@ -247,8 +247,14 @@ def download_source_xml():
     file = SOURCE_FILE
     url = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml'
     util.download(url, file, show_progress=True)
-    # TODO: create real verification with md5sum
-    if util.is_file(file):
+    # TODO: download app_source.xml.sha256 file
+    file_sha = util.fix_path(PATH_INSTALLERS + '/' + 'app_source.xml.sha256')
+    url_sha = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml.sha256'
+    util.download(url_sha, file_sha)
+    hashsum = util.md5sum(file, show_progress=True)
+
+    # verification with md5sum
+    if util.is_md5_in_file(file_sha, hashsum, SOURCE_FILE):
         SOURCE_FILE_OK = True
 
 
