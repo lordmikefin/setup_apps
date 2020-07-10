@@ -28,11 +28,13 @@ import app_source_handler
 import json
 from .util import logger
 from setup_apps.base import Base
+import LMToyBoxPython
+# NOTE: we need "unused" imports for Sphinx Documentation generator comment lines :)
 from typing import List
 from setup_apps.eclipse import Eclipse
 from setup_apps.java import Java
 from setup_apps.npp import Npp
-import LMToyBoxPython
+from setup_apps.putty import Putty
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -517,6 +519,12 @@ def init():
         source_npp = app_source_handler.source.APPS.get('npp', {})
         logger.debug('source_npp: ' + str(source_npp))
         npp_obj.generate_all(source_npp)
+
+    putty_list = list(APPS.get('putty', []))
+    for putty_obj in putty_list: #: :type putty_obj: Putty
+        source_putty = app_source_handler.source.APPS.get('putty', {})
+        logger.debug('source_putty: ' + str(source_putty))
+        putty_obj.generate_all(source_putty)
 
 
 def download():

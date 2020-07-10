@@ -22,7 +22,9 @@
 from . import PATH_APP_PUTTY, PATH_INSTALLERS
 from . import util
 import os
-from setup_apps.base import Base
+from setup_apps.base import Base, Checksum
+from setup_apps.util import logger
+from setup_apps.tag import Tag
 
 class Putty(Base):
 
@@ -33,6 +35,38 @@ class Putty(Base):
         self.install_path = None
         self.install_path_full = None
         self.exe_file = None
+
+    def generate_all(self, source: dict):
+        super().generate_all(source)
+        self.generate_install_path()
+        logger.info('install_path_full        : ' + str(self.install_path_full))
+
+        # TODO: this should be done in Base
+        #self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file #: :type self.checksum: Checksum
+        #self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file #: :type checksum: Checksum
+        sum_obj = self.checksum #: :type sum_obj: Checksum
+        sum_obj.file
+        self.installer_path_md5 = PATH_INSTALLERS + sum_obj.file
+        logger.info('installer_path_md5        : ' + str(self.installer_path_md5))
+
+    def generate_install_path(self):
+        if self.install_path is None:
+            logger.error('Incorrect Putty config: Missing tag "' + Tag.install_path + '"')
+            return
+
+        if self.version is None:
+            logger.error('Incorrect Putty config: Missing tag "' + Tag.version + '"')
+            return
+
+        if not '{version}' in self.install_path:
+            self.install_path_full = str(self.install_path)
+            self.exe_file = self.install_path_full + '\\putty.exe'
+            self.install_path_ok = True
+            return
+
+        self.install_path_full = str(self.install_path).format(version=self.version)
+        self.exe_file = self.install_path_full + '\\putty.exe'
+        self.install_path_ok = True
 
 
 _putty_ver = ''
