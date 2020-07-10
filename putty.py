@@ -21,9 +21,18 @@
 
 from . import PATH_APP_PUTTY, PATH_INSTALLERS
 from . import util
-
-
 import os
+from setup_apps.base import Base
+
+class Putty(Base):
+
+    def __init__(self):
+        super().__init__()
+
+        self.install_path_ok = False
+        self.install_path = None
+        self.install_path_full = None
+        self.exe_file = None
 
 
 _putty_ver = ''

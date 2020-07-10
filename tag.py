@@ -27,6 +27,7 @@ class Tag():
     eclipse = 'eclipse'
     java = 'java'
     npp = 'npp'
+    putty = 'putty'
 
     installer_file = 'installer_file'
     installer_url = 'installer_url'

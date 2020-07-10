@@ -20,7 +20,8 @@
 """
 
 import xml.etree.ElementTree as ET
-from setup_apps import util, __version__, eclipse, PATH_INSTALLERS, java, npp
+from setup_apps import util, __version__, eclipse, PATH_INSTALLERS, java, npp,\
+    putty
 from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
 import app_source_handler
@@ -112,6 +113,9 @@ def create_sample():
     # Notepad ++
     append_npp(apps, ver='7.7.1')
 
+    # Putty
+    append_putty(apps, ver='0.73')
+
     indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
@@ -125,6 +129,12 @@ def set_version(elem: Element, ver: str):
 def set_install_path(elem: Element, path: str):
     install_path = ET.SubElement(elem, Tag.install_path)
     install_path.text = path
+
+
+def append_putty(apps: Element, ver: str):
+    npp_elem = ET.SubElement(apps, Tag.putty)
+    set_version(npp_elem, ver)
+    set_install_path(npp_elem, 'C:\\Program Files\\PuTTY')
 
 
 def append_npp(apps: Element, ver: str):
@@ -278,6 +288,8 @@ def parse_apps(elem_apps: Element):
             parse_java(elem)
         if elem.tag == Tag.npp:
             parse_npp(elem)
+        if elem.tag == Tag.putty:
+            parse_putty(elem)
 
 
 def parse_version(elem: Element, base_obj: Base):
@@ -296,6 +308,18 @@ def append_app(app_name: str, app_obj: Base):
     obj_list = list(APPS.get(app_name, []))
     obj_list.append(app_obj)
     APPS[app_name] = obj_list
+
+
+def parse_putty(elem: Element):
+    global APPS
+
+    obj = putty.Putty()
+    logger.info('parse putty              : ' + str(obj.__name__))
+    parse_version(elem, obj)
+    parse_install_path(elem, obj)
+    logger.info('version                  : ' + str(obj.version))
+    logger.info('install_path             : ' + str(obj.install_path))
+    append_app('putty', obj)
 
 
 def parse_npp(elem: Element):
@@ -447,6 +471,7 @@ APPS = {
     'eclipse': [],
     'java': [],
     'npp': [],
+    'putty': [],
     }
 
 # NOTE: guide for Python hints:
