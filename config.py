@@ -54,9 +54,8 @@ XML_TEST = 'test.xml'
 
 def indent(elem, level=0):
     ''' Indent the xml tree '''
-    # TODO: this should be part of 'xml.etree.ElementTree'
-    # TODO: Create common code base! And move this there.
-
+    LMToyBoxPython.indent(elem, level)
+    '''
     # NOTE: code copied from stackoverflow
     # https://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
     i = "\n" + level*"  "
@@ -72,6 +71,7 @@ def indent(elem, level=0):
     else:
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
+    '''
 
 
 def create_sample():
