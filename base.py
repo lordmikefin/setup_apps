@@ -69,8 +69,11 @@ class Checksum:
 
     def is_hash_correct(self, hashsum: str, installer_path: str) -> bool:
         # TODO: refactor
-        hash_file = PATH_INSTALLERS + self.file
-        logger.debug('hash_file : ' + str(hash_file))
+        if self.file:
+            hash_file = PATH_INSTALLERS + self.file
+            logger.debug('hash_file : ' + str(hash_file))
+        if self.sum:
+            logger.debug('hash sum : ' + str(self.sum))
 
         if self.type == Checksum.Type.MD5SUM:
             if self.has_sum:
