@@ -542,6 +542,10 @@ def download():
     for npp_obj in npp_list: #: :type npp_obj: Npp
         npp_obj.download()
 
+    putty_list = list(APPS.get('putty', []))
+    for putty_obj in putty_list: #: :type putty_obj: Putty
+        putty_obj.download()
+
 
 def install():
     """ install all app """
