@@ -45,7 +45,6 @@ class Putty(Base):
         #self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file #: :type self.checksum: Checksum
         #self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file #: :type checksum: Checksum
         sum_obj = self.checksum #: :type sum_obj: Checksum
-        sum_obj.file
         self.installer_path_md5 = PATH_INSTALLERS + sum_obj.file
         logger.info('installer_path_md5        : ' + str(self.installer_path_md5))
 

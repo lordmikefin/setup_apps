@@ -33,15 +33,22 @@ class Checksum:
         SHA256SUM = 2
 
     def __init__(self):
+        '''
         self.type = Checksum.Type.NOT_SET
         self.url = None
         self.file = None
         self.sum = None
         self.ok = False
         self.has_sum = False
+        '''
+        self.set()
 
     def set(self, url: str=None, file: str=None, summ: str=None,
             sum_type: int=None):
+        self.type = sum_type if sum_type is not None else Checksum.Type.NOT_SET
+        self.ok = True if (url and file) or summ else False
+        self.has_sum = True if summ else False
+        '''
         if url and file:
             self.ok = True
         if summ:
@@ -49,6 +56,7 @@ class Checksum:
             self.has_sum = True
         if sum_type:
             self.type = sum_type
+        '''
         self.url = url
         self.file = file
         self.sum = summ
