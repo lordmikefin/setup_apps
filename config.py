@@ -21,7 +21,7 @@
 
 import xml.etree.ElementTree as ET
 from setup_apps import util, __version__, eclipse, PATH_INSTALLERS, java, npp,\
-    putty
+    putty, python
 from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
 import app_source_handler
@@ -118,6 +118,9 @@ def create_sample():
     # Putty
     append_putty(apps, ver='0.73')
 
+    # Python
+    append_python(apps, ver='3.8.1')
+
     indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
@@ -137,6 +140,15 @@ def append_putty(apps: Element, ver: str):
     npp_elem = ET.SubElement(apps, Tag.putty)
     set_version(npp_elem, ver)
     set_install_path(npp_elem, 'C:\\Program Files\\PuTTY')
+
+
+def append_python(apps: Element, ver: str):
+    elem = ET.SubElement(apps, Tag.python)
+    set_version(elem, ver)
+    # TODO: parse marjor and minor numbers from version
+    marjor = '3'
+    minor = '8'
+    set_install_path(elem, 'C:\\Program Files\\Python' + marjor + minor)
 
 
 def append_npp(apps: Element, ver: str):
@@ -292,6 +304,8 @@ def parse_apps(elem_apps: Element):
             parse_npp(elem)
         if elem.tag == Tag.putty:
             parse_putty(elem)
+        if elem.tag == Tag.python:
+            parse_python(elem)
 
 
 def parse_version(elem: Element, base_obj: Base):
@@ -310,6 +324,18 @@ def append_app(app_name: str, app_obj: Base):
     obj_list = list(APPS.get(app_name, []))
     obj_list.append(app_obj)
     APPS[app_name] = obj_list
+
+
+def parse_python(elem: Element):
+    global APPS
+
+    obj = python.Python
+    logger.info('parse python             : ' + str(obj.__name__))
+    parse_version(elem, obj)
+    parse_install_path(elem, obj)
+    logger.info('version                  : ' + str(obj.version))
+    logger.info('install_path             : ' + str(obj.install_path))
+    append_app('python', obj)
 
 
 def parse_putty(elem: Element):
@@ -474,6 +500,7 @@ APPS = {
     'java': [],
     'npp': [],
     'putty': [],
+    'python': [],
     }
 
 # NOTE: guide for Python hints:

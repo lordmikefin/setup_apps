@@ -28,6 +28,7 @@ class Tag():
     java = 'java'
     npp = 'npp'
     putty = 'putty'
+    python = 'python'
 
     installer_file = 'installer_file'
     installer_url = 'installer_url'

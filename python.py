@@ -28,6 +28,13 @@ from . import util
 import os
 import re
 import subprocess
+from setup_apps.base import Base
+
+
+class Python(Base):
+
+    def __init__(self):
+        super().__init__()
 
 
 _ver = ''
