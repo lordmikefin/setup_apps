@@ -35,6 +35,7 @@ from setup_apps.eclipse import Eclipse
 from setup_apps.java import Java
 from setup_apps.npp import Npp
 from setup_apps.putty import Putty
+from setup_apps.python import Python
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -136,12 +137,6 @@ def set_install_path(elem: Element, path: str):
     install_path.text = path
 
 
-def append_putty(apps: Element, ver: str):
-    npp_elem = ET.SubElement(apps, Tag.putty)
-    set_version(npp_elem, ver)
-    set_install_path(npp_elem, 'C:\\Program Files\\PuTTY')
-
-
 def append_python(apps: Element, ver: str):
     elem = ET.SubElement(apps, Tag.python)
     set_version(elem, ver)
@@ -149,6 +144,12 @@ def append_python(apps: Element, ver: str):
     marjor = '3'
     minor = '8'
     set_install_path(elem, 'C:\\Program Files\\Python' + marjor + minor)
+
+
+def append_putty(apps: Element, ver: str):
+    npp_elem = ET.SubElement(apps, Tag.putty)
+    set_version(npp_elem, ver)
+    set_install_path(npp_elem, 'C:\\Program Files\\PuTTY')
 
 
 def append_npp(apps: Element, ver: str):
@@ -329,7 +330,7 @@ def append_app(app_name: str, app_obj: Base):
 def parse_python(elem: Element):
     global APPS
 
-    obj = python.Python
+    obj = python.Python()
     logger.info('parse python             : ' + str(obj.__name__))
     parse_version(elem, obj)
     parse_install_path(elem, obj)
@@ -552,6 +553,12 @@ def init():
         source_putty = app_source_handler.source.APPS.get('putty', {})
         logger.debug('source_putty: ' + str(source_putty))
         putty_obj.generate_all(source_putty)
+
+    python_list = list(APPS.get('python', []))
+    for python_obj in python_list: #: :type python_obj: Python
+        source_python = app_source_handler.source.APPS.get('python', {})
+        logger.debug('source_python: ' + str(source_python))
+        python_obj.generate_all(source_python)
 
 
 def download():
