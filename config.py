@@ -604,6 +604,10 @@ def install():
     for putty_obj in putty_list: #: :type putty_obj: Putty
         putty_obj.install()
 
+    python_list = list(APPS.get('python', []))
+    for python_obj in python_list: #: :type python_obj: Python
+        python_obj.install()
+
 
 def configure():
     """ configure all app """

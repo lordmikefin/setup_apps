@@ -97,6 +97,55 @@ class Python(Base):
         logger.error('Download of Python installer failed.')
         return False
 
+    def is_installed(self):
+        # TODO: how to update if version is different
+        # util.compare_version(ver_a: str, ver_b: str)
+
+        command = '"' + self.exe_file + '"' + ' --version'
+        print(str(command))
+        com_res = util.run_command(command)
+        res = com_res.errorlevel
+        if res > 0:
+            print('Python NOT installed.')
+            return False
+    
+        print('Python already installed.')
+        return True
+
+    def install(self) -> bool:
+        if not self.is_downloaded:
+            logger.error('Python installer not downloaded.')
+            return False
+
+        if not self.install_path_ok:
+            logger.error('Installation path not defined.')
+            return False
+
+        if self.is_installed():
+            logger.info('Python is already installed')
+            return False
+
+        logger.info('Start Python installer.')
+        logger.info('Installing ... wait ... wait ... ')
+        # Install python
+        # https://stackoverflow.com/questions/14894993/running-windows-shell-commands-with-python
+
+        # TODO: Silent (unattended) install
+        #   https://docs.python.org/3/using/windows.html#installing-without-ui
+
+        # TODO: 'quiet' mode does not install Python if installer ask to select 'install', 'repair', etc
+        command = self.installer_path + ' /quiet '
+        command = command + ' InstallAllUsers=1 '
+        command = command + ' TargetDir="' + self.install_path_full + '"'
+        command = command + ' PrependPath=1 '
+        test = util.run_os_command(command)
+        if not test:
+            logger.error('Python installation FAILED.')
+            return False
+
+        logger.info('Python installation done.')
+        return True
+
 
 _ver = ''
 _installer_file_fullname = ''
