@@ -642,6 +642,10 @@ def install():
     for python_obj in python_list: #: :type python_obj: Python
         python_obj.install()
 
+    git_list = list(APPS.get('git', []))
+    for git_obj in git_list: #: :type git_obj: Git
+        git_obj.install()
+
 
 def configure():
     """ configure all app """

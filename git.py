@@ -63,12 +63,12 @@ class Git(Base):
 
         if not '{version}' in self.install_path:
             self.install_path_full = str(self.install_path)
-            self.exe_file = self.install_path_full + '\\git.exe'
+            self.exe_file = self.install_path_full + '\\bin\\git.exe'
             self.install_path_ok = True
             return
 
         self.install_path_full = str(self.install_path).format(version=self.version)
-        self.exe_file = self.install_path_full + '\\git.exe'
+        self.exe_file = self.install_path_full + '\\bin\\git.exe'
         self.install_path_ok = True
 
     def download(self) -> bool:
@@ -95,6 +95,59 @@ class Git(Base):
 
         logger.error('Download of Git installer failed.')
         return False
+
+    def is_installed(self):
+        # TODO: how to update if version is different
+        # NOTE: look sample code from git.py.is_installed() -function
+        # util.compare_version(ver_a: str, ver_b: str)
+
+        command = '"' + self.exe_file + '"' + ' --version'
+        logger.info(str(command))
+        com_res = util.run_command(command)
+        res = com_res.errorlevel
+        if res > 0:
+            logger.info('Git NOT installed.')
+            return False
+    
+        logger.info('Git already installed.')
+        return True
+
+    def install(self) -> bool:
+        if not self.is_downloaded:
+            logger.error('Git installer not downloaded.')
+            return False
+
+        if not self.install_path_ok:
+            logger.error('Installation path not defined.')
+            return False
+
+        if self.is_installed():
+            logger.info('Git is already installed')
+            return False
+
+        logger.info('Start Git installer.')
+        logger.info('Installing ... wait ... wait ... ')
+        # Install git
+        # https://stackoverflow.com/questions/14894993/running-windows-shell-commands-with-python
+
+        # READ MORE: Silent (unattended) install
+        #   https://github.com/msysgit/msysgit/wiki/Silent-or-Unattended-Installation
+        #   http://www.jrsoftware.org/ishelp/index.php?topic=setupcmdline
+
+        # TODO: Generate the inf file.
+        # TODO: Is there way to set all inf-file selections with command line?
+
+        command = self.installer_path + ' /SILENT '
+        command = command + ' /LOADINF="git.inf" '
+        command = command + ' /LOG="git-install.log" '
+        command = command + ' /DIR="' + self.install_path_full + '"'
+        test = util.run_os_command(command)
+        if not test:
+            logger.error('Git installation FAILED.')
+            return False
+
+        logger.info('Git installation done.')
+        return True
 
 
 _git_ver = ''
