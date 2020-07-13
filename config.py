@@ -525,6 +525,7 @@ APPS = {
     'npp': [],
     'putty': [],
     'python': [],
+    'git': [],
     }
 
 # NOTE: guide for Python hints:
@@ -582,6 +583,12 @@ def init():
         source_python = app_source_handler.source.APPS.get('python', {})
         logger.debug('source_python: ' + str(source_python))
         python_obj.generate_all(source_python)
+
+    git_list = list(APPS.get('git', []))
+    for git_obj in git_list: #: :type git_obj: Git
+        source_git = app_source_handler.source.APPS.get('git', {})
+        logger.debug('source_git: ' + str(source_git))
+        git_obj.generate_all(source_git)
 
 
 def download():

@@ -226,6 +226,7 @@ class Base:
         md5sum = ver.get('md5sum', '')
         sha256url = ver.get('sha256url', '')
         sha256file = ver.get('sha256file', '')
+        sha256sum = ver.get('sha256sum', '')
 
         logger.info('url: ' + str(url))
         logger.info('installer file: ' + str(file))
@@ -234,6 +235,7 @@ class Base:
         logger.info('md5sum: ' + str(md5sum))
         logger.info('sha256url: ' + str(sha256url))
         logger.info('sha256file: ' + str(sha256file))
+        logger.info('sha256sum: ' + str(sha256sum))
 
         self.installer_full_url = url
         self.installer_file = file
@@ -245,8 +247,8 @@ class Base:
         new_checksum = Checksum()
         if md5url or md5sum:
             new_checksum.set(url=md5url, file=md5file, summ=md5sum, sum_type=Checksum.Type.MD5SUM)
-        if sha256url:
-            new_checksum.set(url=sha256url, file=sha256file, sum_type=Checksum.Type.SHA256SUM)
+        if sha256url or sha256sum:
+            new_checksum.set(url=sha256url, file=sha256file, summ=sha256sum, sum_type=Checksum.Type.SHA256SUM)
         self.checksum = new_checksum
 
         self.set_url_ok()
