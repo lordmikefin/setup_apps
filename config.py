@@ -580,6 +580,10 @@ def download():
     for putty_obj in putty_list: #: :type putty_obj: Putty
         putty_obj.download()
 
+    python_list = list(APPS.get('python', []))
+    for python_obj in python_list: #: :type putty_obj: Python
+        python_obj.download()
+
 
 def install():
     """ install all app """
