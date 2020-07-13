@@ -59,12 +59,14 @@ class Putty(Base):
 
         if not '{version}' in self.install_path:
             self.install_path_full = str(self.install_path)
-            self.exe_file = self.install_path_full + '\\putty.exe'
+            #self.exe_file = self.install_path_full + '\\putty.exe'
+            self.exe_file = self.install_path_full + '\\plink.exe'
             self.install_path_ok = True
             return
 
         self.install_path_full = str(self.install_path).format(version=self.version)
-        self.exe_file = self.install_path_full + '\\putty.exe'
+        #self.exe_file = self.install_path_full + '\\putty.exe'
+        self.exe_file = self.install_path_full + '\\plink.exe'
         self.install_path_ok = True
 
     def download(self) -> bool:
@@ -91,6 +93,63 @@ class Putty(Base):
 
         logger.error('Download of Putty installer failed.')
         return False
+
+    def is_installed(self):
+        # TODO: how to test putty exists
+        #   https://the.earth.li/~sgtatham/putty/0.73/htmldoc/Chapter3.html#using-cmdline
+        #command = str(PATH_APP_PUTTY) + '\\putty'
+        # NOTE: putty does not print version, but plink does
+        #command = '"' + str(PATH_APP_PUTTY) + '\\plink' + '"' + ' -V '
+        #command = '"' + str(_plink) + '"' + ' -V '
+        command = '"' + self.exe_file + '"' + ' -V '
+        print(str(command))
+        test = util.run_os_command(command)
+        if not test:
+            print('Putty NOT installed.')
+            return False
+    
+        print('Putty already installed.')
+        return True
+
+    def install(self) -> bool:
+        if not self.is_downloaded:
+            logger.error('Putty installer not downloaded.')
+            return False
+
+        if not self.install_path_ok:
+            logger.error('Installation path not defined.')
+            return False
+
+        if self.is_installed():
+            logger.info('Putty is already installed')
+            return False
+
+        logger.info('Start Putty installer.')
+        logger.info('Installing ... wait ... wait ... ')
+        # Install Putty
+        # https://stackoverflow.com/questions/14894993/running-windows-shell-commands-with-python
+    
+        # Silent (unattended) install
+        # http://www.silentinstall.org/msiexec
+        # http://mylittlespotinthebigunknown.blogspot.com/2018/04/automating-putty-07-msi-install.html
+        properties = {
+            'ACTION': 'INSTALL',
+            'ADDLOCAL': 'FilesFeature,DesktopFeature,PathFeature,PPKFeature',
+            }
+        #util.msiexec(name, installer, properties, log_file, show_progress)
+        test = util.msiexec("Putty Install", self.installer_path,
+                            properties, log_file='PuttyInstall.log')
+        
+        # TODO: use 'run_command' -function instead inside 'msiexec' and return CommandRet
+        #res_err = com_res.errorlevel
+        #logger.debug('Install command error level: ' + str(res_err))
+        #if res_err != 0:
+        if not test:
+            logger.error('Putty installation FAILED.')
+            return False
+
+        logger.info('Putty installation done.')
+        return True
 
 
 _putty_ver = ''
