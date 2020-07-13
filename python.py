@@ -102,14 +102,14 @@ class Python(Base):
         # util.compare_version(ver_a: str, ver_b: str)
 
         command = '"' + self.exe_file + '"' + ' --version'
-        print(str(command))
+        logger.info(str(command))
         com_res = util.run_command(command)
         res = com_res.errorlevel
         if res > 0:
-            print('Python NOT installed.')
+            logger.info('Python NOT installed.')
             return False
     
-        print('Python already installed.')
+        logger.info('Python already installed.')
         return True
 
     def install(self) -> bool:
