@@ -27,6 +27,13 @@ import os
 import re
 import subprocess
 import sys
+from setup_apps.base import Base
+
+
+class Git(Base):
+
+    def __init__(self):
+        super().__init__()
 
 
 _git_ver = ''

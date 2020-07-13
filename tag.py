@@ -29,6 +29,7 @@ class Tag():
     npp = 'npp'
     putty = 'putty'
     python = 'python'
+    git = 'git'
 
     installer_file = 'installer_file'
     installer_url = 'installer_url'

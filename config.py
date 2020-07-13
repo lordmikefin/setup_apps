@@ -21,7 +21,7 @@
 
 import xml.etree.ElementTree as ET
 from setup_apps import util, __version__, eclipse, PATH_INSTALLERS, java, npp,\
-    putty, python
+    putty, python, git
 from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
 import app_source_handler
@@ -122,6 +122,9 @@ def create_sample():
     # Python
     append_python(apps, ver='3.8.1')
 
+    # Git
+    append_git(apps, ver='2.24.1')
+
     indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
@@ -135,6 +138,12 @@ def set_version(elem: Element, ver: str):
 def set_install_path(elem: Element, path: str):
     install_path = ET.SubElement(elem, Tag.install_path)
     install_path.text = path
+
+
+def append_git(apps: Element, ver: str):
+    elem = ET.SubElement(apps, Tag.git)
+    set_version(elem, ver)
+    set_install_path(elem, 'C:\\Program Files\\Git')
 
 
 def append_python(apps: Element, ver: str):
@@ -307,6 +316,8 @@ def parse_apps(elem_apps: Element):
             parse_putty(elem)
         if elem.tag == Tag.python:
             parse_python(elem)
+        if elem.tag == Tag.git:
+            parse_git(elem)
 
 
 def parse_version(elem: Element, base_obj: Base):
@@ -325,6 +336,18 @@ def append_app(app_name: str, app_obj: Base):
     obj_list = list(APPS.get(app_name, []))
     obj_list.append(app_obj)
     APPS[app_name] = obj_list
+
+
+def parse_git(elem: Element):
+    global APPS
+
+    obj = git.Git()
+    logger.info('parse git             : ' + str(obj.__name__))
+    parse_version(elem, obj)
+    parse_install_path(elem, obj)
+    logger.info('version                  : ' + str(obj.version))
+    logger.info('install_path             : ' + str(obj.install_path))
+    append_app('git', obj)
 
 
 def parse_python(elem: Element):
