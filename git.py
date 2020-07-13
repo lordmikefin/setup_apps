@@ -42,6 +42,8 @@ class Git(Base):
         self.install_path_full = None
         self.exe_file = None
 
+        self.config = None
+
     def generate_all(self, source: dict):
         super().generate_all(source)
         self.generate_install_path()
@@ -148,6 +150,12 @@ class Git(Base):
 
         logger.info('Git installation done.')
         return True
+
+    def configure(self):
+        logger.info('Configure')
+        if not self.config:
+            logger.info('Git No configures')
+            return
 
 
 _git_ver = ''

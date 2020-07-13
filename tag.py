@@ -43,6 +43,8 @@ class Tag():
     key_value = 'key_value'
     key = 'key'
     value = 'value'
+    console = 'console'
+    command = 'command'
 
     plugins = 'plugins'
     plugin = 'plugin'

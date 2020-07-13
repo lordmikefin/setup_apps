@@ -144,6 +144,16 @@ def append_git(apps: Element, ver: str):
     elem = ET.SubElement(apps, Tag.git)
     set_version(elem, ver)
     set_install_path(elem, 'C:\\Program Files\\Git')
+    append_console_configure(elem)
+
+def append_console_configure(elem: Element):
+    configure = ET.SubElement(elem, Tag.configure)
+    configure_console = ET.SubElement(configure, Tag.console)
+    configure_console.append(ET.Comment(' {git_exe_full_path} is replaced with value from tag "install_path" + hardcoded .\\bin\\git.exe '))
+    command = ET.SubElement(configure_console, Tag.command) #: :type command: Element
+    command.text = '{git_exe_full_path} config --global user.name "Lord Mike"'
+    command2 = ET.SubElement(configure_console, Tag.command) #: :type command2: Element
+    command2.text = '{git_exe_full_path} config --global user.email lordmike@iki.fi'
 
 
 def append_python(apps: Element, ver: str):
@@ -652,6 +662,10 @@ def configure():
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list: #: :type ecli: Eclipse
         ecli.configure()
+
+    git_list = list(APPS.get('git', []))
+    for git_obj in git_list: #: :type git_obj: Git
+        git_obj.configure()
 
 
 def print_sample():
