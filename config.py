@@ -614,6 +614,10 @@ def download():
     for python_obj in python_list: #: :type putty_obj: Python
         python_obj.download()
 
+    git_list = list(APPS.get('git', []))
+    for git_obj in git_list: #: :type git_obj: Git
+        git_obj.download()
+
 
 def install():
     """ install all app """

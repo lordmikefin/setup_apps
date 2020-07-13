@@ -71,6 +71,31 @@ class Git(Base):
         self.exe_file = self.install_path_full + '\\git.exe'
         self.install_path_ok = True
 
+    def download(self) -> bool:
+        if not (self.url_ok and self.path_ok):
+            logger.error('Can not download Git installer.')
+            return False
+
+        if not self.checksum:
+            logger.error('Checksum data missing.')
+            return False
+
+        if self.is_installer_downloaded(self.checksum):
+            self.is_downloaded = True
+            return True
+
+        logger.info('Download Git installer.')
+        util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        logger.info('Download complete.')
+
+        if self.is_installer_downloaded(self.checksum):
+            logger.info('Download is verified.')
+            self.is_downloaded = True
+            return True
+
+        logger.error('Download of Git installer failed.')
+        return False
+
 
 _git_ver = ''
 _installer_file_fullname = ''
