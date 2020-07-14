@@ -58,6 +58,7 @@ class Npp(Base):
 
         if not '{version}' in self.install_path:
             self.install_path_full = str(self.install_path)
+            self.exe_file = self.install_path_full + '\\notepad++.exe'
             self.install_path_ok = True
             return
 
@@ -95,9 +96,14 @@ class Npp(Base):
         # TODO: How to print version? Following command will show 'help' window.
         # > "C:\Program Files\Notepad++\notepad++.exe" --help
         #file = 'C:\\Program Files\\Notepad++\\notepad++.exe'
-        file = self.install_path_full + '\\notepad++.exe'
+        #file = self.install_path_full + '\\notepad++.exe'
+        file = self.exe_file
         #logger.debug('Executable: ' + str(file))
-        if util.is_file(file):
+        command = '"' + file + '" -quickPrint'
+        #test = util.run_os_command(command)
+        test = util.run_command(command)
+        #if util.is_file(file):
+        if test.errorlevel == 0:
             logger.info('Notepad++ already installed.')
             return True
 
