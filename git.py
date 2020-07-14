@@ -162,7 +162,6 @@ class Git(Base):
             commands_list = conf_list.get('commands')
             for command in commands_list:
                 logger.info('command: ' + str(command))
-                # TODO: replace  {git_exe_full_path}
                 if '{git_exe_full_path}' in command:
                     com = str(command).format(git_exe_full_path=self.exe_file)
                     logger.debug('com: ' + str(com))

@@ -151,6 +151,18 @@ class Putty(Base):
         logger.info('Putty installation done.')
         return True
 
+    def configure(self):
+        logger.info('Configure Putty')
+        if not self.config:
+            logger.info('Putty No configures')
+            return
+
+        logger.info('self.config ' + str(self.config))
+        for conf_list in self.config:
+            commands_list = conf_list.get('enviroments')
+            for command in commands_list:
+                logger.info('command: ' + str(command))
+
 
 _putty_ver = ''
 _installer_file_fullname = ''

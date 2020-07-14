@@ -150,11 +150,16 @@ def append_console_configure(elem: Element):
     configure = ET.SubElement(elem, Tag.configure)
     configure_console = ET.SubElement(configure, Tag.console)
     configure_console.append(ET.Comment(' {git_exe_full_path} is replaced with value from tag "install_path" + hardcoded .\\bin\\git.exe '))
-    command = ET.SubElement(configure_console, Tag.command) #: :type command: Element
-    command.text = '{git_exe_full_path} config --global user.name "Lord Mike"'
-    command2 = ET.SubElement(configure_console, Tag.command) #: :type command2: Element
-    command2.text = '{git_exe_full_path} config --global user.email lordmike@iki.fi'
+    #command = ET.SubElement(configure_console, Tag.command) #: :type command: Element
+    #command.text = '{git_exe_full_path} config --global user.name "Lord Mike"'
+    append_command_elem(configure_console, '{git_exe_full_path} config --global user.name "Lord Mike"')
+    #command2 = ET.SubElement(configure_console, Tag.command) #: :type command2: Element
+    #command2.text = '{git_exe_full_path} config --global user.email lordmike@iki.fi'
+    append_command_elem(configure_console, '{git_exe_full_path} config --global user.email lordmike@iki.fi')
 
+def append_command_elem(elem_parent: Element, command: str):
+    elem = ET.SubElement(elem_parent, Tag.command) #: :type elem: Element
+    elem.text = str(command)
 
 def append_python(apps: Element, ver: str):
     elem = ET.SubElement(apps, Tag.python)
@@ -169,7 +174,14 @@ def append_putty(apps: Element, ver: str):
     npp_elem = ET.SubElement(apps, Tag.putty)
     set_version(npp_elem, ver)
     set_install_path(npp_elem, 'C:\\Program Files\\PuTTY')
+    append_env_configure(npp_elem)
 
+def append_env_configure(elem: Element):
+    configure = ET.SubElement(elem, Tag.configure)
+    configure_enviroment = ET.SubElement(configure, Tag.enviroment)
+    configure_enviroment.append(ET.Comment('"' + str(Tag.enviroment) + '" element content is set into windows environmet variables'))
+    configure_enviroment.append(ET.Comment(' {plink_exe_full_path}  is replaced with value from tag "install_path" + hardcoded .\\plink.exe '))
+    append_command_elem(configure_enviroment, 'GIT_SSH {plink_exe_full_path}')
 
 def append_npp(apps: Element, ver: str):
     npp_elem = ET.SubElement(apps, Tag.npp)
@@ -388,6 +400,13 @@ def parse_putty(elem: Element):
     parse_install_path(elem, obj)
     logger.info('version                  : ' + str(obj.version))
     logger.info('install_path             : ' + str(obj.install_path))
+
+    configure = elem.find(Tag.configure)
+    if not configure is None:
+        conf_file_list = []
+        obj.config = conf_file_list
+        parse_configure(configure, conf_file_list)
+
     append_app('putty', obj)
 
 
@@ -530,6 +549,14 @@ def parse_configure(configure: Element, conf_file_list: list):
             conf_file_list.append(temp)
             #command_list.append('spam')
             #command_list.append('eggs')
+            for com_elem in c_elem:
+                if com_elem.tag == Tag.command:
+                    command_list.append(com_elem.text)
+        if c_elem.tag == Tag.enviroment:
+            temp = {}
+            command_list = []
+            temp['enviroments'] = command_list
+            conf_file_list.append(temp)
             for com_elem in c_elem:
                 if com_elem.tag == Tag.command:
                     command_list.append(com_elem.text)
@@ -683,6 +710,10 @@ def configure():
     git_list = list(APPS.get('git', []))
     for git_obj in git_list: #: :type git_obj: Git
         git_obj.configure()
+
+    putty_list = list(APPS.get('putty', []))
+    for putty_obj in putty_list: #: :type putty_obj: Putty
+        putty_obj.configure()
 
 
 def print_sample():

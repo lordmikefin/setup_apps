@@ -45,6 +45,7 @@ class Tag():
     value = 'value'
     console = 'console'
     command = 'command'
+    enviroment = 'enviroment'
 
     plugins = 'plugins'
     plugin = 'plugin'
