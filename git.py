@@ -119,9 +119,8 @@ class Git(Base):
         test = util.compare_version(self.version, parsed_ver)
         if test == 1: # A is newer
             logger.info('Current version is older.')
-            logger.info('Upgrading git to version' + self.version + '.')
-            # TODO: force the upgrade
-            #return False
+            logger.info('Upgrading git to version: ' + self.version + '.')
+            return False
         return True
 
     def install(self) -> bool:
