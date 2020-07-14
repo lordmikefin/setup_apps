@@ -239,9 +239,9 @@ class Eclipse(Base):
         util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='')
 
     def configure(self):
-        logger.info('Configure')
+        logger.info('Configure Eclipse')
         if not self.config:
-            logger.info('No configures')
+            logger.info('Eclipse No configures')
             return
 
         logger.info('self.config ' + str(self.config))

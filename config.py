@@ -357,6 +357,13 @@ def parse_git(elem: Element):
     parse_install_path(elem, obj)
     logger.info('version                  : ' + str(obj.version))
     logger.info('install_path             : ' + str(obj.install_path))
+
+    configure = elem.find(Tag.configure)
+    if not configure is None:
+        conf_file_list = []
+        obj.config = conf_file_list
+        parse_configure(configure, conf_file_list)
+
     append_app('git', obj)
 
 
@@ -516,6 +523,16 @@ def parse_configure(configure: Element, conf_file_list: list):
                 if kvs.tag == Tag.key_value:
                     key_val = parse_key_value(kvs)
                     key_vals.append(key_val)
+        if c_elem.tag == Tag.console:
+            temp = {}
+            command_list = []
+            temp['commands'] = command_list
+            conf_file_list.append(temp)
+            #command_list.append('spam')
+            #command_list.append('eggs')
+            for com_elem in c_elem:
+                if com_elem.tag == Tag.command:
+                    command_list.append(com_elem.text)
 
 
 def parse_key_value(kvs: Element):

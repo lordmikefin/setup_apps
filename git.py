@@ -152,10 +152,21 @@ class Git(Base):
         return True
 
     def configure(self):
-        logger.info('Configure')
+        logger.info('Configure Git')
         if not self.config:
             logger.info('Git No configures')
             return
+
+        logger.info('self.config ' + str(self.config))
+        for conf_list in self.config:
+            commands_list = conf_list.get('commands')
+            for command in commands_list:
+                logger.info('command: ' + str(command))
+                # TODO: replace  {git_exe_full_path}
+                if '{git_exe_full_path}' in command:
+                    com = str(command).format(git_exe_full_path=self.exe_file)
+                    logger.debug('com: ' + str(com))
+                    util.run_command(com)
 
 
 _git_ver = ''
