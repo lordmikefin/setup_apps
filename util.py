@@ -38,6 +38,7 @@ from typing import Union
 import logging
 import inspect
 import LMToyBoxPython
+import re
 
 # import urllib.request
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
@@ -261,6 +262,19 @@ def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
     logger.info(command)
     test = run_os_command(command)
     # TODO: How to handle possible errors?
+
+
+def parse_version(git_ver: str) -> str:
+    mat = parse_version_alt1(git_ver)
+    ret = ''
+    if mat.endpos > 0:
+        ret = mat[0]
+    return ret
+
+def parse_version_alt1(git_ver: str) -> re.Match:
+    # https://docs.python.org/3/library/re.html
+    res = re.search(r'[0-9]+\.[0-9]+\.[0-9]+', git_ver) #: :type res: re.Match
+    return res
 
 
 def compare_version(ver_a: str, ver_b: str) -> int:

@@ -112,6 +112,16 @@ class Git(Base):
             return False
     
         logger.info('Git already installed.')
+        version_current = com_res.stdout
+        logger.info('Current version (stdout): ' + str(version_current))
+        parsed_ver = util.parse_version(str(version_current))
+        logger.info('Current version: (parse_version): ' + str(parsed_ver))
+        test = util.compare_version(self.version, parsed_ver)
+        if test == 1: # A is newer
+            logger.info('Current version is older.')
+            logger.info('Upgrading git to version' + self.version + '.')
+            # TODO: force the upgrade
+            #return False
         return True
 
     def install(self) -> bool:
