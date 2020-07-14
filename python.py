@@ -154,22 +154,6 @@ _file_name = ''
 _cmd = '"' + str(PATH_APP_PY38) + '\\python.exe"'
 
 
-def set_env_var():
-    # TODO: make util from this
-    #   https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/setx
-    '''
-    command = 'setx GIT_SSH ' + '"' + str(_plink) + '"'
-    print(str(command))
-    res = int(os.system(command))
-    if res > 0:
-        print('GIT_SSH is not set.')
-        return False
-
-    print('GIT_SSH is set.')
-    return True
-    '''
-    pass
-
 
 def is_installed():
     # TODO: how to update if version is different
@@ -278,6 +262,3 @@ def run():
 
     if not is_installed():
         install()
-
-    #set_env_var()
-
