@@ -651,9 +651,12 @@ def log_env_var(var_name: str, system_wide: bool=True):
     test = run_command(com)
     logger.debug('test: ' + str(test))
     if test.errorlevel > 0:
-        logger.info(test.stderr + '(' + var_name + ')')
+        logger.info(test.stderr.replace('\n', '') + ' (' + var_name + ')')
     else:
-        logger.info(test.stdout)
+        #logger.info(test.stdout)
+        row_split = test.stdout.split(var_name, maxsplit=1)
+        cur_val = str(row_split[1]).split('REG_SZ    ', maxsplit=1)
+        logger.info('cur_val: ' + str(cur_val[1]).replace('\n', '') + ' (' + var_name + ')')
 
 
 def set_env_var(var_name: str, var_val: str, system_wide: bool=True):
