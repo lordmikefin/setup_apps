@@ -660,9 +660,10 @@ def set_env_var(var_name: str, var_val: str, system_wide: bool=True):
      > reg query HKCU\Environment
 
     set test val into system wide env vars 
-     > setx testvar testval
+     > setx /m testvar testval
     list system wide env vars
      > reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+     > reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v testvar
     '''
     params = ''
     if system_wide:
