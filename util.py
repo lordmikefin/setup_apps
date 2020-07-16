@@ -637,3 +637,36 @@ def connect_samba_share(src_samba: str, dst_drive: str) -> bool:
         logger.info('Samba share connected.')
         logger.info(ret.stdout)
         return True
+
+
+def set_env_var(var_name: str, var_val: str, system_wide: bool=True):
+    if not var_name:
+        logger.error('Environment variable name is empty')
+        return
+    if not var_name:
+        logger.error('Environment variable value is empty')
+        return
+    # TODO: log previous value 
+    '''
+     https://superuser.com/questions/1179433/how-to-list-global-environment-variables-separately-from-user-specific-environme
+    list all vars:
+     > set
+
+    set test val into env vars 
+     > setx testvar testval
+    print value of var 'testvar'. NOTE: this will not print correct result untill launching new cmd.exe
+     > echo %testvar%
+    This will print all env var values without relaunching cmd.exe
+     > reg query HKCU\Environment
+
+    set test val into system wide env vars 
+     > setx testvar testval
+    list system wide env vars
+     > reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+    '''
+    params = ''
+    if system_wide:
+        params = ' /M '
+    com = 'SETX ' + params + var_name + ' "' + var_val + '"'
+    logger.debug('com: ' + str(com))
+    run_command(com)
