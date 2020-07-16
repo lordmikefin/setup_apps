@@ -639,14 +639,31 @@ def connect_samba_share(src_samba: str, dst_drive: str) -> bool:
         return True
 
 
+def log_env_var(var_name: str, system_wide: bool=True):
+    windows_only()
+    if not var_name:
+        logger.error('Environment variable name is empty')
+        return
+    key = 'HKCU\Environment'
+    if system_wide:
+        key = 'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment'
+    com = 'reg query "' + key + '" /v ' + var_name
+    test = run_command(com)
+    logger.debug('test: ' + str(test))
+    if test.errorlevel > 0:
+        logger.info(test.stderr + '(' + var_name + ')')
+    else:
+        logger.info(test.stdout)
+
+
 def set_env_var(var_name: str, var_val: str, system_wide: bool=True):
+    windows_only()
     if not var_name:
         logger.error('Environment variable name is empty')
         return
     if not var_name:
         logger.error('Environment variable value is empty')
         return
-    # TODO: log previous value 
     '''
      https://superuser.com/questions/1179433/how-to-list-global-environment-variables-separately-from-user-specific-environme
     list all vars:

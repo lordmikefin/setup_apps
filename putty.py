@@ -166,7 +166,9 @@ class Putty(Base):
                 value = command.get('value', '')
                 if '{plink_exe_full_path}' in value:
                     value = str(value).format(plink_exe_full_path=self.exe_file)
+                util.log_env_var(key)
                 util.set_env_var(key, value)
+                util.log_env_var(key)
                 '''
                 # {plink_exe_full_path}  self.exe_file
                 if '{plink_exe_full_path}' in command:
