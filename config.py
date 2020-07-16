@@ -180,8 +180,16 @@ def append_env_configure(elem: Element):
     configure = ET.SubElement(elem, Tag.configure)
     configure_enviroment = ET.SubElement(configure, Tag.enviroment)
     configure_enviroment.append(ET.Comment('"' + str(Tag.enviroment) + '" element content is set into windows environmet variables'))
-    configure_enviroment.append(ET.Comment(' {plink_exe_full_path}  is replaced with value from tag "install_path" + hardcoded .\\plink.exe '))
-    append_command_elem(configure_enviroment, 'GIT_SSH {plink_exe_full_path}')
+    #configure_enviroment.append(ET.Comment(' {plink_exe_full_path}  is replaced with value from tag "install_path" + hardcoded .\\plink.exe '))
+    #append_command_elem(configure_enviroment, 'GIT_SSH {plink_exe_full_path}')
+    key_values = ET.SubElement(configure_enviroment, Tag.key_values)
+    key_value = ET.SubElement(key_values, Tag.key_value)
+    key = ET.SubElement(key_value, Tag.key)
+    key.text = 'GIT_SSH'
+    key_value.append(ET.Comment(' {plink_exe_full_path}  is replaced with value from tag "install_path" + hardcoded .\\plink.exe '))
+    value = ET.SubElement(key_value, Tag.value)
+    value.text = '{plink_exe_full_path}'
+
 
 def append_npp(apps: Element, ver: str):
     npp_elem = ET.SubElement(apps, Tag.npp)
@@ -554,12 +562,22 @@ def parse_configure(configure: Element, conf_file_list: list):
                     command_list.append(com_elem.text)
         if c_elem.tag == Tag.enviroment:
             temp = {}
+            conf_file_list.append(temp)
+
+            key_values = c_elem.find(Tag.key_values)
+            key_vals = []
+            temp['enviroments'] = key_vals
+            for kvs in key_values:
+                if kvs.tag == Tag.key_value:
+                    key_val = parse_key_value(kvs)
+                    key_vals.append(key_val)
+            '''
             command_list = []
             temp['enviroments'] = command_list
-            conf_file_list.append(temp)
             for com_elem in c_elem:
                 if com_elem.tag == Tag.command:
                     command_list.append(com_elem.text)
+            '''
 
 
 def parse_key_value(kvs: Element):

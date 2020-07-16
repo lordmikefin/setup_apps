@@ -162,12 +162,19 @@ class Putty(Base):
             commands_list = conf_list.get('enviroments')
             for command in commands_list:
                 logger.info('command: ' + str(command))
+                key = command.get('key', '')
+                value = command.get('value', '')
+                if '{plink_exe_full_path}' in value:
+                    value = str(value).format(plink_exe_full_path=self.exe_file)
+                util.set_env_var(key, value)
+                '''
                 # {plink_exe_full_path}  self.exe_file
                 if '{plink_exe_full_path}' in command:
                     plink = '"' + self.exe_file + '"'
                     com = 'setx ' + str(command).format(plink_exe_full_path=plink)
                     logger.debug('com: ' + str(com))
                     util.run_command(com)
+                '''
 
 
 _putty_ver = ''
