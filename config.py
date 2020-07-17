@@ -36,6 +36,7 @@ from setup_apps.java import Java
 from setup_apps.npp import Npp
 from setup_apps.putty import Putty
 from setup_apps.python import Python
+import os
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -693,6 +694,10 @@ def download():
 
 def install():
     """ install all app """
+    # TODO: Is 'PATH' changed. Is there need to modify it manually?
+    logger.debug("os.environ.get('PATH'): " + str(os.environ.get('PATH')))
+    util.log_env_var('PATH')
+
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list: #: :type ecli: Eclipse
         ecli.install()
@@ -718,6 +723,10 @@ def install():
     for git_obj in git_list: #: :type git_obj: Git
         git_obj.install()
 
+    # TODO: Is 'PATH' changed. Is there need to modify it manually?
+    logger.debug("os.environ.get('PATH'): " + str(os.environ.get('PATH')))
+    util.log_env_var('PATH')
+
 
 def configure():
     """ configure all app """
@@ -732,6 +741,10 @@ def configure():
     putty_list = list(APPS.get('putty', []))
     for putty_obj in putty_list: #: :type putty_obj: Putty
         putty_obj.configure()
+
+    java_list = list(APPS.get('java', []))
+    for java_obj in java_list: #: :type java_obj: Java
+        java_obj.configure()
 
 
 def print_sample():

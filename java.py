@@ -199,6 +199,26 @@ class Java(Base):
         logger.info('Java installation done.')
         return True
 
+    def configure(self):
+        logger.info('Configure Java')
+        self.update_env_var_path()
+
+    def update_env_var_path(self):
+        # TODO: Do we need to update environment variables? PATH?
+        # TODO: PATH is updated in req -> so just update local PATH from req
+        #  -> util.log_env_var(key)
+
+        # C:\Program Files (x86)\Common Files\Oracle\Java\javapath;
+        javapath = 'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath'
+        # self.install_path_full
+        path = str(os.environ.get('PATH'))
+        logger.debug('PATH: ' + str(path))
+        '''
+        command = str('PATH=' + str(_javapath) + ';%PATH%')
+        res = int(os.system(command))
+        os.environ['PATH'] = str(_javapath) + ';' + _path
+        '''
+
 
 _installer_file_fullname = ''
 _file_name = ''
