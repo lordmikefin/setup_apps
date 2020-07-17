@@ -655,7 +655,12 @@ def log_env_var(var_name: str, system_wide: bool=True):
     else:
         #logger.info(test.stdout)
         row_split = test.stdout.split(var_name, maxsplit=1)
-        cur_val = str(row_split[1]).split('REG_SZ    ', maxsplit=1)
+        var_row = row_split[1]
+        # REG_EXPAND_SZ
+        if 'REG_EXPAND_SZ' in var_row:
+            cur_val = str(var_row).split('REG_EXPAND_SZ    ', maxsplit=1)
+        else:
+            cur_val = str(var_row).split('REG_SZ    ', maxsplit=1)
         logger.info('cur_val: ' + str(cur_val[1]).replace('\n', '') + ' (' + var_name + ')')
 
 
