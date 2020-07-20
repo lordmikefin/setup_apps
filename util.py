@@ -570,8 +570,22 @@ def move_win(src: str, dst: str):
     # /E :: copy subdirectories, including Empty ones.
     # /NFL : No File List - don't log file names.
     # /NDL : No Directory List - don't log directory names.
-    #print(command)
-    res = run_os_command(command)
+    logger.debug('command: ' + str(command))
+    #res = run_os_command(command)
+    res = run_command(command)
+    #logger.debug('res: ' + str(res))
+    logger.info('robocopy message:\n' + str(res.stdout))
+    logger.debug('errorlevel: ' + str(res.errorlevel))
+    if res.errorlevel == 1:
+        # NOTE: errorlevel 1 is not error
+        # https://ss64.com/nt/robocopy-exit.html
+        logger.debug('0x01   1       One or more files were copied successfully')
+        #res.errorlevel = 0
+        res = CommandRet(errorlevel=0, stdout=res.stdout, stderr=res.stderr)
+
+    if res.errorlevel > 0:
+        logger.error('robocopy failed:\n' + str(res.stderr))
+
 
 def startswith_comment(line: str):
     ''' Is line a comment line of INI file. '''
