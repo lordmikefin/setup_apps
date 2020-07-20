@@ -246,7 +246,7 @@ def append_configure(ecli_elem: Element):
     configure.append(ET.Comment(' "file" is realative path of "install_path" '))
     configure_file = ET.SubElement(configure, Tag.file)
     name = ET.SubElement(configure_file, Tag.name)
-    name.text = '\eclipse.ini'
+    name.text = '\\eclipse.ini'
     file_type = ET.SubElement(configure_file, Tag.type)
     file_type.text = 'ini'
     key_values = ET.SubElement(configure_file, Tag.key_values)
@@ -257,6 +257,33 @@ def append_configure(ecli_elem: Element):
     value = ET.SubElement(key_value, Tag.value)
     #value.text = '@user.home/eclipse-workspace-2019-09'
     value.text = '@user.home/eclipse-workspace-{version}'
+
+    #    <file>
+    #      <name>C:\Users\lordmike\eclipse-workspace-2019-12\.metadata\.plugins\org.eclipse.core.runtime\.settings\org.eclipse.egit.core.prefs</name>
+    #      <type>prefs</type>
+    #      <key_values>
+    #        <key_value>
+    #          <key>core_defaultRepositoryDir</key>
+    #          <value>${workspace_loc}</value>
+    #        </key_value>
+    #      </key_values>
+    #    </file>
+    configure_file_egit = ET.SubElement(configure, Tag.file)
+    configure_file_egit.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    configure_file_egit.append(ET.Comment(' {user_home} is replaced with path to current user home '))
+    name = ET.SubElement(configure_file_egit, Tag.name)
+    #name.text = 'C:\\Users\\lordmike\\eclipse-workspace-2019-12\\.metadata\\.plugins\\org.eclipse.core.runtime\\.settings\\org.eclipse.egit.core.prefs'
+    #name.text = 'C:\\Users\\lordmike\\eclipse-workspace-{version}\\.metadata\\.plugins\\org.eclipse.core.runtime\\.settings\\org.eclipse.egit.core.prefs'
+    name.text = '{user_home}\\eclipse-workspace-{version}\\.metadata\\.plugins\\org.eclipse.core.runtime\\.settings\\org.eclipse.egit.core.prefs'
+    file_type = ET.SubElement(configure_file_egit, Tag.type)
+    file_type.text = 'prefs'
+    key_values_egit = ET.SubElement(configure_file_egit, Tag.key_values)
+    key_value_egit = ET.SubElement(key_values_egit, Tag.key_value)
+    key_egit = ET.SubElement(key_value_egit, Tag.key)
+    key_egit.text = 'core_defaultRepositoryDir'
+    key_value_egit.append(ET.Comment(' ${workspace_loc} is internal varable of Eclipse'))
+    value_egit = ET.SubElement(key_value_egit, Tag.value)
+    value_egit.text = '${workspace_loc}'
 
 
 def append_plugins(ecli_elem: Element, name: str, ver: str):
