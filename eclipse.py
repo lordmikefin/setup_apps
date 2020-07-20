@@ -248,6 +248,17 @@ class Eclipse(Base):
         #self.config = None
         for file in self.config:
             name = file.get('name')
+            test_dict = {}
+            if '{version}' in name:
+                #name = name.format(version=self.version)
+                test_dict['version'] = self.version
+            if '{user_home}' in name:
+                home = util.home_path()
+                logger.debug('User home is: ' + str(home))
+                #name = name.format(user_home=home)
+                test_dict['user_home'] = home
+            if test_dict:
+                name = name.format(**test_dict)
             f_type = file.get('type')
             logger.info('name: ' + str(name) + ' type: ' + str(f_type))
             confs = file.get('confs', [])
@@ -259,7 +270,10 @@ class Eclipse(Base):
                     value = value.format(version=self.version)
                 
                 logger.info('key: ' + str(key) + ' value: ' + str(value))
-                self.config_apply(self.install_path_full + name, key, value)
+                if f_type == 'ini':
+                    self.config_apply(self.install_path_full + name, key, value)
+                elif f_type == 'prefs':
+                    self.config_apply(name, key, value)
 
     def configure_hc(self):
         #self.config_eclipse_ini
