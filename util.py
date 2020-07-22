@@ -464,6 +464,19 @@ def mkdir(path: str):
     Path(path).mkdir(parents=True, exist_ok=True)
 
 
+def create_missing_file(file: str):
+    # TODO: Failure will raise an exception. Should this return false?
+    logger.info('file missing: ' + str(file))
+    path_file = Path(file)
+    #parents = path_file.parents
+    parent = path_file.parent
+    logger.info('Create path:  ' + str(parent))
+    mkdir(parent)
+    logger.info('Create file')
+    with open(file, 'w') as temp:
+        pass
+
+
 def md5sum(src: str, length: int=io.DEFAULT_BUFFER_SIZE, callback=None, show_progress: bool=False) -> str:
     '''
     Calculate md5 checksum.
