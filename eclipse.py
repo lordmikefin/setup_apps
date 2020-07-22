@@ -290,6 +290,9 @@ class Eclipse(Base):
         found_line = -1
         line_idx = -1
         lines = []
+        if not util.is_file(file):
+            util.create_missing_file(file)
+
         with open(file, "r") as f:
             for line in f: 
                 lines.append(line)
