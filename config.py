@@ -37,6 +37,7 @@ from setup_apps.npp import Npp
 from setup_apps.putty import Putty
 from setup_apps.python import Python
 import os
+from LMToyBoxPython import LMetree
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -55,28 +56,6 @@ XML_TEST = 'test.xml'
 # https://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
 # https://lxml.de/index.html
 # https://pypi.org/project/lxml/
-
-
-def indent(elem, level=0):
-    ''' Indent the xml tree '''
-    LMToyBoxPython.indent(elem, level)
-    '''
-    # NOTE: code copied from stackoverflow
-    # https://stackoverflow.com/questions/3095434/inserting-newlines-in-xml-file-generated-via-xml-etree-elementtree-in-python
-    i = "\n" + level*"  "
-    if len(elem):
-        if not elem.text or not elem.text.strip():
-            elem.text = i + "  "
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-        for elem in elem:
-            indent(elem, level+1)
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-    else:
-        if level and (not elem.tail or not elem.tail.strip()):
-            elem.tail = i
-    '''
 
 
 def create_sample():
@@ -126,7 +105,7 @@ def create_sample():
     # Git
     append_git(apps, ver='2.24.1')
 
-    indent(root)
+    LMetree.indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
 
@@ -798,7 +777,7 @@ def create_test_xml():
 
     # create a new XML file with the results
     logger.info('create a new XML file with the results')
-    indent(xml_config)
+    LMetree.indent(xml_config)
     tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
     '''
     mydata = str(ET.tostring(xml_config),'utf-8')
@@ -819,7 +798,7 @@ def read_write():
     #pretty_xml_as_string = ET.tostring(root, pretty_print=True)
     #logger.info('pretty_xml_as_string: ' + str(pretty_xml_as_string))
     logger.info('write to file: ' + str(XML_CONFIG))
-    indent(root)
+    LMetree.indent(root)
     #tree.write(XML_CONFIG)
     tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
     #tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True, pretty_print=True)
