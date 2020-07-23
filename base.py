@@ -23,6 +23,7 @@ from setup_apps.tag import Tag
 import app_source_handler
 from setup_apps.util import logger
 from setup_apps import util
+from LMToyBoxPython import LMhashlib
 
 
 class Checksum:
@@ -95,10 +96,10 @@ class Checksum:
         hashsum = None
         if self.type == Checksum.Type.MD5SUM:
             logger.info('Calculate md5')
-            hashsum = util.md5sum(file_installer, show_progress=True)
+            hashsum = LMhashlib.md5sum(file_installer, show_progress=True)
         elif self.type == Checksum.Type.SHA256SUM:
             logger.info('Calculate sha256')
-            hashsum = util.sha256(file_installer, show_progress=True)
+            hashsum = LMhashlib.sha256(file_installer, show_progress=True)
         else:
             logger.error('Checksum type is not set.')
         return hashsum

@@ -37,7 +37,7 @@ from setup_apps.npp import Npp
 from setup_apps.putty import Putty
 from setup_apps.python import Python
 import os
-from LMToyBoxPython import LMetree
+from LMToyBoxPython import LMetree, LMhashlib
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -323,7 +323,7 @@ def download_source_xml():
     file_sha = util.fix_path(PATH_INSTALLERS + '/' + 'app_source.xml.sha256')
     url_sha = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml.sha256'
     util.download(url_sha, file_sha)
-    hashsum = LMToyBoxPython.sha256(file, show_progress=True)
+    hashsum = LMhashlib.sha256(file, show_progress=True)
 
     # verification with md5sum
     if util.is_md5_in_file(file_sha, hashsum, SOURCE_FILE):
