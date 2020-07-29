@@ -133,10 +133,18 @@ class Winmerge(Base):
         #command = command + ' /LOADINF="...inf" '
         command = command + ' /LOG="winmerge-install.log" '
         command = command + ' /DIR="' + self.install_path_full + '"'
+
+        com_res = util.run_command(command)
+        res = com_res.errorlevel
+        if res > 0:
+            logger.error('WinMerge installation FAILED.')
+            return False
+        '''
         test = util.run_os_command(command)
         if not test:
             logger.error('WinMerge installation FAILED.')
             return False
+        '''
 
         logger.info('WinMerge installation done.')
         return True
