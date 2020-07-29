@@ -63,13 +63,9 @@ def create_sample():
     logger.info('create the sample config XML file: ' + str(file))
     root = ET.Element(Tag.setup)
     tree = ET.ElementTree(root)
-    #tree._setroot(root)
 
     root.append(ET.Comment(' Supported version of "setup_apps" '))
-
-    #root.set('version', __version__)
-    version = ET.SubElement(root, Tag.version)
-    version.text = __version__
+    LMetree.create_subelem(root, Tag.version, __version__)
 
     apps = ET.SubElement(root, Tag.apps)
     plugins = [
@@ -87,7 +83,7 @@ def create_sample():
             'version': '7.4.0',
         }
     ]
-    #apps = ET.SubElement(root, Tag.apps)
+
     append_eclipse(apps, ver='2019-09', plugins=plugins)
 
     #append_java(apps, ver='8u242b08')
@@ -111,13 +107,11 @@ def create_sample():
 
 
 def set_version(elem: Element, ver: str):
-    version_elem = ET.SubElement(elem, Tag.version)
-    version_elem.text = ver
+    LMetree.create_subelem(elem, Tag.version, ver)
 
 
 def set_install_path(elem: Element, path: str):
-    install_path = ET.SubElement(elem, Tag.install_path)
-    install_path.text = path
+    LMetree.create_subelem(elem, Tag.install_path, path)
 
 
 def append_git(apps: Element, ver: str):
@@ -138,8 +132,7 @@ def append_console_configure(elem: Element):
     append_command_elem(configure_console, '{git_exe_full_path} config --global user.email lordmike@iki.fi')
 
 def append_command_elem(elem_parent: Element, command: str):
-    elem = ET.SubElement(elem_parent, Tag.command) #: :type elem: Element
-    elem.text = str(command)
+    LMetree.create_subelem(elem_parent, Tag.command, command)
 
 def append_python(apps: Element, ver: str):
     elem = ET.SubElement(apps, Tag.python)
@@ -164,11 +157,9 @@ def append_env_configure(elem: Element):
     #append_command_elem(configure_enviroment, 'GIT_SSH {plink_exe_full_path}')
     key_values = ET.SubElement(configure_enviroment, Tag.key_values)
     key_value = ET.SubElement(key_values, Tag.key_value)
-    key = ET.SubElement(key_value, Tag.key)
-    key.text = 'GIT_SSH'
+    LMetree.create_subelem(key_value, Tag.key, 'GIT_SSH')
     key_value.append(ET.Comment(' {plink_exe_full_path}  is replaced with value from tag "install_path" + hardcoded .\\plink.exe '))
-    value = ET.SubElement(key_value, Tag.value)
-    value.text = '{plink_exe_full_path}'
+    LMetree.create_subelem(key_value, Tag.value, '{plink_exe_full_path}')
 
 
 def append_npp(apps: Element, ver: str):
@@ -224,8 +215,7 @@ def append_configure(ecli_elem: Element):
     configure = ET.SubElement(ecli_elem, Tag.configure)
     configure.append(ET.Comment(' "file" is realative path of "install_path" '))
     configure_file = ET.SubElement(configure, Tag.file)
-    name = ET.SubElement(configure_file, Tag.name)
-    name.text = '\\eclipse.ini'
+    LMetree.create_subelem(configure_file, Tag.name, '\\eclipse.ini')
     file_type = ET.SubElement(configure_file, Tag.type)
     file_type.text = 'ini'
     key_values = ET.SubElement(configure_file, Tag.key_values)
@@ -250,19 +240,16 @@ def append_configure(ecli_elem: Element):
     configure_file_egit = ET.SubElement(configure, Tag.file)
     configure_file_egit.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     configure_file_egit.append(ET.Comment(' {user_home} is replaced with path to current user home '))
-    name = ET.SubElement(configure_file_egit, Tag.name)
     #name.text = 'C:\\Users\\lordmike\\eclipse-workspace-2019-12\\.metadata\\.plugins\\org.eclipse.core.runtime\\.settings\\org.eclipse.egit.core.prefs'
     #name.text = 'C:\\Users\\lordmike\\eclipse-workspace-{version}\\.metadata\\.plugins\\org.eclipse.core.runtime\\.settings\\org.eclipse.egit.core.prefs'
-    name.text = '{user_home}\\eclipse-workspace-{version}\\.metadata\\.plugins\\org.eclipse.core.runtime\\.settings\\org.eclipse.egit.core.prefs'
-    file_type = ET.SubElement(configure_file_egit, Tag.type)
-    file_type.text = 'prefs'
+    LMetree.create_subelem(configure_file_egit, Tag.name,
+                           '{user_home}\\eclipse-workspace-{version}\\.metadata\\.plugins\\org.eclipse.core.runtime\\.settings\\org.eclipse.egit.core.prefs')
+    LMetree.create_subelem(configure_file_egit, Tag.type, 'prefs')
     key_values_egit = ET.SubElement(configure_file_egit, Tag.key_values)
     key_value_egit = ET.SubElement(key_values_egit, Tag.key_value)
-    key_egit = ET.SubElement(key_value_egit, Tag.key)
-    key_egit.text = 'core_defaultRepositoryDir'
+    LMetree.create_subelem(key_value_egit, Tag.key, 'core_defaultRepositoryDir')
     key_value_egit.append(ET.Comment(' ${workspace_loc} is internal varable of Eclipse'))
-    value_egit = ET.SubElement(key_value_egit, Tag.value)
-    value_egit.text = '${workspace_loc}'
+    LMetree.create_subelem(key_value_egit, Tag.value, '${workspace_loc}')
 
 
 def append_plugins(ecli_elem: Element, name: str, ver: str):
@@ -270,16 +257,14 @@ def append_plugins(ecli_elem: Element, name: str, ver: str):
     plugin = ET.SubElement(plugins, Tag.plugin)
     #plugin_pydev = ET.SubElement(plugin, Tag.plugin_pydev)
     plugin_pydev = plugin  # TODO: is there realy need for separate tag for each plugin?
-    name_elem = ET.SubElement(plugin_pydev, Tag.name)
     # TODO: how to share plugin names elegantly between 'setup_apps' and 'app_source'?
     # NOTE: for now it is hard code :(
     #name_elem.text = 'pydev'
-    name_elem.text = name
-    version = ET.SubElement(plugin_pydev, Tag.version)
+    LMetree.create_subelem(plugin_pydev, Tag.name, name)
     # NOTE: use latest version from the source
     #version.text = '7.4.0'
     #version.text = 'latest'
-    version.text = ver
+    LMetree.create_subelem(plugin_pydev, Tag.version, ver)
     '''
     plugin_pydev.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     installer_file = ET.SubElement(plugin_pydev, Tag.installer_file)
