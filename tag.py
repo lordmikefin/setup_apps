@@ -30,7 +30,7 @@ class Tag():
     putty = 'putty'
     python = 'python'
     git = 'git'
-    # TODO: add WinMerge   https://winmerge.org/
+    winmerge = 'winmerge'
 
     installer_file = 'installer_file'
     installer_url = 'installer_url'

@@ -21,7 +21,7 @@
 
 import xml.etree.ElementTree as ET
 from setup_apps import util, __version__, eclipse, PATH_INSTALLERS, java, npp,\
-    putty, python, git
+    putty, python, git, winmerge
 from xml.etree.ElementTree import Element
 from setup_apps.tag import Tag
 import app_source_handler
@@ -101,6 +101,9 @@ def create_sample():
     # Git
     append_git(apps, ver='2.24.1')
 
+    # WinMerge
+    append_winmerge(apps, ver='2.16.6')
+
     LMetree.indent(root)
     util.mkdir(CONFIG_PATH)
     tree.write(file, encoding="UTF-8", xml_declaration=True)
@@ -113,6 +116,11 @@ def set_version(elem: Element, ver: str):
 def set_install_path(elem: Element, path: str):
     LMetree.create_subelem(elem, Tag.install_path, path)
 
+
+def append_winmerge(apps: Element, ver: str):
+    elem = ET.SubElement(apps, Tag.winmerge)
+    set_version(elem, ver)
+    set_install_path(elem, 'C:\\Program Files\\WinMerge')
 
 def append_git(apps: Element, ver: str):
     elem = ET.SubElement(apps, Tag.git)
@@ -340,6 +348,8 @@ def parse_apps(elem_apps: Element):
             parse_python(elem)
         if elem.tag == Tag.git:
             parse_git(elem)
+        if elem.tag == Tag.winmerge:
+            parse_winmerge(elem)
 
 
 def parse_version(elem: Element, base_obj: Base):
@@ -358,6 +368,18 @@ def append_app(app_name: str, app_obj: Base):
     obj_list = list(APPS.get(app_name, []))
     obj_list.append(app_obj)
     APPS[app_name] = obj_list
+
+
+def parse_winmerge(elem: Element):
+    global APPS
+
+    obj = winmerge.Winmerge()
+    logger.info('parse git             : ' + str(obj.__name__))
+    parse_version(elem, obj)
+    parse_install_path(elem, obj)
+    logger.info('version                  : ' + str(obj.version))
+    logger.info('install_path             : ' + str(obj.install_path))
+    append_app('winmerge', obj)
 
 
 def parse_git(elem: Element):
