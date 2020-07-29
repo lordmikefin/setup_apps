@@ -110,7 +110,7 @@ class Git(Base):
         if res > 0:
             logger.info('Git NOT installed.')
             return False
-    
+
         logger.info('Git already installed.')
         version_current = com_res.stdout
         logger.info('Current version (stdout): ' + str(version_current))

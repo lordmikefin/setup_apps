@@ -64,7 +64,7 @@ class Winmerge(Base):
             return
 
         self.install_path_full = str(self.install_path)
-        self.exe_file = self.install_path_full + '\\winmerge.exe'
+        self.exe_file = self.install_path_full + '\\WinMergeU.exe'
         self.install_path_ok = True
 
     def download(self) -> bool:
@@ -91,3 +91,52 @@ class Winmerge(Base):
 
         logger.error('Download of WinMerge installer failed.')
         return False
+
+    def is_installed(self):
+        # TODO: how to update if version is different
+
+        # NOTE: open command line guide
+        # command = '"' + self.exe_file + '"' + ' /?'
+        # TODO: how to check the version?
+
+        if util.is_file(self.exe_file):
+            logger.info('WinMerge already installed.')
+            return True
+
+        logger.info('WinMerge NOT installed.')
+        return False
+
+    def install(self) -> bool:
+        if not self.is_downloaded:
+            logger.error('WinMerge installer not downloaded.')
+            return False
+
+        if not self.install_path_ok:
+            logger.error('Installation path not defined.')
+            return False
+
+        if self.is_installed():
+            logger.info('WinMerge is already installed')
+            return False
+
+        logger.info('Start WinMerge installer.')
+        logger.info('Installing ... wait ... wait ... ')
+
+        # NOTE: auto install WinMerge
+        # https://forums.winmerge.org/viewtopic.php?f=7&t=1743
+
+        # READ MORE: Silent (unattended) install
+        #   http://www.jrsoftware.org/ishelp/index.php?topic=setupcmdline
+
+        command = self.installer_path + ' /SILENT '
+        # TODO: Generate the inf file.
+        #command = command + ' /LOADINF="...inf" '
+        command = command + ' /LOG="winmerge-install.log" '
+        command = command + ' /DIR="' + self.install_path_full + '"'
+        test = util.run_os_command(command)
+        if not test:
+            logger.error('WinMerge installation FAILED.')
+            return False
+
+        logger.info('WinMerge installation done.')
+        return True

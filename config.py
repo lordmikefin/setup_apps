@@ -748,6 +748,10 @@ def install():
     for git_obj in git_list: #: :type git_obj: Git
         git_obj.install()
 
+    winmerge_list = list(APPS.get('winmerge', []))
+    for winmerge_obj in winmerge_list: #: :type winmerge_obj: Winmerge
+        winmerge_obj.install()
+
     # TODO: Is 'PATH' changed. Is there need to modify it manually?
     logger.debug("os.environ.get('PATH'): " + str(os.environ.get('PATH')))
     util.log_env_var('PATH')
