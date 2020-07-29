@@ -38,6 +38,8 @@ from setup_apps.putty import Putty
 from setup_apps.python import Python
 import os
 from LMToyBoxPython import LMetree, LMhashlib
+from setup_apps.git import Git
+from setup_apps.winmerge import Winmerge
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -676,6 +678,12 @@ def init():
         logger.debug('source_git: ' + str(source_git))
         git_obj.generate_all(source_git)
 
+    winmerge_list = list(APPS.get('winmerge', []))
+    for winmerge_obj in winmerge_list: #: :type winmerge_obj: Winmerge
+        source_winmerge = app_source_handler.source.APPS.get('winmerge', {})
+        logger.debug('source_winmerge: ' + str(source_winmerge))
+        winmerge_obj.generate_all(source_winmerge)
+
 
 def download():
     """ Download all app installers """
@@ -703,6 +711,10 @@ def download():
     git_list = list(APPS.get('git', []))
     for git_obj in git_list: #: :type git_obj: Git
         git_obj.download()
+
+    winmerge_list = list(APPS.get('winmerge', []))
+    for winmerge_obj in winmerge_list: #: :type winmerge_obj: Winmerge
+        winmerge_obj.download()
 
 
 def install():
