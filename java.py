@@ -154,8 +154,13 @@ class Java(Base):
         #java -version
         command = 'java -version'
         logger.info(str(command))
+        '''
         test = util.run_os_command(command)
         if not test:
+        '''
+        com_res = util.run_command(command)
+        res = com_res.errorlevel
+        if res > 0:
             logger.info('Java NOT installed.')
             return False
     
@@ -219,7 +224,8 @@ class Java(Base):
         os.environ['PATH'] = str(_javapath) + ';' + _path
         '''
 
-
+# TODO: remove obsolete code
+'''
 _installer_file_fullname = ''
 _file_name = ''
 
@@ -257,7 +263,7 @@ def download_jre():
         logger.info('Can not auto download Oracle JRE !!!')
         logger.info('Download "' + str(_file_name) + '" manually into folder: ' + str(_installer_file_fullname))
         logger.info('  https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html')
-        '''
+        '
         # TODO: Use OpenJDK
         https://openjdk.java.net/
         https://openjdk.java.net/install/index.html
@@ -270,7 +276,7 @@ def download_jre():
         https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.zip
         https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi
         https://adoptopenjdk.net/installation.html#windows-msi
-        '''
+        '
 
 
 def define_file_jre():
@@ -287,7 +293,7 @@ def define_file_jre():
 
 
 def install_jre():
-    '''
+    '
     TODO: download and install Java:  OracleJRE
     Oracle
     https://www.oracle.com/technetwork/java/index.html
@@ -296,7 +302,7 @@ def install_jre():
 
     https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html
     https://download.oracle.com/otn/java/jdk/8u221-b11/230deb18db3e4014bb8e3e8324f81b43/jre-8u221-windows-x64.exe
-    '''
+    '
     # TODO: Install silently
     # TODO: Can I change java installation path?
     # TODO: how to install Java silently (unattended)
@@ -322,7 +328,7 @@ def is_installed_jdk():
 
 
 def install_jdk():
-    '''
+    '
     TODO: download and install Java:  OpenJDK or OracleJDK
     Oracle
     https://www.oracle.com/technetwork/java/index.html
@@ -335,7 +341,7 @@ def install_jdk():
     https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_windows-x64_bin.zip
     SHA256
     https://download.java.net/java/GA/jdk13/5b8a42f3905b406298b72d750b6919f6/33/GPL/openjdk-13_windows-x64_bin.zip.sha256
-    '''
+    '
     pass
 
 def update_env_var_path():
@@ -347,12 +353,12 @@ def update_env_var_path():
     _path = str(os.environ.get('PATH'))
     #print('')
     #print('PATH : ' + _path)
-    '''
+    '
     command = str('PATH=' + str(_javapath) + ';%PATH%')
     #print(command)
     res = int(os.system(command))
     #print('result : ' + str(res))
-    '''
+    '
     os.environ['PATH'] = str(_javapath) + ';' + _path
     #print('PATH : ' + str(os.environ.get('PATH')))
 
@@ -370,4 +376,4 @@ def run():
     if not is_installed_jre():
         if install_jre():
             update_env_var_path()
-
+'''

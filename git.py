@@ -19,14 +19,9 @@
     :license: MIT License
 """
 
-from . import PATH_APP_GIT, PATH_INSTALLERS
+from . import PATH_INSTALLERS
 from . import util
 
-
-import os
-import re
-import subprocess
-import sys
 from setup_apps.base import Base
 from setup_apps.util import logger
 from setup_apps.tag import Tag
@@ -152,8 +147,13 @@ class Git(Base):
         command = command + ' /LOADINF="git.inf" '
         command = command + ' /LOG="git-install.log" '
         command = command + ' /DIR="' + self.install_path_full + '"'
+        '''
         test = util.run_os_command(command)
         if not test:
+        '''
+        com_res = util.run_command(command)
+        res = com_res.errorlevel
+        if res > 0:
             logger.error('Git installation FAILED.')
             return False
 
@@ -176,7 +176,8 @@ class Git(Base):
                     logger.debug('com: ' + str(com))
                     util.run_command(com)
 
-
+# TODO: remove obsolete code
+'''
 _git_ver = ''
 _installer_file_fullname = ''
 _file_name = ''
@@ -192,11 +193,11 @@ def define_the_user():
     # TODO: parameterize user and email.
     command = _git_cmd + ' config --global user.name "' + _user + '"'
     print(str(command))
-    ''' NOTE: This will raise error: 'C:\Program' is not recognized as an internal or external command, operable program or batch file.
+    ' NOTE: This will raise error: 'C:\Program' is not recognized as an internal or external command, operable program or batch file.
     res = int(os.system(command))
     if res > 0:
         print('Failed to set user for git!')
-    '''
+    '
 
     # TODO: use 'run_command' -function instead
     try:
@@ -364,4 +365,4 @@ def run():
 
     if is_installed():
         define_the_user()
-
+'''

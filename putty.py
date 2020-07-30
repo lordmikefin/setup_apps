@@ -19,10 +19,10 @@
     :license: MIT License
 """
 
-from . import PATH_APP_PUTTY, PATH_INSTALLERS
+from . import PATH_INSTALLERS
 from . import util
-import os
-from setup_apps.base import Base, Checksum
+
+from setup_apps.base import Base
 from setup_apps.util import logger
 from setup_apps.tag import Tag
 
@@ -102,13 +102,18 @@ class Putty(Base):
         #command = '"' + str(PATH_APP_PUTTY) + '\\plink' + '"' + ' -V '
         #command = '"' + str(_plink) + '"' + ' -V '
         command = '"' + self.exe_file + '"' + ' -V '
+        '''
         print(str(command))
         test = util.run_os_command(command)
         if not test:
-            print('Putty NOT installed.')
+        '''
+        com_res = util.run_command(command)
+        res = com_res.errorlevel
+        if res > 0:
+            logger.info('Putty NOT installed.')
             return False
     
-        print('Putty already installed.')
+        logger.info('Putty already installed.')
         return True
 
     def install(self) -> bool:
@@ -178,7 +183,8 @@ class Putty(Base):
                     util.run_command(com)
                 '''
 
-
+# TODO: remove obsolete code
+'''
 _putty_ver = ''
 _installer_file_fullname = ''
 _file_name = ''
@@ -314,4 +320,4 @@ def run():
         install()
 
     set_env_var()
-
+'''

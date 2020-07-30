@@ -21,13 +21,9 @@
 
 # TODO: how to dynamically define the python folder version?
 #from . import PATH_APP_PY37, PATH_INSTALLERS
-from . import PATH_APP_PY38, PATH_INSTALLERS
+from . import PATH_INSTALLERS
 from . import util
 
-
-import os
-import re
-import subprocess
 from setup_apps.base import Base
 from setup_apps.util import logger
 from setup_apps.tag import Tag
@@ -138,15 +134,21 @@ class Python(Base):
         command = command + ' InstallAllUsers=1 '
         command = command + ' TargetDir="' + self.install_path_full + '"'
         command = command + ' PrependPath=1 '
+        '''
         test = util.run_os_command(command)
         if not test:
+        '''
+        com_res = util.run_command(command)
+        res = com_res.errorlevel
+        if res > 0:
             logger.error('Python installation FAILED.')
             return False
 
         logger.info('Python installation done.')
         return True
 
-
+# TODO: remove obsolete code
+'''
 _ver = ''
 _installer_file_fullname = ''
 _file_name = ''
@@ -262,3 +264,4 @@ def run():
 
     if not is_installed():
         install()
+'''

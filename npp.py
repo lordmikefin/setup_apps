@@ -19,11 +19,10 @@
     :license: MIT License
 """
 
-from . import PATH_APP_NPP, PATH_INSTALLERS
+from . import PATH_INSTALLERS
 from . import util
 
-import os
-from setup_apps.base import Base, Checksum
+from setup_apps.base import Base
 from setup_apps.util import logger
 from setup_apps.tag import Tag
 
@@ -100,9 +99,7 @@ class Npp(Base):
         file = self.exe_file
         #logger.debug('Executable: ' + str(file))
         command = '"' + file + '" -quickPrint'
-        #test = util.run_os_command(command)
         test = util.run_command(command)
-        #if util.is_file(file):
         if test.errorlevel == 0:
             logger.info('Notepad++ already installed.')
             return True
@@ -138,7 +135,8 @@ class Npp(Base):
         logger.info('Notepad++ installation done.')
         return True
 
-
+# TODO: remove obsolete code
+'''
 _installer_file_fullname = ''
 _file_name = ''
 
@@ -250,4 +248,4 @@ def run():
 
     # TODO: Disable 'security warning' and UAC
     #install_npp()
-
+'''
