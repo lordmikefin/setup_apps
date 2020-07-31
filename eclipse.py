@@ -256,7 +256,9 @@ class Eclipse(Base):
                         git_exe = 'git.exe'
                         com = str(command).format(git_exe=git_exe)
                         logger.debug('com: ' + str(com))
-                        util.run_command(com)
+                        # NOTE: must use "shell=True" or can't call multiple commands with &&
+                        #util.run_command(com, shell=False)
+                        util.run_command(com, shell=True)
                 continue  # handle as command and skip to next conf
             name = file.get('name')
             test_dict = {}

@@ -268,6 +268,12 @@ def append_configure(ecli_elem: Element):
     configure_console.append(ET.Comment(' {git_exe} is replaced with value "git.exe" '))
     append_command_elem(configure_console, '{git_exe} clone https://github.com/lordmikefin/testground_setup_apps.git "C:\\Users\\lordmike\\eclipse-workspace-2019-09\\testground_setup_apps"')
 
+    # load submodules of the repo
+    configure_console.append(ET.Comment(' run submodule commands after "clone" command '))
+    configure_console.append(ET.Comment(' {git_exe} is replaced with value "git.exe" '))
+    append_command_elem(configure_console, 'cd C:\\Users\\lordmike\\eclipse-workspace-2019-09\\testground_setup_apps && {git_exe} submodule init')
+    append_command_elem(configure_console, 'cd C:\\Users\\lordmike\\eclipse-workspace-2019-09\\testground_setup_apps && {git_exe} submodule update')
+
     # Define git repo locations
     # TODO: parameterise
     # TODO: append the path to value - do not replace
