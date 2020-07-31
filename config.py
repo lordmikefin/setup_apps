@@ -279,6 +279,11 @@ def append_configure(ecli_elem: Element):
     append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps" && {git_exe} submodule init')
     append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps" && {git_exe} submodule update')
 
+    # TODO: use ssh
+    # git remote set-url origin git@github.com:lordmikefin/setup_apps.git
+    # git remote set-url origin git@github.com:lordmikefin/app_source_handler.git
+    # git@github.com:lordmikefin/LMToyBoxPython.git
+
     # Define git repo locations
     # TODO: append the path to value - do not replace
     key_value_egit1 = ET.SubElement(key_values_egit, Tag.key_value)
