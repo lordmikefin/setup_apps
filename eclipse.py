@@ -252,13 +252,18 @@ class Eclipse(Base):
             if commands_list:
                 for command in commands_list:
                     logger.info('command: ' + str(command))
+                    format_dict = {}
                     if '{git_exe}' in command:
                         git_exe = 'git.exe'
-                        com = str(command).format(git_exe=git_exe)
-                        logger.debug('com: ' + str(com))
-                        # NOTE: must use "shell=True" or can't call multiple commands with &&
-                        #util.run_command(com, shell=False)
-                        util.run_command(com, shell=True)
+                        #com = str(command).format(git_exe=git_exe)
+                        format_dict['git_exe'] = git_exe
+                    if '{version}' in command:
+                        format_dict['version'] = self.version
+                    com = command.format(**format_dict)
+                    logger.debug('com: ' + str(com))
+                    # NOTE: must use "shell=True" or can't call multiple commands with &&
+                    #util.run_command(com, shell=False)
+                    util.run_command(com, shell=True)
                 continue  # handle as command and skip to next conf
             name = file.get('name')
             test_dict = {}
@@ -278,10 +283,15 @@ class Eclipse(Base):
             for conf in confs:
                 key = conf.get('key')
                 value = conf.get('value')
+                val_dict = {}
                 # replase {version}
                 if '{version}' in value:
-                    value = value.format(version=self.version)
-                
+                    val_dict['version'] = self.version
+                    #value = value.format(version=self.version)
+                if '{workspace_loc}' in value:
+                    val_dict['workspace_loc'] = '{workspace_loc}'
+                value = value.format(**val_dict)
+
                 logger.info('key: ' + str(key) + ' value: ' + str(value))
                 if f_type == 'ini':
                     self.config_apply(self.install_path_full + name, key, value)

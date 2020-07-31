@@ -266,20 +266,26 @@ def append_configure(ecli_elem: Element):
     # git@github.com:lordmikefin/testground_setup_apps.git
     configure_console = ET.SubElement(configure, Tag.console)
     configure_console.append(ET.Comment(' {git_exe} is replaced with value "git.exe" '))
-    append_command_elem(configure_console, '{git_exe} clone https://github.com/lordmikefin/testground_setup_apps.git "C:\\Users\\lordmike\\eclipse-workspace-2019-09\\testground_setup_apps"')
+    configure_console.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    home = util.home_path()
+    home_fixed = home.replace('\\', '\\\\').replace(':', '\\:')
+    append_command_elem(configure_console, '{git_exe} clone https://github.com/lordmikefin/testground_setup_apps.git "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps"')
 
     # load submodules of the repo
     configure_console.append(ET.Comment(' run submodule commands after "clone" command '))
     configure_console.append(ET.Comment(' {git_exe} is replaced with value "git.exe" '))
-    append_command_elem(configure_console, 'cd C:\\Users\\lordmike\\eclipse-workspace-2019-09\\testground_setup_apps && {git_exe} submodule init')
-    append_command_elem(configure_console, 'cd C:\\Users\\lordmike\\eclipse-workspace-2019-09\\testground_setup_apps && {git_exe} submodule update')
+    #configure_console.append(ET.Comment(' {user_home_fixed} is replaced with path to current user home '))
+    configure_console.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps" && {git_exe} submodule init')
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps" && {git_exe} submodule update')
 
     # Define git repo locations
-    # TODO: parameterise
     # TODO: append the path to value - do not replace
     key_value_egit1 = ET.SubElement(key_values_egit, Tag.key_value)
     LMetree.create_subelem(key_value_egit1, Tag.key, 'GitRepositoriesView.GitDirectories')
-    LMetree.create_subelem(key_value_egit1, Tag.value, 'C\\:\\\\Users\\\\lordmike\\\\eclipse-workspace-2019-09\\\\testground_setup_apps\\\\.git;')
+    key_value_egit1.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    #LMetree.create_subelem(key_value_egit1, Tag.value, 'C\\:\\\\Users\\\\lordmike\\\\eclipse-workspace-2019-09\\\\testground_setup_apps\\\\.git;')
+    LMetree.create_subelem(key_value_egit1, Tag.value, '' + home_fixed + '\\\\eclipse-workspace-{version}\\\\testground_setup_apps\\\\.git;')
 
     key_value_egit2 = ET.SubElement(key_values_egit, Tag.key_value)
     LMetree.create_subelem(key_value_egit2, Tag.key, 'GitRepositoriesView.GitDirectories.relative')
@@ -296,8 +302,8 @@ def append_configure(ecli_elem: Element):
     key_value_pydev = ET.SubElement(key_values_pydev, Tag.key_value)
     LMetree.create_subelem(key_value_pydev, Tag.key, 'INTERPRETER_PATH_NEW')
     #key_value_pydev.append(ET.Comment(' {user_home} is replaced with path to current user home '))
-    home = util.home_path()
-    home_fixed = home.replace('\\', '\\\\').replace(':', '\\:')
+    #home = util.home_path()
+    #home_fixed = home.replace('\\', '\\\\').replace(':', '\\:')
     LMetree.create_subelem(key_value_pydev, Tag.value,
          #'<xml>\n<name>python37_venv_setup_apps</name>\n<version>3.7</version>\n<executable>C\:\\Users\\lordmike\\Envs\\venv-LMAutoSetBotWin\\Scripts\\python.exe</executable>\n<lib>c\:\\program files\\python37\\DLLs</lib>\n<lib>c\:\\program files\\python37\\lib</lib>\n<lib>c\:\\program files\\python37</lib>\n<lib>C\:\\Users\\lordmike\\Envs\\venv-LMAutoSetBotWin</lib>\n<lib>C\:\\Users\\lordmike\\Envs\\venv-LMAutoSetBotWin\\lib\\site-packages</lib>\n<forced_lib>Image</forced_lib>\n<forced_lib>OpenGL</forced_lib>\n<forced_lib>_abc</forced_lib>\n<forced_lib>_ast</forced_lib>\n<forced_lib>_bisect</forced_lib>\n<forced_lib>_blake2</forced_lib>\n<forced_lib>_bytesio</forced_lib>\n<forced_lib>_codecs</forced_lib>\n<forced_lib>_codecs_cn</forced_lib>\n<forced_lib>_codecs_hk</forced_lib>\n<forced_lib>_codecs_iso2022</forced_lib>\n<forced_lib>_codecs_jp</forced_lib>\n<forced_lib>_codecs_kr</forced_lib>\n<forced_lib>_codecs_tw</forced_lib>\n<forced_lib>_collections</forced_lib>\n<forced_lib>_contextvars</forced_lib>\n<forced_lib>_csv</forced_lib>\n<forced_lib>_datetime</forced_lib>\n<forced_lib>_fileio</forced_lib>\n<forced_lib>_functools</forced_lib>\n<forced_lib>_heapq</forced_lib>\n<forced_lib>_hotshot</forced_lib>\n<forced_lib>_imp</forced_lib>\n<forced_lib>_io</forced_lib>\n<forced_lib>_json</forced_lib>\n<forced_lib>_locale</forced_lib>\n<forced_lib>_lsprof</forced_lib>\n<forced_lib>_md5</forced_lib>\n<forced_lib>_multibytecodec</forced_lib>\n<forced_lib>_opcode</forced_lib>\n<forced_lib>_operator</forced_lib>\n<forced_lib>_pickle</forced_lib>\n<forced_lib>_random</forced_lib>\n<forced_lib>_sha</forced_lib>\n<forced_lib>_sha1</forced_lib>\n<forced_lib>_sha256</forced_lib>\n<forced_lib>_sha3</forced_lib>\n<forced_lib>_sha512</forced_lib>\n<forced_lib>_signal</forced_lib>\n<forced_lib>_sre</forced_lib>\n<forced_lib>_stat</forced_lib>\n<forced_lib>_string</forced_lib>\n<forced_lib>_struct</forced_lib>\n<forced_lib>_subprocess</forced_lib>\n<forced_lib>_symtable</forced_lib>\n<forced_lib>_thread</forced_lib>\n<forced_lib>_tracemalloc</forced_lib>\n<forced_lib>_warnings</forced_lib>\n<forced_lib>_weakref</forced_lib>\n<forced_lib>_winapi</forced_lib>\n<forced_lib>_winreg</forced_lib>\n<forced_lib>array</forced_lib>\n<forced_lib>atexit</forced_lib>\n<forced_lib>audioop</forced_lib>\n<forced_lib>binascii</forced_lib>\n<forced_lib>builtins</forced_lib>\n<forced_lib>cPickle</forced_lib>\n<forced_lib>cStringIO</forced_lib>\n<forced_lib>cmath</forced_lib>\n<forced_lib>cv2</forced_lib>\n<forced_lib>datetime</forced_lib>\n<forced_lib>email</forced_lib>\n<forced_lib>errno</forced_lib>\n<forced_lib>exceptions</forced_lib>\n<forced_lib>faulthandler</forced_lib>\n<forced_lib>future_builtins</forced_lib>\n<forced_lib>gc</forced_lib>\n<forced_lib>gi</forced_lib>\n<forced_lib>hashlib</forced_lib>\n<forced_lib>imageop</forced_lib>\n<forced_lib>imp</forced_lib>\n<forced_lib>itertools</forced_lib>\n<forced_lib>marshal</forced_lib>\n<forced_lib>math</forced_lib>\n<forced_lib>mmap</forced_lib>\n<forced_lib>mock</forced_lib>\n<forced_lib>msvcrt</forced_lib>\n<forced_lib>multiprocessing</forced_lib>\n<forced_lib>mutagen</forced_lib>\n<forced_lib>nt</forced_lib>\n<forced_lib>numpy</forced_lib>\n<forced_lib>operator</forced_lib>\n<forced_lib>os</forced_lib>\n<forced_lib>os.path</forced_lib>\n<forced_lib>parser</forced_lib>\n<forced_lib>pytest</forced_lib>\n<forced_lib>scipy</forced_lib>\n<forced_lib>signal</forced_lib>\n<forced_lib>six</forced_lib>\n<forced_lib>socket</forced_lib>\n<forced_lib>ssl</forced_lib>\n<forced_lib>strop</forced_lib>\n<forced_lib>sys</forced_lib>\n<forced_lib>thread</forced_lib>\n<forced_lib>time</forced_lib>\n<forced_lib>winreg</forced_lib>\n<forced_lib>wx</forced_lib>\n<forced_lib>wxPython</forced_lib>\n<forced_lib>xxsubtype</forced_lib>\n<forced_lib>zipimport</forced_lib>\n<forced_lib>zlib</forced_lib>\n<string_substitution_var><key>PY</key><value>37</value></string_substitution_var>\n</xml>&&&&&')
          '<xml>\\n<name>python37_venv_setup_apps</name>\\n<version>3.7</version>\\n' +\
