@@ -231,6 +231,7 @@ class Eclipse(Base):
         # NOTE: Shortcut is not created, because installer is not used.
         # TODO: Create shortcut for eclipse into Start Menu
         self.create_link()
+        # TODO: create link in configure - define link name there
 
     def create_link(self):
         util.windows_only()
@@ -245,6 +246,7 @@ class Eclipse(Base):
             return
 
         # TODO: refactor (eclipse.py, git.py)
+        # TODO: create link in configure - define link name there - not during install
         logger.info('self.config ' + str(self.config))
         #self.config = None
         for file in self.config:
