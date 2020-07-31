@@ -261,8 +261,12 @@ def append_configure(ecli_elem: Element):
     key_value_egit.append(ET.Comment(' ${workspace_loc} is internal varable of Eclipse'))
     LMetree.create_subelem(key_value_egit, Tag.value, '${workspace_loc}')
 
-    # Define git repo locations
     # TOOD: auto load repos :)
+    # git@github.com:lordmikefin/testground_setup_apps.git
+    # https://github.com/lordmikefin/testground_setup_apps.git
+    #  $ git clone https://github.com/lordmikefin/testground_setup_apps.git
+
+    # Define git repo locations
     # TODO: parameterise
     # TODO: append the path to value - do not replace
     key_value_egit1 = ET.SubElement(key_values_egit, Tag.key_value)
