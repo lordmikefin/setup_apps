@@ -262,8 +262,6 @@ def append_configure(ecli_elem: Element):
     LMetree.create_subelem(key_value_egit, Tag.value, '${workspace_loc}')
 
     # auto load repo
-    # TODO: how to use ssh? need to auto set ssh key, but how?
-    # git@github.com:lordmikefin/testground_setup_apps.git
     configure_console = ET.SubElement(configure, Tag.console)
     configure_console.append(ET.Comment(' {git_exe} is replaced with value "git.exe" '))
     configure_console.append(ET.Comment(' {version} is replaced with value from tag "version" '))
@@ -279,10 +277,19 @@ def append_configure(ecli_elem: Element):
     append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps" && {git_exe} submodule init')
     append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps" && {git_exe} submodule update')
 
-    # TODO: use ssh
-    # git remote set-url origin git@github.com:lordmikefin/setup_apps.git
-    # git remote set-url origin git@github.com:lordmikefin/app_source_handler.git
-    # git@github.com:lordmikefin/LMToyBoxPython.git
+    # use ssh
+    configure_console.append(ET.Comment(' use ssh for git repo '))
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps" && {git_exe} remote set-url origin git@github.com:lordmikefin/testground_setup_apps.git')
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps\\setup_apps" && {git_exe} remote set-url origin git@github.com:lordmikefin/setup_apps.git')
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps\\app_source_handler" && {git_exe} remote set-url origin git@github.com:lordmikefin/app_source_handler.git')
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps\\LMToyBoxPython" && {git_exe} remote set-url origin git@github.com:lordmikefin/LMToyBoxPython.git')
+
+    # use 'master' branch
+    configure_console.append(ET.Comment(' use "master" branch '))
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps" && {git_exe} checkout master')
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps\\setup_apps" && {git_exe} checkout master')
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps\\app_source_handler" && {git_exe} checkout master')
+    append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps\\LMToyBoxPython" && {git_exe} checkout master')
 
     # Define git repo locations
     # TODO: append the path to value - do not replace
