@@ -244,9 +244,20 @@ class Eclipse(Base):
             logger.info('Eclipse No configures')
             return
 
+        # TODO: refactor (eclipse.py, git.py)
         logger.info('self.config ' + str(self.config))
         #self.config = None
         for file in self.config:
+            commands_list = file.get('commands')
+            if commands_list:
+                for command in commands_list:
+                    logger.info('command: ' + str(command))
+                    if '{git_exe}' in command:
+                        git_exe = 'git.exe'
+                        com = str(command).format(git_exe=git_exe)
+                        logger.debug('com: ' + str(com))
+                        util.run_command(com)
+                continue  # handle as command and skip to next conf
             name = file.get('name')
             test_dict = {}
             if '{version}' in name:

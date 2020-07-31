@@ -166,6 +166,7 @@ class Git(Base):
             logger.info('Git No configures')
             return
 
+        # TODO: refactor (eclipse.py, git.py)
         logger.info('self.config ' + str(self.config))
         for conf_list in self.config:
             commands_list = conf_list.get('commands')

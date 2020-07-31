@@ -261,10 +261,12 @@ def append_configure(ecli_elem: Element):
     key_value_egit.append(ET.Comment(' ${workspace_loc} is internal varable of Eclipse'))
     LMetree.create_subelem(key_value_egit, Tag.value, '${workspace_loc}')
 
-    # TOOD: auto load repos :)
+    # auto load repo
+    # TODO: how to use ssh? need to auto set ssh key, but how?
     # git@github.com:lordmikefin/testground_setup_apps.git
-    # https://github.com/lordmikefin/testground_setup_apps.git
-    #  $ git clone https://github.com/lordmikefin/testground_setup_apps.git
+    configure_console = ET.SubElement(configure, Tag.console)
+    configure_console.append(ET.Comment(' {git_exe} is replaced with value "git.exe" '))
+    append_command_elem(configure_console, '{git_exe} clone https://github.com/lordmikefin/testground_setup_apps.git "C:\\Users\\lordmike\\eclipse-workspace-2019-09\\testground_setup_apps"')
 
     # Define git repo locations
     # TODO: parameterise
