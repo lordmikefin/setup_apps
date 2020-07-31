@@ -367,6 +367,8 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
     logger.debug(str(process))
     if process.returncode > 0 and process.stderr:
         logger.error(process.stderr)
+    elif process.returncode == 0 and process.stderr:
+        logger.info(process.stderr)
     return process
 
 
