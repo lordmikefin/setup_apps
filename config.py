@@ -261,6 +261,18 @@ def append_configure(ecli_elem: Element):
     key_value_egit.append(ET.Comment(' ${workspace_loc} is internal varable of Eclipse'))
     LMetree.create_subelem(key_value_egit, Tag.value, '${workspace_loc}')
 
+    # Define git repo locations
+    # TOOD: auto load repos :)
+    # TODO: parameterise
+    # TODO: append the path to value - do not replace
+    key_value_egit1 = ET.SubElement(key_values_egit, Tag.key_value)
+    LMetree.create_subelem(key_value_egit1, Tag.key, 'GitRepositoriesView.GitDirectories')
+    LMetree.create_subelem(key_value_egit1, Tag.value, 'C\\:\\\\Users\\\\lordmike\\\\eclipse-workspace-2019-09\\\\testground_setup_apps\\\\.git;')
+
+    key_value_egit2 = ET.SubElement(key_values_egit, Tag.key_value)
+    LMetree.create_subelem(key_value_egit2, Tag.key, 'GitRepositoriesView.GitDirectories.relative')
+    LMetree.create_subelem(key_value_egit2, Tag.value, 'testground_setup_apps\\\\.git;')
+
     # Define python interpreter
     configure_file_pydev = ET.SubElement(configure, Tag.file)
     configure_file_pydev.append(ET.Comment(' {version} is replaced with value from tag "version" '))
