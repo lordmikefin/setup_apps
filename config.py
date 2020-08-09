@@ -48,8 +48,6 @@ from setup_apps.winmerge import Winmerge
 CONFIG_PATH = util.fix_path(util.home_path() + '/LM_ToyBox/setup_apps')
 CONFIG_FILE = 'setup_apps_config.xml'
 
-XML_CONFIG = 'xml_config.xml'
-XML_TEST = 'test.xml'
 
 # https://stackabuse.com/reading-and-writing-xml-files-in-python/
 
@@ -851,45 +849,3 @@ def print_sample():
     logger.debug(CONFIG_FILE + ' content:\n' + str(ET.tostring(tree.getroot()), 'utf-8'))
     logger.debug('  NOTE: declaration and comments are not printed!')
 
-
-def create_test_xml():
-    # create the file structure
-    logger.info('create the XML file structure')
-    tree = ET.ElementTree()
-    xml_config = ET.Element('test_element')
-    tree._setroot(xml_config)
-    items = ET.SubElement(xml_config, 'items')
-    item1 = ET.SubElement(items, 'item')
-    item2 = ET.SubElement(items, 'item')
-    item1.set('name','item1')
-    item2.set('name','item2')
-    item1.text = 'item1abc'
-    item2.text = 'item2abc'
-
-    # create a new XML file with the results
-    logger.info('create a new XML file with the results')
-    LMetree.indent(xml_config)
-    tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
-    '''
-    mydata = str(ET.tostring(xml_config),'utf-8')
-    logger.info('mydata type: ' + str(type(mydata)))
-    myfile = open(XML_CONFIG, "w")
-    myfile.write(mydata)
-    myfile.close()
-    '''
-
-def read_write():
-    logger.info('read from file: ' + str(XML_TEST))
-    tree = ET.parse(XML_TEST)
-    root = tree.getroot()
-    #root.
-    #items = ET.SubElement(root, 'items')
-    ET.SubElement(root, 'items')
-    #pretty_xml_as_string = root.toprettyxml()
-    #pretty_xml_as_string = ET.tostring(root, pretty_print=True)
-    #logger.info('pretty_xml_as_string: ' + str(pretty_xml_as_string))
-    logger.info('write to file: ' + str(XML_CONFIG))
-    LMetree.indent(root)
-    #tree.write(XML_CONFIG)
-    tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True)
-    #tree.write(XML_CONFIG, encoding="UTF-8", xml_declaration=True, pretty_print=True)
