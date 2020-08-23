@@ -34,8 +34,14 @@ from typing import NamedTuple
 #Backward-compatible usage:
 #CommandRet = NamedTuple('CommandRet', [('errorlevel', int), ('stdout', str)])
 
+CommandRet = NamedTuple('CommandRet', [('errorlevel', int), ('stdout', str), ('stderr', str)])
+'''
 class CommandRet(NamedTuple):
-    stdout: str = ''
-    errorlevel: int = 0  # 0, no error
-    stderr: str = ''
-
+    # TODO: type hint is not supported by py3.5 ???
+    #stdout: str = ''
+    stdout = ''
+    #errorlevel: int = 0  # 0, no error
+    errorlevel = 0  # 0, no error
+    #stderr: str = ''
+    stderr = ''
+'''

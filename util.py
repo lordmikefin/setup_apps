@@ -271,7 +271,7 @@ def parse_version(git_ver: str) -> str:
         ret = mat[0]
     return ret
 
-def parse_version_alt1(git_ver: str) -> re.Match:
+def parse_version_alt1(git_ver: str):# -> re.Match:  # TODO: unknown for py3.5
     # https://docs.python.org/3/library/re.html
     res = re.search(r'[0-9]+\.[0-9]+\.[0-9]+', git_ver) #: :type res: re.Match
     return res
