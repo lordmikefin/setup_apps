@@ -40,10 +40,13 @@ import os
 from LMToyBoxPython import LMetree, LMhashlib
 from setup_apps.git import Git
 from setup_apps.winmerge import Winmerge
+import sys
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
 
+OS_WINDOWS = 'win32'
+OS_LINUX = 'linux'
 
 CONFIG_PATH = util.fix_path(util.home_path() + '/LM_ToyBox/setup_apps')
 CONFIG_FILE = 'setup_apps_config.xml'
@@ -68,41 +71,49 @@ def create_sample():
     LMetree.create_subelem(root, Tag.version, __version__)
 
     apps = ET.SubElement(root, Tag.apps)
-    plugins = [
-        {
-            'name': 'pydev',
-            'version': 'latest',
-        }
-    ]
-    append_eclipse(apps, ver='latest', plugins=plugins)
-    #append_eclipse(apps, '2019-09')
 
-    plugins = [
-        {
-            'name': 'pydev',
-            'version': '7.4.0',
-        }
-    ]
+    # OS_WINDOWS = 'win32'
+    # OS_LINUX = 'linux'
+    if sys.platform == OS_LINUX:
+        plugins = []
+        append_eclipse(apps, ver='2019-12', plugins=plugins)
 
-    append_eclipse(apps, ver='2019-09', plugins=plugins)
-
-    #append_java(apps, ver='8u242b08')
-    append_java(apps, ver='jdk-8.0.242.08-hotspot')
-
-    # Notepad ++
-    append_npp(apps, ver='7.7.1')
-
-    # Putty
-    append_putty(apps, ver='0.73')
-
-    # Python
-    append_python(apps, ver='3.8.1')
-
-    # Git
-    append_git(apps, ver='2.24.1')
-
-    # WinMerge
-    append_winmerge(apps, ver='2.16.6')
+    elif sys.platform == OS_WINDOWS:
+        plugins = [
+            {
+                'name': 'pydev',
+                'version': 'latest',
+            }
+        ]
+        append_eclipse(apps, ver='latest', plugins=plugins)
+        #append_eclipse(apps, '2019-09')
+    
+        plugins = [
+            {
+                'name': 'pydev',
+                'version': '7.4.0',
+            }
+        ]
+    
+        append_eclipse(apps, ver='2019-09', plugins=plugins)
+    
+        #append_java(apps, ver='8u242b08')
+        append_java(apps, ver='jdk-8.0.242.08-hotspot')
+    
+        # Notepad ++
+        append_npp(apps, ver='7.7.1')
+    
+        # Putty
+        append_putty(apps, ver='0.73')
+    
+        # Python
+        append_python(apps, ver='3.8.1')
+    
+        # Git
+        append_git(apps, ver='2.24.1')
+    
+        # WinMerge
+        append_winmerge(apps, ver='2.16.6')
 
     LMetree.indent(root)
     util.mkdir(CONFIG_PATH)
@@ -203,20 +214,24 @@ def append_eclipse(apps: Element, ver: str, plugins: list):
     installer_url = ET.SubElement(ecli_elem, Tag.installer_url)
     installer_url.text = 'https://ftp.acc.umu.se/mirror/eclipse.org/technology/epp/downloads/release/2019-09/R/{installer_file}'
     '''
-    # TODO: is there better solution? extract to temp?
-    # NOTE: while extracting I got path too long error -> changed install path
-    ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    #install_path = ET.SubElement(ecli_elem, Tag.install_path)
-    #install_path.text = 'C:\\Program Files\\eclipse-{version}'
-    #install_path.text = 'C:\\Program Files\\e-{version}'
-    set_install_path(ecli_elem, 'C:\\Program Files\\eclipse-{version}')
-    append_configure(ecli_elem)
-    for plugin in plugins:
-        # TODO: get name and version
-        name = plugin.get('name')
-        version = plugin.get('version')
-        #append_plugins(ecli_elem, name='pydev', ver='latest')
-        append_plugins(ecli_elem, name, version)
+    # OS_WINDOWS = 'win32'
+    # OS_LINUX = 'linux'
+    if sys.platform == OS_WINDOWS:
+
+        # TODO: is there better solution? extract to temp?
+        # NOTE: while extracting I got path too long error -> changed install path
+        ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+        #install_path = ET.SubElement(ecli_elem, Tag.install_path)
+        #install_path.text = 'C:\\Program Files\\eclipse-{version}'
+        #install_path.text = 'C:\\Program Files\\e-{version}'
+        set_install_path(ecli_elem, 'C:\\Program Files\\eclipse-{version}')
+        append_configure(ecli_elem)
+        for plugin in plugins:
+            # TODO: get name and version
+            name = plugin.get('name')
+            version = plugin.get('version')
+            #append_plugins(ecli_elem, name='pydev', ver='latest')
+            append_plugins(ecli_elem, name, version)
 
 
 def append_configure(ecli_elem: Element):
