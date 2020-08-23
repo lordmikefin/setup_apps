@@ -26,7 +26,8 @@ __revision__ = "setup_apps (module)  v" + __version__ + " (2020-08-09)"
 import sys
 
 # NOTE: This code is tested only with Python version 3.7
-assert sys.version_info >= (3, 7)
+# NOTE: ubuntu 16 has only python 3.5
+assert sys.version_info >= (3, 5)
 
 '''
 These lines are copied from init.bat (2019-09-30)
