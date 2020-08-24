@@ -63,6 +63,9 @@ CONFIG_FILE = 'setup_apps_config.xml'
 
 def create_sample():
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
+    if util.is_file(file):
+        logger.info('config XML file exists: ' + str(file))
+        return
     logger.info('create the sample config XML file: ' + str(file))
     root = ET.Element(Tag.setup)
     tree = ET.ElementTree(root)
