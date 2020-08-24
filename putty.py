@@ -19,12 +19,12 @@
     :license: MIT License
 """
 
-from . import PATH_INSTALLERS
 from . import util
 
 from setup_apps.base import Base
 from setup_apps.util import logger
 from setup_apps.tag import Tag
+from setup_apps import SETUP
 
 class Putty(Base):
 
@@ -45,7 +45,7 @@ class Putty(Base):
         #self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file #: :type self.checksum: Checksum
         #self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file #: :type checksum: Checksum
         sum_obj = self.checksum #: :type sum_obj: Checksum
-        self.installer_path_md5 = PATH_INSTALLERS + sum_obj.file
+        self.installer_path_md5 = SETUP.path_installers + sum_obj.file
         logger.info('installer_path_md5        : ' + str(self.installer_path_md5))
 
     def generate_install_path(self):

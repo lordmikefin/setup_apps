@@ -19,13 +19,13 @@
     :license: MIT License
 """
 
-from . import PATH_INSTALLERS
 from . import util
 
 import os
 from setup_apps.base import Base
 from setup_apps.tag import Tag
 from setup_apps.util import logger
+from setup_apps import SETUP
 
 
 class Java(Base):
@@ -53,7 +53,7 @@ class Java(Base):
         #self.installer_path = PATH_INSTALLERS + self.installer_file
         #self.installer_path_md5 = self.installer_path + '.md5'  # NOTE: this is set in Base class!
         #self.installer_path_md5 = PATH_INSTALLERS + 'OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi.sha256.txt'
-        self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file
+        self.installer_path_md5 = SETUP.path_installers + self.checksum.file
         #self.installer_full_url_md5 = None  # NOTE: this is set in Base class!
         #self.installer_full_url_md5 = self.sha256url
 

@@ -18,11 +18,11 @@
     :copyright: (c) 2020, Mikko Niemelä a.k.a. Lord Mike (lordmike@iki.fi)
     :license: MIT License
 """
-from . import PATH_INSTALLERS  # TODO: improve how installer path is defined
+#from . import PATH_INSTALLERS  # TODO: improve how installer path is defined
 from setup_apps.tag import Tag
 import app_source_handler
 from setup_apps.util import logger
-from setup_apps import util
+from setup_apps import util, SETUP
 from LMToyBoxPython import LMhashlib
 
 
@@ -71,7 +71,7 @@ class Checksum:
     def is_hash_correct(self, hashsum: str, installer_path: str) -> bool:
         # TODO: refactor
         if self.file:
-            hash_file = PATH_INSTALLERS + self.file
+            hash_file = SETUP.path_installers + self.file
             logger.debug('hash_file : ' + str(hash_file))
         if self.sum:
             logger.debug('hash sum : ' + str(self.sum))
@@ -143,7 +143,7 @@ class Base:
             return
 
         # file = str(self.installer_file).format(version=self.version)
-        self.installer_path = PATH_INSTALLERS + self.installer_file
+        self.installer_path = SETUP.path_installers + self.installer_file
 
         # TODO: get md5/sha256 file from the sourse
         self.installer_path_md5 = self.installer_path + '.md5'

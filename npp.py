@@ -19,12 +19,12 @@
     :license: MIT License
 """
 
-from . import PATH_INSTALLERS
 from . import util
 
 from setup_apps.base import Base
 from setup_apps.util import logger
 from setup_apps.tag import Tag
+from setup_apps import SETUP
 
 class Npp(Base):
 
@@ -43,7 +43,7 @@ class Npp(Base):
         logger.info('install_path_full        : ' + str(self.install_path_full))
 
         # TODO: this should be done in Base
-        self.installer_path_md5 = PATH_INSTALLERS + self.checksum.file
+        self.installer_path_md5 = SETUP.path_installers + self.checksum.file
         logger.info('installer_path_md5        : ' + str(self.installer_path_md5))
 
     def generate_install_path(self):

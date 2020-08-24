@@ -32,8 +32,7 @@ from setup_apps.tag import Tag
 # WinMerge-2.16.6-Setup.exe
 #    b55de4fc99487e99ecb271a62e13ed6808b9ba3a96bf7d6b65cbee707b16fff1
 
-from . import PATH_INSTALLERS
-from setup_apps import util
+from setup_apps import util, SETUP
 
 
 class Winmerge(Base):
@@ -55,7 +54,7 @@ class Winmerge(Base):
 
         # TODO: this should be done in Base
         sum_obj = self.checksum #: :type sum_obj: Checksum
-        self.installer_path_md5 = PATH_INSTALLERS + sum_obj.file
+        self.installer_path_md5 = SETUP.path_installers + sum_obj.file
         logger.info('installer_path_md5        : ' + str(self.installer_path_md5))
 
     def generate_install_path(self):

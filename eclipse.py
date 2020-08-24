@@ -22,7 +22,7 @@
 import os
 import sys
 
-from . import PATH_APP_ECLIPSE, PATH_INSTALLERS, PATH_APP_PYDEV
+from . import PATH_APP_ECLIPSE, PATH_APP_PYDEV
 from . import util
 from setup_apps.base import Base
 from setup_apps.tag import Tag
@@ -30,6 +30,7 @@ import app_source_handler
 from setup_apps.plugin import Plugin
 from setup_apps.util import logger
 import LMToyBoxPython
+from setup_apps import SETUP
 
 
 class Eclipse(Base):
@@ -493,7 +494,7 @@ def define_file():
     installer_file = "eclipse-javascript-2019-09-R-win32-x86_64.zip"
     _file_name = installer_file
 
-    installer_path = PATH_INSTALLERS
+    installer_path = SETUP.path_installers
     _installer_file_fullname = str(installer_path) + str(installer_file)
 
     _exe_file = str(PATH_APP_PYDEV) + '\\eclipse\\eclipse.exe'
@@ -561,7 +562,7 @@ def run():
     logger.info('Test comment from "eclipse.py"')
 
     logger.info('Value of variable "PATH_APP_ECLIPSE": ' + str(PATH_APP_ECLIPSE))
-    logger.info('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
+    logger.info('Value of variable "PATH_INSTALLERS": ' + str(SETUP.path_installers))
 
     define_file()
     if not is_download():

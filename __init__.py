@@ -78,7 +78,37 @@ PATH_TOY_BOX = PATH_ROOT + 'LM_ToyBox\\'
 # TODO: set PATH_INSTALLERS from config xml
 #DRIVE_INSTALLER = 'W:'
 #PATH_INSTALLERS = DRIVE_INSTALLER + '\\'
-PATH_INSTALLERS = util.fix_path(util.home_path() + '/LM_ToyBox/download/') + os.sep
+#PATH_INSTALLERS = util.fix_path(util.home_path() + '/LM_ToyBox/download/') + os.sep
+#PATH_INSTALLERS = None
+
+class Setup():
+    def __init__(self):
+        self.path_installers = None
+        self.source_file = None
+        self.source_file_sha = None
+        self.source_file_ok = False
+
+        self.set_path_installers(util.home_path() + '/LM_ToyBox/download/')
+
+    def set_path_installers(self, path: str):
+        path_inst = util.fix_path(path) + os.sep
+        self.path_installers = path_inst
+        logger.info('PATH_INSTALLERS: ' + str(path_inst))
+        self.set_source_file()
+        self.set_source_file_sha()
+        self.source_file_ok = False
+
+    def set_source_file(self):
+        path_source = util.fix_path(self.path_installers + 'app_source.xml')
+        self.source_file = path_source
+        logger.info('SOURCE_FILE: ' + str(path_source))
+
+    def set_source_file_sha(self):
+        path_source = util.fix_path(self.path_installers + 'app_source.xml.sha256')
+        self.source_file_sha = path_source
+        logger.info('SOURCE_FILE_sha: ' + str(path_source))
+
+SETUP = Setup()
 
 
 # TODO: parameterize the destination installation path

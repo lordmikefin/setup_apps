@@ -19,11 +19,12 @@
     :license: MIT License
 """
 
-from . import PATH_APP_PYDEV, PATH_INSTALLERS
+from . import PATH_APP_PYDEV
 from . import util
 
 import os
 import sys
+from setup_apps import SETUP
 
 
 _installer_file_fullname = ''
@@ -111,7 +112,7 @@ def define_file():
     installer_file = "PyDev 7.4.0.zip"
     _file_name = installer_file
 
-    installer_path = PATH_INSTALLERS
+    installer_path = SETUP.path_installers
     _installer_file_fullname = str(installer_path) + str(installer_file)
 
     #_exe_file = str(PATH_APP_PYDEV) + '\\eclipse\\eclipse.exe'
@@ -127,7 +128,7 @@ def run():
     print('Test comment from "pydev.py"')
 
     print('Value of variable "PATH_APP_PYDEV": ' + str(PATH_APP_PYDEV))
-    print('Value of variable "PATH_INSTALLERS": ' + str(PATH_INSTALLERS))
+    print('Value of variable "PATH_INSTALLERS": ' + str(SETUP.path_installers))
 
     define_file()
     if not is_download():
