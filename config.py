@@ -378,8 +378,8 @@ def append_plugins(ecli_elem: Element, name: str, ver: str):
 
 
 def parse(source_file: str=''):
-    download_source_xml()
-    parse_source_xml(source_file)
+    #download_source_xml()
+    #parse_source_xml(source_file)
     logger.info('parse the config XML file')
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
     tree = ET.parse(file)
@@ -388,6 +388,9 @@ def parse(source_file: str=''):
         # TODO: check version
         if elem.tag == Tag.apps:
             parse_apps(elem)
+
+    download_source_xml()
+    parse_source_xml(source_file)
 
 
 SOURCE_FILE = util.fix_path(PATH_INSTALLERS + '/' + 'app_source.xml')
