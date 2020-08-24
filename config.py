@@ -85,7 +85,7 @@ def create_sample(overwrite: bool=False):
 
     elif sys.platform == OS_WINDOWS:
         # Define 'setup_apps' variables
-        setup_apps_elem.append(ET.Comment('By default "path_installers" points to <user home>/LM_ToyBox/download/'))
+        setup_apps_elem.append(ET.Comment(' By default "path_installers" points to <user home>/LM_ToyBox/download/ '))
         LMetree.create_subelem(setup_apps_elem, Tag.path_installers, 'W:\\')
 
         plugins = [
