@@ -75,7 +75,6 @@ def create_sample(overwrite: bool=False):
 
     apps = ET.SubElement(root, Tag.apps)
 
-    setup_apps_elem = ET.SubElement(root, Tag.setup_apps)
 
     # OS_WINDOWS = 'win32'
     # OS_LINUX = 'linux'
@@ -85,8 +84,13 @@ def create_sample(overwrite: bool=False):
 
     elif sys.platform == OS_WINDOWS:
         # Define 'setup_apps' variables
+        setup_apps_elem = ET.SubElement(root, Tag.setup_apps)
         setup_apps_elem.append(ET.Comment(' By default "path_installers" points to <user home>/LM_ToyBox/download/ '))
-        LMetree.create_subelem(setup_apps_elem, Tag.path_installers, 'W:\\')
+        LMetree.create_subelem(setup_apps_elem, Tag.path_installers, 'W:')
+
+        samba_elem = ET.SubElement(setup_apps_elem, Tag.samba)
+        LMetree.create_subelem(samba_elem, Tag.samba_srv, '\\\\192.168.122.1\\sambashare\\windows')
+        LMetree.create_subelem(samba_elem, Tag.samba_dst, 'W:')
 
         plugins = [
             {
@@ -440,6 +444,18 @@ def parse_setup_apps(elem: Element):
         if setup.tag == Tag.path_installers:
             path_installers = setup.text
             SETUP.set_path_installers(path_installers)
+        elif setup.tag == Tag.samba:
+            samba_srv = None
+            samba_dst = None
+            for samba_elem in setup: #: :type samba_elem: Element
+                if samba_elem.tag == Tag.samba_srv:
+                    samba_srv = samba_elem.text
+                if samba_elem.tag == Tag.samba_dst:
+                    samba_dst = samba_elem.text
+
+            return util.connect_samba_share(
+                src_samba=samba_srv,
+                dst_drive=samba_dst)
 
 
 def parse_apps(elem_apps: Element):

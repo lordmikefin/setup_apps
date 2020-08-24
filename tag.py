@@ -26,6 +26,10 @@ class Tag():
     setup_apps = 'setup_apps'
     path_installers = 'path_installers'
 
+    samba = 'samba'
+    samba_srv = 'samba_srv'
+    samba_dst = 'samba_dst'
+
     apps = 'apps'
     eclipse = 'eclipse'
     java = 'java'
