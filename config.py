@@ -75,6 +75,8 @@ def create_sample(overwrite: bool=False):
 
     apps = ET.SubElement(root, Tag.apps)
 
+    setup_apps_elem = ET.SubElement(apps, Tag.setup_apps)
+
     # OS_WINDOWS = 'win32'
     # OS_LINUX = 'linux'
     if sys.platform == OS_LINUX:
@@ -82,6 +84,10 @@ def create_sample(overwrite: bool=False):
         append_eclipse(apps, ver='2019-12', plugins=plugins)
 
     elif sys.platform == OS_WINDOWS:
+        # Define 'setup_apps' variables
+        setup_apps_elem.append(ET.Comment('By default "path_installers" points to <user home>/LM_ToyBox/download/'))
+        LMetree.create_subelem(setup_apps_elem, Tag.path_installers, 'W:\\')
+
         plugins = [
             {
                 'name': 'pydev',

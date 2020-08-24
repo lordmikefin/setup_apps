@@ -23,6 +23,9 @@ class Tag():
     setup = 'setup'
     version = 'version'
 
+    setup_apps = 'setup_apps'
+    path_installers = 'path_installers'
+
     apps = 'apps'
     eclipse = 'eclipse'
     java = 'java'
