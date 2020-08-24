@@ -61,9 +61,9 @@ CONFIG_FILE = 'setup_apps_config.xml'
 # https://pypi.org/project/lxml/
 
 
-def create_sample():
+def create_sample(overwrite: bool=False):
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
-    if util.is_file(file):
+    if util.is_file(file) and not overwrite:
         logger.info('config XML file exists: ' + str(file))
         return
     logger.info('create the sample config XML file: ' + str(file))
