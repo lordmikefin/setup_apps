@@ -601,6 +601,8 @@ def msiexec(name: str, installer: str, properties: dict=None, log_file: str=None
 def connect_samba_share(src_samba: str, dst_drive: str) -> bool:
     """ Connect samba share. """
     windows_only()
+    if not dst_drive:
+        logger.error('Drive not defined')
     logger.debug('TODO: Test if drive exists')
     logger.debug('TODO: Get samba share address from config')
     #command = 'net use W: \\192.168.122.1\sambashare\windows'

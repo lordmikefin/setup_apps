@@ -399,6 +399,7 @@ def download_source_xml():
     global SOURCE_FILE_OK
     logger.info('download the source XML file')
     file = SOURCE_FILE
+    util.mkdir(PATH_INSTALLERS)
     url = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml'
     util.download(url, file, show_progress=True)
     # TODO: download app_source.xml.sha256 file

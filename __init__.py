@@ -76,8 +76,10 @@ PATH_TOY_BOX = PATH_ROOT + 'LM_ToyBox\\'
 #PATH_INSTALLERS = PATH_TOY_BOX + 'download'
 
 # TODO: set PATH_INSTALLERS from config xml
-DRIVE_INSTALLER = 'W:'
-PATH_INSTALLERS = DRIVE_INSTALLER + '\\'
+#DRIVE_INSTALLER = 'W:'
+#PATH_INSTALLERS = DRIVE_INSTALLER + '\\'
+PATH_INSTALLERS = util.fix_path(util.home_path() + '/LM_ToyBox/download/') + os.sep
+
 
 # TODO: parameterize the destination installation path
 #PATH_APPS = PATH_TOY_BOX + 'apps'
@@ -95,7 +97,7 @@ PATH_APP_PUTTY = PATH_APPS + '\\putty'
 
 
 def connect_samba_share(src_samba: str='\\\\192.168.122.1\\sambashare\\windows',
-                        dst_drive=DRIVE_INSTALLER) -> bool:
+                        dst_drive='') -> bool:
     """ Connect samba share. """
     # TODO: remove this function
     # TODO: Test if destination drive exists.
