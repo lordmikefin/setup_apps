@@ -132,9 +132,12 @@ def connect_samba_share(src_samba: str='\\\\192.168.122.1\\sambashare\\windows',
     # TODO: remove this function
     # TODO: Test if destination drive exists.
     # TODO: Get samba share address from config.
+    logger.error('remove this function')
+    '''
     return util.connect_samba_share(
         src_samba=src_samba,
         dst_drive=dst_drive)
+    '''
     '''
     #command = 'net use W: \\192.168.122.1\sambashare\windows'
     command = 'net use ' + DRIVE_INSTALLER + ' \\192.168.122.1\sambashare\windows'
