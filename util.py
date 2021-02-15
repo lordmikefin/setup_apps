@@ -168,7 +168,24 @@ def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progre
     # print('headers   : ' + str(headers))
 
 
+def not_implemented():
+    """ Raise error 'not implemented' """
+    # TODO: create custom exception
+    meg = 'util.' + print_caller_func_name() + '() Is not implemented for ' + str(sys.platform)
+    logger.critical(meg)
+    raise OSError(meg)
+
+
 def pause():
+    '''
+    Pause the console app.
+    '''
+    if is_os_windows():
+        pause_win()
+    else:
+        not_implemented()
+
+def pause_win():
     '''
     Pause the console app. Windows only!
 
