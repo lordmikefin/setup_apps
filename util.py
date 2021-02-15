@@ -44,6 +44,7 @@ import re
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
 
 OS_WINDOWS = 'win32'
+OS_LINUX = 'linux'
 
 
 def create_logger():
@@ -92,6 +93,9 @@ def hint_test_complex(test: Union[str, int]) -> bool:
 
 def is_os_windows() -> bool:
     return sys.platform == OS_WINDOWS
+
+def is_os_linux() -> bool:
+    return sys.platform == OS_LINUX
 
 def windows_only():
     """ Raise error if OS is not Windows """
