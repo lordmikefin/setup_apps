@@ -97,6 +97,14 @@ def is_os_windows() -> bool:
 def is_os_linux() -> bool:
     return sys.platform == OS_LINUX
 
+def linux_only():
+    """ Raise error if OS is not Linux """
+    if not is_os_linux():
+        # TODO: create custom exception
+        meg = 'util.' + print_caller_func_name() + '() Works only with Linux'
+        logger.critical(meg)
+        raise OSError(meg)
+
 def windows_only():
     """ Raise error if OS is not Windows """
     if not is_os_windows():
@@ -182,8 +190,32 @@ def pause():
     '''
     if is_os_windows():
         pause_win()
+    if is_os_linux():
+        pause_linux()
     else:
         not_implemented()
+
+
+def pause_linux():
+    '''
+    Pause the console app. Linux only!
+
+    https://www.cyberciti.biz/tips/linux-unix-pause-command.html
+    '''
+    # TODO: Does this work for macOS and/or bsd?
+    linux_only()
+    # NOTE: sh: 1: read: Illegal option -s  -- Errorlevel: 512  <- sunnign 'sh' not 'bash'
+    #run_os_command('read -s -n 1 -p "Press any key to continue . . ."')
+    #run_command('read -p "Press any key to continue . . ."', shell=True)
+    #run_command('read', shell=True)
+    #command = ["read", "-p", "Press any key to continue . . ."]
+    command = ["read", "-s", "-n", " 1", "-p", "Press any key to continue . . ."]
+    #command = ["read"]
+    #command = ['/bin/bash', '-c', command]
+    #command = ['/bin/bash', '-c', "read", "-p", "Press any key to continue . . ."]
+    print("Press any key to continue . . .")
+    run_command(command, shell=True)
+
 
 def pause_win():
     '''
@@ -354,15 +386,30 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
         # https://docs.python.org/3/library/subprocess.html#security-considerations
         logger.debug('TODO: avoid shell injection vulnerabilities')
 
+    kwargs = {}
+    if is_os_linux():
+        # NOTE: It seems that subprocess in using '/bin/sh' not '/bin/bash' as default shell.
+        # https://www.saltycrane.com/blog/2011/04/how-use-bash-shell-python-subprocess-instead-binsh/
+        #command = ['/bin/bash', '-c', command]
+        # Read more:
+        # https://stackabuse.com/executing-shell-commands-with-python/
+        # https://stackoverflow.com/questions/17435056/read-bash-variables-into-a-python-script
+        kwargs['executable'] = '/bin/bash'
+        pass
+
     logger.info('Run command: ' + str(command))
     process = None
     try:
+        #process = subprocess.Popen(
         process = subprocess.run(
             command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             shell=shell,
-            universal_newlines=True)
+            #executable='/bin/bash',
+            universal_newlines=True,
+            **kwargs)
+        #return_code = process.wait() # wait for process to finish so we can get the return code ".Popen()"
     except FileNotFoundError as err:
         logger.error('Command failed')
         logger.error("{0}".format(err))
