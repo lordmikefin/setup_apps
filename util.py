@@ -213,7 +213,8 @@ def pause_linux():
     #command = ["read"]
     #command = ['/bin/bash', '-c', command]
     #command = ['/bin/bash', '-c', "read", "-p", "Press any key to continue . . ."]
-    print("Press any key to continue . . .")
+    # TODO: how to print this from 'read' command
+    print("Press any key to continue . . .") # 'read' command will not print into console???
     run_command(command, shell=True)
 
 
