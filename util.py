@@ -190,7 +190,7 @@ def pause():
     '''
     if is_os_windows():
         pause_win()
-    if is_os_linux():
+    elif is_os_linux():
         pause_linux()
     else:
         not_implemented()
