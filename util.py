@@ -753,3 +753,8 @@ def set_env_var(var_name: str, var_val: str, system_wide: bool=True):
     com = 'SETX ' + params + var_name + ' "' + var_val + '"'
     logger.debug('com: ' + str(com))
     run_command(com)
+
+
+def convert_multiline_to_singleline(string: str):
+    return string.replace('\n', '\t')
+
