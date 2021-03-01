@@ -20,8 +20,8 @@
 """
 
 __license__ = "MIT License"
-__version__ = "0.1.29"
-__revision__ = "setup_apps (module)  v" + __version__ + " (2020-08-24)"
+__version__ = "0.1.30"
+__revision__ = "setup_apps (module)  v" + __version__ + " (2021-03-01)"
 
 import sys
 
