@@ -229,6 +229,10 @@ def append_eclipse(apps: Element, ver: str, plugins: list):
     '''
     # OS_WINDOWS = 'win32'
     # OS_LINUX = 'linux'
+    if sys.platform == OS_LINUX:
+        ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+        set_install_path(ecli_elem, '/opt/eclipse-{version}')
+
     if sys.platform == OS_WINDOWS:
 
         # TODO: is there better solution? extract to temp?
