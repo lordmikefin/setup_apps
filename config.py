@@ -854,8 +854,9 @@ def install():
 
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list: #: :type ecli: Eclipse
-        ecli.install()
-        ecli.install_plugins()
+        install_ok = ecli.install()
+        if install_ok:
+            ecli.install_plugins()
 
     java_list = list(APPS.get('java', []))
     for java_obj in java_list: #: :type java_obj: Java
@@ -883,7 +884,10 @@ def install():
 
     # TODO: Is 'PATH' changed. Is there need to modify it manually?
     logger.debug("os.environ.get('PATH'): " + str(os.environ.get('PATH')))
-    util.log_env_var('PATH')
+    if util.is_os_windows():
+        util.log_env_var('PATH')
+    else:
+        logger.info('TODO: how to print "path" in other os than windows?')
 
 
 def configure():

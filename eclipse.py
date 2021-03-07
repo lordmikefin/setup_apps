@@ -98,11 +98,16 @@ class Eclipse(Base):
         # TODO: is there better solution? extract to temp?
         # NOTE: while extracting I got path too long error -> changed install path
         #self.unzipped = self.install_path_full + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
-        self.temp_path = 'C:\\temp'
-        self.unzipped = self.temp_path + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
-        self.exe_file = self.install_path_full + '\\eclipse.exe'
-        self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
-        self.install_path_ok = True
+        if util.is_os_windows():
+            self.temp_path = 'C:\\temp'
+            self.unzipped = self.temp_path + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
+            self.exe_file = self.install_path_full + '\\eclipse.exe'
+            self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
+            self.install_path_ok = True
+        elif util.is_os_linux():
+            logger.error('Set path for eclipse')
+        else:
+            logger.error('Set path for eclipse')
 
     def generate_all(self, source_eclipse: dict):
         super().generate_all(source_eclipse)
@@ -191,16 +196,18 @@ class Eclipse(Base):
         return util.is_file(self.exe_file)
 
     def install(self):
+        install_ok = False
         if not self.is_downloaded:
             logger.error('Eclipse installer not downloaded.')
 
         if not self.install_path_ok:
             logger.error('Installation path not defined.')
+            return install_ok
 
         if self.is_installed():
             logger.info('Eclipse is already installed')
             self.create_link()
-            return
+            return install_ok
 
         logger.info('Start Eclipse installer.')
         logger.info(' Installing ... wait ... wait ... ')
@@ -221,10 +228,11 @@ class Eclipse(Base):
 
         if not self.is_installed():
             logger.error('Eclipse is NOT installed!')
-            return
+            return install_ok
 
         logger.info('Eclipse is installed')
         logger.info('Eclipse exe: ' + str(self.exe_file))
+        install_ok = True
 
         # TODO: Change the default workspace folder (eclipse.ini)
         # -Dosgi.instance.area.default=@user.home/eclipse-workspace
@@ -233,6 +241,7 @@ class Eclipse(Base):
         # TODO: Create shortcut for eclipse into Start Menu
         self.create_link()
         # TODO: create link in configure - define link name there
+        return install_ok
 
     def create_link(self):
         util.windows_only()
