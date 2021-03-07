@@ -173,6 +173,11 @@ class Plugin(Base):
         logger.info('Start pydev installer.')
         logger.info('Start ' + str(self.__name__) + ' ' + str(self.name) + ' installer.')
         logger.info(' Installing ... wait ... wait ... ')
+        
+        # TODO: how to test is plugin already installed?
+        #if self.is_installed():
+        #    pass
+
         # NOTE: This is "offline installer" ;)
         #print(str(_installer_file_fullname) + ' :: ' + str(_eclipse_path))
         #util.unzip(str(self.installer_path), str(self.install_path))

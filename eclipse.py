@@ -420,6 +420,10 @@ class Eclipse(Base):
             logger.info('No plugins')
             return
 
+        # TODO: how to test is plugin already installed?
+        #if self.is_installed():
+        #    pass
+
         if False:  # Definition only for Eclipse auto complete
             plug = Plugin()
 
