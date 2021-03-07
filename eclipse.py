@@ -207,6 +207,7 @@ class Eclipse(Base):
         if self.is_installed():
             logger.info('Eclipse is already installed')
             self.create_link()
+            install_ok = True
             return install_ok
 
         logger.info('Start Eclipse installer.')
