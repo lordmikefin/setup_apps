@@ -847,7 +847,10 @@ def install():
     """ install all app """
     # TODO: Is 'PATH' changed. Is there need to modify it manually?
     logger.debug("os.environ.get('PATH'): " + str(os.environ.get('PATH')))
-    util.log_env_var('PATH')
+    if util.is_os_windows():
+        util.log_env_var('PATH')
+    else:
+        logger.info('TODO: how to print "path" in other os than windows?')
 
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list: #: :type ecli: Eclipse
