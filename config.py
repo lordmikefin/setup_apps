@@ -41,6 +41,7 @@ from LMToyBoxPython import LMetree, LMhashlib
 from setup_apps.git import Git
 from setup_apps.winmerge import Winmerge
 import sys
+from setup_apps.exception import NotSudo
 #from lxml import etree as ET
 #import lxml.etree as ET
 # TODO: remove 'lxml' from requirements
@@ -851,6 +852,15 @@ def install():
         util.log_env_var('PATH')
     else:
         logger.info('TODO: how to print "path" in other os than windows?')
+
+    if util.is_os_windows():
+        logger.debug('TODO: why does not Windows need admin permissions to install apps?')
+    elif util.is_os_linux():
+        if os.getuid() != 0:
+            # https://stackoverflow.com/questions/5191878/change-to-sudo-user-within-a-python-script
+            raise NotSudo("This program is not run as sudo or elevated this it will not work")
+    else:
+        logger.debug('TODO: Does other OS need root permissions for installing apps?')
 
     eclipse_list = list(APPS.get('eclipse', []))
     for ecli in eclipse_list: #: :type ecli: Eclipse
