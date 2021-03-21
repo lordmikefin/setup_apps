@@ -106,6 +106,9 @@ class Eclipse(Base):
             self.install_path_ok = True
         elif util.is_os_linux():
             logger.error('Set path for eclipse')
+            self.exe_file = self.install_path_full + '/eclipse/eclipse'
+            self.config_eclipse_ini = self.install_path_full + '/eclipse/eclipse.ini'
+            self.install_path_ok = True
         else:
             logger.error('Set path for eclipse')
 
@@ -213,19 +216,37 @@ class Eclipse(Base):
         logger.info('Start Eclipse installer.')
         logger.info(' Installing ... wait ... wait ... ')
 
-        # NOTE: while extracting I got path too long error -> changed install path
-        # NOTE: This is "offline installer" ;)
-        #util.unzip(str(self.installer_path), str(self.install_path_full))
-        #util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
-        #self.temp_path
-        util.unzip_py(str(self.installer_path), str(self.temp_path), show_progress=True)
-
-        # NOTE: Eclipse is unzipped into subfolder /eclipse/ because zip file contains subfolder /eclipse/
-        # TODO: Why python shutil.move() is throwing an error? How it should be used to mimic Win copy?
-        #util.move(str(self.unzipped), str(self.install_path_full))  # shutil.Error: Destination path 'C:\Program Files\eclipse-2019-09\eclipse' already exists
-        #util.move(str(self.unzipped) + '\\', str(self.install_path_full) + '\\') 
-        #util.move_win(str(self.unzipped) + '\\*', str(self.install_path_full) + '\\')
-        util.move_win(str(self.unzipped) + '', str(self.install_path_full) + '')
+        if util.is_os_windows():
+            # NOTE: while extracting I got path too long error -> changed install path
+            # NOTE: This is "offline installer" ;)
+            #util.unzip(str(self.installer_path), str(self.install_path_full))
+            #util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
+            #self.temp_path
+            util.unzip_py(str(self.installer_path), str(self.temp_path), show_progress=True)
+    
+            # NOTE: Eclipse is unzipped into subfolder /eclipse/ because zip file contains subfolder /eclipse/
+            # TODO: Why python shutil.move() is throwing an error? How it should be used to mimic Win copy?
+            #util.move(str(self.unzipped), str(self.install_path_full))  # shutil.Error: Destination path 'C:\Program Files\eclipse-2019-09\eclipse' already exists
+            #util.move(str(self.unzipped) + '\\', str(self.install_path_full) + '\\') 
+            #util.move_win(str(self.unzipped) + '\\*', str(self.install_path_full) + '\\')
+            util.move_win(str(self.unzipped) + '', str(self.install_path_full) + '')
+        elif util.is_os_linux():
+            logger.error('No install method implemented')
+            success = False
+            # TODO: create the destination directory
+            # $ sudo mkdir /opt/eclipse-2019-12
+            #util.mkdir(str(self.install_path_full))
+            # $ sudo chown lordmike:lordmike /opt/eclipse-2019-12
+            
+            # unzip .tar.gz
+            #success = util.unzip(str(self.installer_path), str(self.install_path_full))
+            # TODO: is there pythonic way to unzip .tar.gz ?
+            #util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
+            if not success:
+                return install_ok
+        else:
+            logger.error('No install method implemented')
+            return install_ok
 
         if not self.is_installed():
             logger.error('Eclipse is NOT installed!')
