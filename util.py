@@ -254,7 +254,48 @@ def power_shell(command: str) -> int:
     logger.debug('success: ' + str(ret))
     return ret
 
+
 def unzip(zip_file: str, dst: str):
+    if is_os_windows():
+        unzip_win(zip_file, dst)
+    elif is_os_linux():
+        success = unzip_linux(zip_file, dst)
+        return success
+
+
+def unzip_linux(zip_file: str, dst: str):
+    # https://linuxize.com/post/how-to-extract-unzip-tar-gz-file/
+    linux_only()
+    logger.error('No unzip method implemented')
+    #tar -xf archive.tar.gz
+    #--extract (-x)
+    #--directory (-C)
+    '''
+    command = [
+        'tar',
+        #'--extract',
+        '-x',
+        #'--file="'+ zip_file +'"',
+        '-f', zip_file,
+        #'--directory="'+ dst +'"',
+        '-C', dst,
+        ]
+    '''
+    command = 'tar ' + ' -x ' + ' -f ' + zip_file +' -C ' + dst
+    '''
+    command = [
+        'sudo',
+        command
+        ]
+    '''
+    #command = 'sudo ' + command
+    test = run_command(command, shell=True)
+    logger.info('Command result: ' + str(test))
+    logger.info('Command succeeded: ' + str(test.errorlevel == 0))
+    return test.errorlevel == 0
+
+
+def unzip_win(zip_file: str, dst: str):
     windows_only()
     logger.info('Unzip the file')
     logger.info('Unzip to  ' + str(dst))
