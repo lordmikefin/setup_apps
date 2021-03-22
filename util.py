@@ -799,3 +799,6 @@ def set_env_var(var_name: str, var_val: str, system_wide: bool=True):
 def convert_multiline_to_singleline(string: str):
     return string.replace('\n', '\t')
 
+
+def is_root():
+    return os.getuid() == 0
