@@ -39,6 +39,7 @@ import logging
 import inspect
 import LMToyBoxPython
 import re
+import getpass
 
 # import urllib.request
 PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile'
@@ -418,7 +419,7 @@ def run_os_command(command: str) -> bool:
 
     return True
 
-def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.CompletedProcess:
+def run_command_alt_1(command: Union[str, list], shell=False, root_password='') -> subprocess.CompletedProcess:
     # https://docs.python.org/3/library/subprocess.html#subprocess.run
     # https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess
     if isinstance(command, str):
@@ -437,9 +438,13 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
         # https://stackabuse.com/executing-shell-commands-with-python/
         # https://stackoverflow.com/questions/17435056/read-bash-variables-into-a-python-script
         kwargs['executable'] = '/bin/bash'
-        pass
 
     logger.info('Run command: ' + str(command))
+    if is_os_linux():
+        # NOTE: Run command as root
+        if root_password:
+            command = 'echo ' + root_password + ' | sudo -S ' + command
+
     process = None
     try:
         #process = subprocess.Popen(
@@ -480,6 +485,30 @@ def run_command_alt_1(command: Union[str, list], shell=False) -> subprocess.Comp
     elif process.returncode == 0 and process.stderr:
         logger.info(process.stderr)
     return process
+
+
+def run_command_sudo(command: Union[str, list]) -> CommandRet:
+    ''' Run given command as root '''
+    logger.info('Run command: ' + str(command))
+    stderr = ''
+    stdout = ''
+    errorlevel = 0
+
+    # NOTE: Windows should already be in elevated mode.
+    if is_os_linux():
+        root_password = getpass.getpass()
+
+    c_proc = run_command_alt_1(command=command, shell=True, root_password=root_password)
+    if c_proc.stdout:
+        stdout = c_proc.stdout
+    if c_proc.returncode:
+        errorlevel = c_proc.returncode
+    if c_proc.stderr:
+        stderr = c_proc.stderr
+
+    ret = CommandRet(errorlevel=errorlevel, stdout=str(stdout), stderr=str(stderr))
+    logger.debug(str(ret))
+    return ret
 
 
 def run_command(command: Union[str, list], shell=False) -> CommandRet:
