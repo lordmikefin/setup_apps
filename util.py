@@ -479,7 +479,10 @@ def run_command_alt_1(command: Union[str, list], shell=False, root_password='') 
         #logger.error(process)
         raise err
 
-    logger.debug(str(process))
+    if root_password:
+        pass # NOTE: Do not print 'process' it contains the password!
+    else:
+        logger.debug(str(process))
     if process.returncode > 0 and process.stderr:
         logger.error(process.stderr)
     elif process.returncode == 0 and process.stderr:
@@ -496,6 +499,7 @@ def run_command_sudo(command: Union[str, list]) -> CommandRet:
 
     # NOTE: Windows should already be in elevated mode.
     if is_os_linux():
+        # NOTE: Eclipse console will echo the password, but bash console does not.
         root_password = getpass.getpass()
 
     c_proc = run_command_alt_1(command=command, shell=True, root_password=root_password)
