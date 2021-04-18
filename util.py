@@ -490,6 +490,36 @@ def run_command_alt_1(command: Union[str, list], shell=False, root_password='') 
     return process
 
 
+ROOT_PASSWORD = ''
+
+def ask_root_pass():
+    '''
+    Ask password form the user.
+    Test the password.
+    Store it in global varitable.
+    '''
+    global ROOT_PASSWORD
+    if ROOT_PASSWORD:
+        return ROOT_PASSWORD
+
+    # NOTE: Eclipse console will echo the password, but bash console does not.
+    root_password = getpass.getpass()
+    # test the password
+    c_proc = run_command_alt_1(command='id', shell=True, root_password=root_password)
+    stdout = ''
+    if c_proc.stdout:
+        stdout = c_proc.stdout
+    is_root = False
+    if stdout:
+        is_root = stdout.find('uid=0') > -1
+    if is_root:
+        ROOT_PASSWORD = root_password
+        return ROOT_PASSWORD
+    else:
+        logger.info('Not valid password. Retry.')
+        return ask_root_pass()
+
+
 def run_command_sudo(command: Union[str, list]) -> CommandRet:
     ''' Run given command as root '''
     logger.info('Run command: ' + str(command))
@@ -500,8 +530,7 @@ def run_command_sudo(command: Union[str, list]) -> CommandRet:
     # NOTE: Windows should already be in elevated mode.
     root_password = ''
     if is_os_linux():
-        # NOTE: Eclipse console will echo the password, but bash console does not.
-        root_password = getpass.getpass()
+        root_password = ask_root_pass()
 
     c_proc = run_command_alt_1(command=command, shell=True, root_password=root_password)
     if c_proc.stdout:
