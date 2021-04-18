@@ -498,6 +498,7 @@ def run_command_sudo(command: Union[str, list]) -> CommandRet:
     errorlevel = 0
 
     # NOTE: Windows should already be in elevated mode.
+    root_password = ''
     if is_os_linux():
         # NOTE: Eclipse console will echo the password, but bash console does not.
         root_password = getpass.getpass()
