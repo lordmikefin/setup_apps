@@ -856,14 +856,14 @@ def install():
     if util.is_os_windows():
         logger.debug('TODO: why does not Windows need admin permissions to install apps?')
     elif util.is_os_linux():
-        logger.info('TODO: For installing any apps I need sudo password.')
-        '''
-        ret = util.run_command_sudo('id') #: :type ret: CommandRet
-        logger.info('stdout: ' + ret.stdout)
         '''
         if not util.is_root_not_sudo():
             # https://stackoverflow.com/questions/5191878/change-to-sudo-user-within-a-python-script
             raise NotSudo("This program is not run as sudo or elevated this it will not work")
+        '''
+        if not util.is_sudo_pass():
+            logger.info('For installing any apps I need sudo password.')
+            util.ask_root_pass()
     else:
         logger.debug('TODO: Does other OS need root permissions for installing apps?')
 

@@ -233,15 +233,23 @@ class Eclipse(Base):
         elif util.is_os_linux():
             logger.error('No install method implemented')
             success = False
-            # TODO: create the destination directory
+
+            # create the destination directory
             # $ sudo mkdir /opt/eclipse-2019-12
             #util.mkdir(str(self.install_path_full))
             # $ sudo chown lordmike:lordmike /opt/eclipse-2019-12
+            ret = util.run_command_sudo('mkdir "' + str(self.install_path_full) + '"') #: :type ret: CommandRet
+            logger.info('stdout: ' + ret.stdout)
+            logger.info('stderr: ' + ret.stderr)
+            # TODO: handle errors
+            # stderr='[sudo] password for lordmike: mkdir: cannot create directory ‘/opt/eclipse-2019-12’: File exists\n'
             
             # unzip .tar.gz
             #success = util.unzip(str(self.installer_path), str(self.install_path_full))
             # TODO: is there pythonic way to unzip .tar.gz ?
             #util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
+            success = util.unzip_linux(str(self.installer_path), str(self.install_path_full), sudo=True)
+
             if not success:
                 return install_ok
         else:
