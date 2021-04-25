@@ -102,9 +102,9 @@ def linux_only():
     """ Raise error if OS is not Linux """
     if not is_os_linux():
         # TODO: create custom exception
-        meg = 'util.' + print_caller_func_name() + '() Works only with Linux'
-        logger.critical(meg)
-        raise OSError(meg)
+        msg = 'util.' + print_caller_func_name() + '() Works only with Linux'
+        logger.critical(msg)
+        raise OSError(msg)
 
 def windows_only():
     """ Raise error if OS is not Windows """
@@ -262,6 +262,9 @@ def unzip(zip_file: str, dst: str):
     elif is_os_linux():
         success = unzip_linux(zip_file, dst)
         return success
+    else:
+        msg = 'util.' + print_caller_func_name()
+        raise NotImplementedError(msg + ' is not implemented for OS ' + str(sys.platform))
 
 
 def unzip_linux(zip_file: str, dst: str, sudo: bool=False):
@@ -339,7 +342,47 @@ def unzip_py(zip_file: str, dst: str, show_progress: bool=False):
                 zip_obj.extract(member, dst)
 
 
-def shortcut(exe_file: str, dst_link_file: str, ico: str=''):
+def shortcut(exe_file: str, dst_link_file: str, ico: str='', version: str='', name: str=''):
+    if is_os_windows():
+        shortcut_win(exe_file, dst_link_file, ico)
+    elif is_os_linux():
+        shortcut_linux(exe_file, dst_link_file, ico, version, name)
+    else:
+        msg = 'util.' + print_caller_func_name()
+        raise NotImplementedError(msg + ' is not implemented for OS ' + str(sys.platform))
+
+
+def shortcut_linux(exe_file: str, dst_link_file: str, ico: str='', version: str='', name: str=''):
+    '''
+    Create shortcut file
+
+    https://askubuntu.com/questions/396273/how-to-create-a-desktop-shortcut-for-a-command
+    '''
+    linux_only()
+    lines = [
+        '[Desktop Entry]',
+        'Version=' + version,
+        'Name=' + name,
+        #'Comment=This is my comment',
+        'Exec=' + exe_file,
+        'Icon=' + ico,
+        'Terminal=false',
+        'Type=Application',
+        'Categories=Utility;Application;',    
+    ]
+    # TODO: check does file already exists
+    write_file(dst_link_file, lines)
+    # TODO: make file executable
+
+
+def write_file(file_path: str, lines: list):
+    with open(file_path, 'w') as file:
+        for line in lines:
+            file.write(line + '\n')
+    pass
+
+
+def shortcut_win(exe_file: str, dst_link_file: str, ico: str=''):
     '''
     Create shortcut file
     

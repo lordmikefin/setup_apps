@@ -274,10 +274,14 @@ class Eclipse(Base):
         return install_ok
 
     def create_link(self):
-        util.windows_only()
+        #util.windows_only()
         # Create link into Desktop.
-        dst_link_file = os.environ.get('USERPROFILE') + '\\Desktop\\Eclipse - ' + self.version + '.lnk'
-        util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='')
+        dst_link_file = ''
+        if util.is_os_windows():
+            dst_link_file = os.environ.get('USERPROFILE') + '\\Desktop\\Eclipse - ' + self.version + '.lnk'
+        elif util.is_os_linux():
+            dst_link_file = util.home_path() + '/Desktop/eclipse-' + self.version + '.desktop'
+        util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='', version=self.version, name='Eclipse - ' + self.version)
 
     def configure(self):
         logger.info('Configure Eclipse')
