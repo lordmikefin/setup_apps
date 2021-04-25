@@ -492,7 +492,7 @@ def run_command_alt_1(command: Union[str, list], shell=False, root_password='') 
 
 ROOT_PASSWORD = ''
 
-def ask_root_pass():
+def ask_root_pass() -> str:
     '''
     Ask password form the user.
     Test the password.
@@ -505,6 +505,8 @@ def ask_root_pass():
     # NOTE: Eclipse console will echo the password, but bash console does not.
     root_password = getpass.getpass()
     # test the password
+    is_root = is_sudo_pass(root_password)
+    '''
     c_proc = run_command_alt_1(command='id', shell=True, root_password=root_password)
     stdout = ''
     if c_proc.stdout:
@@ -512,12 +514,37 @@ def ask_root_pass():
     is_root = False
     if stdout:
         is_root = stdout.find('uid=0') > -1
+    '''
     if is_root:
         ROOT_PASSWORD = root_password
         return ROOT_PASSWORD
     else:
         logger.info('Not valid password. Retry.')
         return ask_root_pass()
+
+
+def is_sudo_pass(root_password: str='') -> bool:
+    is_root = False
+
+    if not root_password:
+        root_password = ROOT_PASSWORD
+
+    if not root_password:
+        return is_root
+
+    c_proc = run_command_alt_1(command='id', shell=True, root_password=root_password)
+    stdout = ''
+    if c_proc.stdout:
+        stdout = c_proc.stdout
+
+    if stdout:
+        is_root = stdout.find('uid=0') > -1
+
+    return is_root
+
+
+def is_root_not_sudo():
+    return os.getuid() == 0
 
 
 def run_command_sudo(command: Union[str, list]) -> CommandRet:
@@ -861,7 +888,3 @@ def set_env_var(var_name: str, var_val: str, system_wide: bool=True):
 
 def convert_multiline_to_singleline(string: str):
     return string.replace('\n', '\t')
-
-
-def is_root():
-    return os.getuid() == 0
