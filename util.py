@@ -264,7 +264,7 @@ def unzip(zip_file: str, dst: str):
         return success
 
 
-def unzip_linux(zip_file: str, dst: str):
+def unzip_linux(zip_file: str, dst: str, sudo: bool=False):
     # https://linuxize.com/post/how-to-extract-unzip-tar-gz-file/
     linux_only()
     logger.error('No unzip method implemented')
@@ -290,7 +290,11 @@ def unzip_linux(zip_file: str, dst: str):
         ]
     '''
     #command = 'sudo ' + command
-    test = run_command(command, shell=True)
+    if sudo:
+        test = run_command_sudo(command) #: :type test: CommandRet
+    else:
+        test = run_command(command, shell=True)
+
     logger.info('Command result: ' + str(test))
     logger.info('Command succeeded: ' + str(test.errorlevel == 0))
     return test.errorlevel == 0
