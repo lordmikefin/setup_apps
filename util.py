@@ -185,6 +185,10 @@ def not_implemented():
     raise OSError(meg)
 
 
+def not_implemented_msg():
+    return 'util.' + print_caller_func_name() + '() Is not implemented for ' + str(sys.platform)
+
+
 def pause():
     '''
     Pause the console app.
@@ -348,8 +352,7 @@ def shortcut(exe_file: str, dst_link_file: str, ico: str='', version: str='', na
     elif is_os_linux():
         shortcut_linux(exe_file, dst_link_file, ico, version, name)
     else:
-        msg = 'util.' + print_caller_func_name()
-        raise NotImplementedError(msg + ' is not implemented for OS ' + str(sys.platform))
+        raise NotImplementedError(not_implemented_msg())
 
 
 def shortcut_linux(exe_file: str, dst_link_file: str, ico: str='', version: str='', name: str=''):
@@ -376,6 +379,7 @@ def shortcut_linux(exe_file: str, dst_link_file: str, ico: str='', version: str=
 
 
 def make_executable(file_path: str):
+    linux_only()
     # TODO: verify file is executable
     ret = run_command('chmod +x "' + file_path + '"', shell=True) #: :type ret: CommandRet
     #logger.info('stdout: ' + ret.stdout)
