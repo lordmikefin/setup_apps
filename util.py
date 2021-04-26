@@ -372,7 +372,14 @@ def shortcut_linux(exe_file: str, dst_link_file: str, ico: str='', version: str=
     ]
     # TODO: check does file already exists
     write_file(dst_link_file, lines)
-    # TODO: make file executable
+    make_executable(dst_link_file)
+
+
+def make_executable(file_path: str):
+    # TODO: verify file is executable
+    ret = run_command('chmod +x "' + file_path + '"', shell=True) #: :type ret: CommandRet
+    #logger.info('stdout: ' + ret.stdout)
+    #logger.info('stderr: ' + ret.stderr)
 
 
 def write_file(file_path: str, lines: list):
