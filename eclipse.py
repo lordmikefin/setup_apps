@@ -98,6 +98,7 @@ class Eclipse(Base):
         # TODO: is there better solution? extract to temp?
         # NOTE: while extracting I got path too long error -> changed install path
         #self.unzipped = self.install_path_full + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
+        logger.debug('Set path for eclipse')
         if util.is_os_windows():
             self.temp_path = 'C:\\temp'
             self.unzipped = self.temp_path + '\\eclipse'  # NOTE: zip file contains subfolder /eclipse/
@@ -105,12 +106,12 @@ class Eclipse(Base):
             self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
             self.install_path_ok = True
         elif util.is_os_linux():
-            logger.error('Set path for eclipse')
             self.exe_file = self.install_path_full + '/eclipse/eclipse'
             self.config_eclipse_ini = self.install_path_full + '/eclipse/eclipse.ini'
             self.install_path_ok = True
         else:
-            logger.error('Set path for eclipse')
+            #logger.error('Set path for eclipse')
+            raise NotImplementedError('No path set for Eclipse. ' + util.not_implemented_for_os_msg())
 
     def generate_all(self, source_eclipse: dict):
         super().generate_all(source_eclipse)
@@ -253,8 +254,9 @@ class Eclipse(Base):
             if not success:
                 return install_ok
         else:
-            logger.error('No install method implemented')
-            return install_ok
+            #logger.error('No install method implemented')
+            #return install_ok
+            raise NotImplementedError(util.not_implemented_msg())
 
         if not self.is_installed():
             logger.error('Eclipse is NOT installed!')
@@ -281,6 +283,9 @@ class Eclipse(Base):
             dst_link_file = os.environ.get('USERPROFILE') + '\\Desktop\\Eclipse - ' + self.version + '.lnk'
         elif util.is_os_linux():
             dst_link_file = util.home_path() + '/Desktop/eclipse-' + self.version + '.desktop'
+        else:
+            raise NotImplementedError('No link file name. ' + util.not_implemented_for_os_msg())
+
         util.shortcut(exe_file=self.exe_file, dst_link_file=dst_link_file, ico='', version=self.version, name='Eclipse - ' + self.version)
 
     def configure(self):
