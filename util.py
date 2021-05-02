@@ -193,7 +193,11 @@ def not_implemented_msg():
     Usage:
       raise NotImplementedError(not_implemented_msg())
     """
-    return 'util.' + print_caller_func_name() + '() Is not implemented for ' + str(sys.platform)
+    return 'util.' + print_caller_func_name() + '() ' + not_implemented_for_os_msg()
+
+
+def not_implemented_for_os_msg():
+    return 'Is not implemented for ' + str(sys.platform)
 
 
 def pause():
