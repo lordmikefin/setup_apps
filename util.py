@@ -615,7 +615,8 @@ def is_sudo_pass(root_password: str='') -> bool:
 
 
 def is_root_not_sudo():
-    return os.getuid() == 0
+    linux_only()
+    return os.getuid() == 0  # @UndefinedVariable
 
 
 def run_command_sudo(command: Union[str, list]) -> CommandRet:
