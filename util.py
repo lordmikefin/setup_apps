@@ -178,7 +178,10 @@ def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progre
 
 
 def not_implemented():
-    """ Raise error 'not implemented' """
+    """ Raise error 'not implemented'
+    NOTE: Do not use this function.
+          Use NotImplementedError exception instead.
+    """
     # TODO: create custom exception
     meg = 'util.' + print_caller_func_name() + '() Is not implemented for ' + str(sys.platform)
     logger.critical(meg)
@@ -186,6 +189,10 @@ def not_implemented():
 
 
 def not_implemented_msg():
+    """ Message for NotImplementedError exception.
+    Usage:
+      raise NotImplementedError(not_implemented_msg())
+    """
     return 'util.' + print_caller_func_name() + '() Is not implemented for ' + str(sys.platform)
 
 
@@ -198,7 +205,8 @@ def pause():
     elif is_os_linux():
         pause_linux()
     else:
-        not_implemented()
+        #not_implemented()
+        raise NotImplementedError(not_implemented_msg())
 
 
 def pause_linux():
@@ -267,8 +275,9 @@ def unzip(zip_file: str, dst: str):
         success = unzip_linux(zip_file, dst)
         return success
     else:
-        msg = 'util.' + print_caller_func_name()
-        raise NotImplementedError(msg + ' is not implemented for OS ' + str(sys.platform))
+        #msg = 'util.' + print_caller_func_name()
+        #raise NotImplementedError(msg + ' is not implemented for OS ' + str(sys.platform))
+        raise NotImplementedError(not_implemented_msg())
 
 
 def unzip_linux(zip_file: str, dst: str, sudo: bool=False):
