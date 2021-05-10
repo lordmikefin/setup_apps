@@ -83,6 +83,15 @@ def create_sample(overwrite: bool=False):
         plugins = []
         append_eclipse(apps, ver='2019-12', plugins=plugins)
 
+        plugins = [
+            {
+                'name': 'pydev',
+                'version': '7.4.0',
+            }
+        ]
+    
+        append_eclipse(apps, ver='2019-09', plugins=plugins)
+
     elif sys.platform == OS_WINDOWS:
         # Define 'setup_apps' variables
         setup_apps_elem = ET.SubElement(root, Tag.setup_apps)
