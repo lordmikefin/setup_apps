@@ -242,6 +242,12 @@ def append_eclipse(apps: Element, ver: str, plugins: list):
     if sys.platform == OS_LINUX:
         ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
         set_install_path(ecli_elem, '/opt/eclipse-{version}')
+        # TODO: Append configure file changes. Linux flavor :)
+        for plugin in plugins:
+            name = plugin.get('name')
+            version = plugin.get('version')
+            append_plugins(ecli_elem, name, version)
+        
 
     if sys.platform == OS_WINDOWS:
 
