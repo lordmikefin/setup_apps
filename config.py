@@ -243,6 +243,8 @@ def append_eclipse(apps: Element, ver: str, plugins: list):
         ecli_elem.append(ET.Comment(' {version} is replaced with value from tag "version" '))
         set_install_path(ecli_elem, '/opt/eclipse-{version}')
         # TODO: Append configure file changes. Linux flavor :)
+        #append_configure(ecli_elem)
+        append_configure_linux(ecli_elem)
         for plugin in plugins:
             name = plugin.get('name')
             version = plugin.get('version')
@@ -267,7 +269,17 @@ def append_eclipse(apps: Element, ver: str, plugins: list):
             append_plugins(ecli_elem, name, version)
 
 
+def append_configure_linux(ecli_elem: Element):
+    # TODO: merge functions 'append_configure_linux' and 'append_configure'
+    configure = ET.SubElement(ecli_elem, Tag.configure)
+    configure.append(ET.Comment(' "file" is realative path of "install_path" '))
+    configure_file = ET.SubElement(configure, Tag.file)
+    LMetree.create_subelem(configure_file, Tag.name, '/eclipse.ini')
+    file_type = ET.SubElement(configure_file, Tag.type)
+    file_type.text = 'ini'
+
 def append_configure(ecli_elem: Element):
+    # TODO: merge functions 'append_configure_linux' and 'append_configure'
     configure = ET.SubElement(ecli_elem, Tag.configure)
     configure.append(ET.Comment(' "file" is realative path of "install_path" '))
     configure_file = ET.SubElement(configure, Tag.file)
