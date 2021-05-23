@@ -412,13 +412,21 @@ def make_executable(file_path: str):
     #logger.info('stdout: ' + ret.stdout)
     #logger.info('stderr: ' + ret.stderr)
 
-def make_writable(file_path: str):
+def make_writable(file_path: str, sudo: bool=False):
     linux_only()
-    ret = run_command('chmod o+w "' + file_path + '"', shell=True) #: :type ret: CommandRet
+    command = 'chmod o+w "' + file_path + '"'
+    if sudo:
+        ret = run_command_sudo(command) #: :type ret: CommandRet
+    else:
+        ret = run_command(command, shell=True) #: :type ret: CommandRet
 
-def make_non_writable(file_path: str):
+def make_non_writable(file_path: str, sudo: bool=False):
     linux_only()
-    ret = run_command('chmod o-w "' + file_path + '"', shell=True) #: :type ret: CommandRet
+    command = 'chmod o-w "' + file_path + '"'
+    if sudo:
+        ret = run_command_sudo(command) #: :type ret: CommandRet
+    else:
+        ret = run_command(command, shell=True) #: :type ret: CommandRet
 
 
 def write_file(file_path: str, lines: list):
