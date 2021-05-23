@@ -277,6 +277,13 @@ def append_configure_linux(ecli_elem: Element):
     LMetree.create_subelem(configure_file, Tag.name, '/eclipse.ini')
     file_type = ET.SubElement(configure_file, Tag.type)
     file_type.text = 'ini'
+    key_values = ET.SubElement(configure_file, Tag.key_values)
+    key_value = ET.SubElement(key_values, Tag.key_value)
+    key = ET.SubElement(key_value, Tag.key)
+    key.text = '-Dosgi.instance.area.default'
+    key_value.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    value = ET.SubElement(key_value, Tag.value)
+    value.text = '@user.home/eclipse-workspace-{version}'
 
 def append_configure(ecli_elem: Element):
     # TODO: merge functions 'append_configure_linux' and 'append_configure'
