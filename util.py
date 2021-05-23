@@ -302,7 +302,7 @@ def unzip_linux(zip_file: str, dst: str, sudo: bool=False):
         '-C', dst,
         ]
     '''
-    command = 'tar ' + ' -x ' + ' -f ' + zip_file +' -C ' + dst
+    command = 'tar ' + ' -x ' + ' -f ' + '"' + zip_file + '"' + ' -C '+ '"' + dst + '"'
     '''
     command = [
         'sudo',
