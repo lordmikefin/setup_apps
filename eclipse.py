@@ -106,8 +106,10 @@ class Eclipse(Base):
             self.config_eclipse_ini = self.install_path_full + '\\eclipse.ini'
             self.install_path_ok = True
         elif util.is_os_linux():
-            self.exe_file = self.install_path_full + '/eclipse/eclipse'
-            self.config_eclipse_ini = self.install_path_full + '/eclipse/eclipse.ini'
+            self.temp_path = '/tmp'
+            self.unzipped = self.temp_path + '/eclipse'  # NOTE: zip file contains subfolder /eclipse/
+            self.exe_file = self.install_path_full + '/eclipse'
+            self.config_eclipse_ini = self.install_path_full + '/eclipse.ini'
             self.install_path_ok = True
         else:
             #logger.error('Set path for eclipse')
@@ -239,9 +241,11 @@ class Eclipse(Base):
             # $ sudo mkdir /opt/eclipse-2019-12
             #util.mkdir(str(self.install_path_full))
             # $ sudo chown lordmike:lordmike /opt/eclipse-2019-12
+            '''
             ret = util.run_command_sudo('mkdir "' + str(self.install_path_full) + '"') #: :type ret: CommandRet
             logger.info('stdout: ' + ret.stdout)
             logger.info('stderr: ' + ret.stderr)
+            '''
             # TODO: handle errors
             # stderr='[sudo] password for lordmike: mkdir: cannot create directory ‘/opt/eclipse-2019-12’: File exists\n'
             
@@ -249,7 +253,9 @@ class Eclipse(Base):
             #success = util.unzip(str(self.installer_path), str(self.install_path_full))
             # TODO: is there pythonic way to unzip .tar.gz ?
             #util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
-            success = util.unzip_tar_linux(str(self.installer_path), str(self.install_path_full), sudo=True)
+            #success = util.unzip_tar_linux(str(self.installer_path), str(self.install_path_full), sudo=True)
+            success = util.unzip_tar_linux(str(self.installer_path), str(self.temp_path), sudo=True)
+            util.move_linux(str(self.unzipped), str(self.install_path_full), sudo=True)
 
             if not success:
                 return install_ok
