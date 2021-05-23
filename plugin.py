@@ -181,6 +181,12 @@ class Plugin(Base):
         # NOTE: This is "offline installer" ;)
         #print(str(_installer_file_fullname) + ' :: ' + str(_eclipse_path))
         #util.unzip(str(self.installer_path), str(self.install_path))
-        util.unzip_py(str(self.installer_path), str(self.install_path))
+        if util.is_os_windows():
+            util.unzip_py(str(self.installer_path), str(self.install_path))
+        elif util.is_os_linux():
+            # NOTE: util.unzip_py() does not have permission
+            util.unzip_linux(str(self.installer_path), str(self.install_path), sudo=True)
+        else:
+            raise NotImplementedError(util.not_implemented_msg())
 
         return True # TODO: return error?
