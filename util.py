@@ -276,7 +276,7 @@ def unzip(zip_file: str, dst: str):
     if is_os_windows():
         unzip_win(zip_file, dst)
     elif is_os_linux():
-        success = unzip_linux(zip_file, dst)
+        success = unzip_tar_linux(zip_file, dst)
         return success
     else:
         #msg = 'util.' + print_caller_func_name()
@@ -284,7 +284,7 @@ def unzip(zip_file: str, dst: str):
         raise NotImplementedError(not_implemented_msg())
 
 
-def unzip_linux(zip_file: str, dst: str, sudo: bool=False):
+def unzip_tar_linux(zip_file: str, dst: str, sudo: bool=False):
     # https://linuxize.com/post/how-to-extract-unzip-tar-gz-file/
     linux_only()
     #logger.error('No unzip method implemented')

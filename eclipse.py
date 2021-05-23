@@ -249,7 +249,7 @@ class Eclipse(Base):
             #success = util.unzip(str(self.installer_path), str(self.install_path_full))
             # TODO: is there pythonic way to unzip .tar.gz ?
             #util.unzip_py(str(self.installer_path), str(self.install_path_full), show_progress=True)
-            success = util.unzip_linux(str(self.installer_path), str(self.install_path_full), sudo=True)
+            success = util.unzip_tar_linux(str(self.installer_path), str(self.install_path_full), sudo=True)
 
             if not success:
                 return install_ok
