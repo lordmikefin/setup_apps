@@ -412,6 +412,14 @@ def make_executable(file_path: str):
     #logger.info('stdout: ' + ret.stdout)
     #logger.info('stderr: ' + ret.stderr)
 
+def make_writable(file_path: str):
+    linux_only()
+    ret = run_command('chmod o+w "' + file_path + '"', shell=True) #: :type ret: CommandRet
+
+def make_non_writable(file_path: str):
+    linux_only()
+    ret = run_command('chmod o-w "' + file_path + '"', shell=True) #: :type ret: CommandRet
+
 
 def write_file(file_path: str, lines: list):
     with open(file_path, 'w') as file:

@@ -345,7 +345,16 @@ class Eclipse(Base):
 
                 logger.info('key: ' + str(key) + ' value: ' + str(value))
                 if f_type == 'ini':
-                    self.config_apply(self.install_path_full + name, key, value)
+                    ini_file = self.install_path_full + name
+                    if util.is_os_linux():
+                        # NOTE: In linux only root has permission to write the ini file
+                        util.make_writable(ini_file)
+
+                    #self.config_apply(self.install_path_full + name, key, value)
+                    self.config_apply(ini_file, key, value)
+
+                    if util.is_os_linux():
+                        util.make_non_writable(ini_file)
                 elif f_type == 'prefs':
                     self.config_apply(name, key, value)
 
