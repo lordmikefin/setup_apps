@@ -815,6 +815,13 @@ def move(src: str, dst: str):
     # https://docs.python.org/3.8/library/shutil.html#shutil.move
     shutil.move(src, dst)
 
+def move_linux(src: str, dst: str, sudo: bool=False):
+    linux_only()
+    command = 'mv "' + src + '"' + ' ' + '"' + dst + '"'
+    if sudo:
+        ret = run_command_sudo(command) #: :type ret: CommandRet
+    else:
+        ret = run_command(command, shell=True) #: :type ret: CommandRet
 
 def move_win(src: str, dst: str):
     windows_only()
