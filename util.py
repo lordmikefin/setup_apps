@@ -287,7 +287,7 @@ def unzip(zip_file: str, dst: str):
 def unzip_linux(zip_file: str, dst: str, sudo: bool=False):
     # https://linuxize.com/post/how-to-extract-unzip-tar-gz-file/
     linux_only()
-    logger.error('No unzip method implemented')
+    #logger.error('No unzip method implemented')
     #tar -xf archive.tar.gz
     #--extract (-x)
     #--directory (-C)

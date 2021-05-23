@@ -232,7 +232,7 @@ class Eclipse(Base):
             #util.move_win(str(self.unzipped) + '\\*', str(self.install_path_full) + '\\')
             util.move_win(str(self.unzipped) + '', str(self.install_path_full) + '')
         elif util.is_os_linux():
-            logger.error('No install method implemented')
+            #logger.error('No install method implemented')
             success = False
 
             # create the destination directory
