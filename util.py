@@ -276,12 +276,26 @@ def unzip(zip_file: str, dst: str):
     if is_os_windows():
         unzip_win(zip_file, dst)
     elif is_os_linux():
-        success = unzip_tar_linux(zip_file, dst)
+        success = unzip_linux(zip_file, dst)
         return success
     else:
         #msg = 'util.' + print_caller_func_name()
         #raise NotImplementedError(msg + ' is not implemented for OS ' + str(sys.platform))
         raise NotImplementedError(not_implemented_msg())
+
+
+def unzip_linux(zip_file: str, dst: str, sudo: bool=False):
+    # https://askubuntu.com/questions/86849/how-to-unzip-a-zip-file-from-the-terminal
+    linux_only()
+    command = 'unzip ' + '"' + zip_file + '"' + ' -d '+ '"' + dst + '"'
+    if sudo:
+        test = run_command_sudo(command) #: :type test: CommandRet
+    else:
+        test = run_command(command, shell=True)
+
+    logger.info('Command result: ' + str(test))
+    logger.info('Command succeeded: ' + str(test.errorlevel == 0))
+    return test.errorlevel == 0
 
 
 def unzip_tar_linux(zip_file: str, dst: str, sudo: bool=False):
