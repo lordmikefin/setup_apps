@@ -335,15 +335,16 @@ def append_configure_linux(ecli_elem: Element):
 
     # Define git repo locations in Egit config
     # TODO: append the path to value - do not replace
-    # TODO: why this adds git repo into git perspective in windows but not in linux?
+    # NOTE: Windows has separator marker ';' linux has '\:'   (linsing of git repos)
+    # TODO: why there is different separator!?
     key_value_egit1 = ET.SubElement(key_values_egit, Tag.key_value)
     LMetree.create_subelem(key_value_egit1, Tag.key, 'GitRepositoriesView.GitDirectories')
     key_value_egit1.append(ET.Comment(' {version} is replaced with value from tag "version" '))
-    LMetree.create_subelem(key_value_egit1, Tag.value, '' + home + '/eclipse-workspace-{version}/testground_setup_apps/.git\\;')
+    LMetree.create_subelem(key_value_egit1, Tag.value, '' + home + '/eclipse-workspace-{version}/testground_setup_apps/.git\\:')
 
     key_value_egit2 = ET.SubElement(key_values_egit, Tag.key_value)
     LMetree.create_subelem(key_value_egit2, Tag.key, 'GitRepositoriesView.GitDirectories.relative')
-    LMetree.create_subelem(key_value_egit2, Tag.value, 'testground_setup_apps/.git\\;')
+    LMetree.create_subelem(key_value_egit2, Tag.value, 'testground_setup_apps/.git\\:')
 
     # Define python interpreter
     configure_file_pydev = ET.SubElement(configure, Tag.file)
