@@ -284,6 +284,7 @@ def append_configure_linux(ecli_elem: Element):
     LMetree.create_subelem(configure_file, Tag.name, '/eclipse.ini')
     file_type = ET.SubElement(configure_file, Tag.type)
     file_type.text = 'ini'
+    # Set default workspace direcotry
     key_values = ET.SubElement(configure_file, Tag.key_values)
     key_value = ET.SubElement(key_values, Tag.key_value)
     key = ET.SubElement(key_value, Tag.key)
@@ -291,6 +292,18 @@ def append_configure_linux(ecli_elem: Element):
     key_value.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     value = ET.SubElement(key_value, Tag.value)
     value.text = '@user.home/eclipse-workspace-{version}'
+    # Set default git repository destination direcotry
+    configure_file_egit = ET.SubElement(configure, Tag.file)
+    configure_file_egit.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    configure_file_egit.append(ET.Comment(' {user_home} is replaced with path to current user home '))
+    LMetree.create_subelem(configure_file_egit, Tag.name,
+                           '{user_home}/eclipse-workspace-{version}/.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.egit.core.prefs')
+    LMetree.create_subelem(configure_file_egit, Tag.type, 'prefs')
+    key_values_egit = ET.SubElement(configure_file_egit, Tag.key_values)
+    key_value_egit = ET.SubElement(key_values_egit, Tag.key_value)
+    LMetree.create_subelem(key_value_egit, Tag.key, 'core_defaultRepositoryDir')
+    key_value_egit.append(ET.Comment(' ${workspace_loc} is internal varable of Eclipse'))
+    LMetree.create_subelem(key_value_egit, Tag.value, '${workspace_loc}')
 
 def append_configure(ecli_elem: Element):
     # TODO: merge functions 'append_configure_linux' and 'append_configure'
@@ -300,6 +313,7 @@ def append_configure(ecli_elem: Element):
     LMetree.create_subelem(configure_file, Tag.name, '\\eclipse.ini')
     file_type = ET.SubElement(configure_file, Tag.type)
     file_type.text = 'ini'
+    # Set default workspace direcotry
     key_values = ET.SubElement(configure_file, Tag.key_values)
     key_value = ET.SubElement(key_values, Tag.key_value)
     key = ET.SubElement(key_value, Tag.key)
@@ -319,6 +333,7 @@ def append_configure(ecli_elem: Element):
     #        </key_value>
     #      </key_values>
     #    </file>
+    # Set default git repository destination direcotry
     configure_file_egit = ET.SubElement(configure, Tag.file)
     configure_file_egit.append(ET.Comment(' {version} is replaced with value from tag "version" '))
     configure_file_egit.append(ET.Comment(' {user_home} is replaced with path to current user home '))
