@@ -312,6 +312,27 @@ def append_configure_linux(ecli_elem: Element):
     home = util.home_path()
     append_command_elem(configure_console, '{git_exe} clone https://github.com/lordmikefin/testground_setup_apps.git "' + home + '/eclipse-workspace-{version}/testground_setup_apps"')
 
+    # load submodules of the repo
+    configure_console.append(ET.Comment(' run submodule commands after "clone" command '))
+    configure_console.append(ET.Comment(' {git_exe} is replaced with value "git.exe" '))
+    configure_console.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps" && {git_exe} submodule init')
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps" && {git_exe} submodule update')
+
+    # use ssh
+    configure_console.append(ET.Comment(' use ssh for git repo '))
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps" && {git_exe} remote set-url origin git@github.com:lordmikefin/testground_setup_apps.git')
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps/setup_apps" && {git_exe} remote set-url origin git@github.com:lordmikefin/setup_apps.git')
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps/app_source_handler" && {git_exe} remote set-url origin git@github.com:lordmikefin/app_source_handler.git')
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps/LMToyBoxPython" && {git_exe} remote set-url origin git@github.com:lordmikefin/LMToyBoxPython.git')
+
+    # use 'master' branch
+    configure_console.append(ET.Comment(' use "master" branch '))
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps" && {git_exe} checkout master')
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps/setup_apps" && {git_exe} checkout master')
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps/app_source_handler" && {git_exe} checkout master')
+    append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps/LMToyBoxPython" && {git_exe} checkout master')
+
 def append_configure(ecli_elem: Element):
     # TODO: merge functions 'append_configure_linux' and 'append_configure'
     configure = ET.SubElement(ecli_elem, Tag.configure)
