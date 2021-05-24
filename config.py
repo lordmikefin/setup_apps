@@ -305,6 +305,13 @@ def append_configure_linux(ecli_elem: Element):
     key_value_egit.append(ET.Comment(' ${workspace_loc} is internal varable of Eclipse'))
     LMetree.create_subelem(key_value_egit, Tag.value, '${workspace_loc}')
 
+    # auto load repo
+    configure_console = ET.SubElement(configure, Tag.console)
+    configure_console.append(ET.Comment(' {git_exe} is replaced with value "git" excetable '))
+    configure_console.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    home = util.home_path()
+    append_command_elem(configure_console, '{git_exe} clone https://github.com/lordmikefin/testground_setup_apps.git "' + home + '/eclipse-workspace-{version}/testground_setup_apps"')
+
 def append_configure(ecli_elem: Element):
     # TODO: merge functions 'append_configure_linux' and 'append_configure'
     configure = ET.SubElement(ecli_elem, Tag.configure)

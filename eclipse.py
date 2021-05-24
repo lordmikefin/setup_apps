@@ -311,7 +311,11 @@ class Eclipse(Base):
                     logger.info('command: ' + str(command))
                     format_dict = {}
                     if '{git_exe}' in command:
-                        git_exe = 'git.exe'
+                        if util.is_os_windows():
+                            git_exe = 'git.exe'
+                        #elif util.is_os_linux():
+                        else: # TODO: does this work for all other OS?
+                            git_exe = '/usr/bin/git'
                         #com = str(command).format(git_exe=git_exe)
                         format_dict['git_exe'] = git_exe
                     if '{version}' in command:
