@@ -80,8 +80,15 @@ def create_sample(overwrite: bool=False):
     # OS_WINDOWS = 'win32'
     # OS_LINUX = 'linux'
     if sys.platform == OS_LINUX:
-        plugins = []
-        append_eclipse(apps, ver='2019-12', plugins=plugins)
+        plugins = [
+            {
+                'name': 'pydev',
+                'version': 'latest',
+            }
+        ]
+        append_eclipse(apps, ver='latest', plugins=plugins)
+        #plugins = []
+        #append_eclipse(apps, ver='2019-12', plugins=plugins)
 
         plugins = [
             {
