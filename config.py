@@ -333,6 +333,18 @@ def append_configure_linux(ecli_elem: Element):
     append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps/app_source_handler" && {git_exe} checkout master')
     append_command_elem(configure_console, 'cd "' + home + '/eclipse-workspace-{version}/testground_setup_apps/LMToyBoxPython" && {git_exe} checkout master')
 
+    # Define git repo locations in Egit config
+    # TODO: append the path to value - do not replace
+    # TODO: why this adds git repo into git perspective in windows but not in linux?
+    key_value_egit1 = ET.SubElement(key_values_egit, Tag.key_value)
+    LMetree.create_subelem(key_value_egit1, Tag.key, 'GitRepositoriesView.GitDirectories')
+    key_value_egit1.append(ET.Comment(' {version} is replaced with value from tag "version" '))
+    LMetree.create_subelem(key_value_egit1, Tag.value, '' + home + '/eclipse-workspace-{version}/testground_setup_apps/.git\\;')
+
+    key_value_egit2 = ET.SubElement(key_values_egit, Tag.key_value)
+    LMetree.create_subelem(key_value_egit2, Tag.key, 'GitRepositoriesView.GitDirectories.relative')
+    LMetree.create_subelem(key_value_egit2, Tag.value, 'testground_setup_apps/.git\\;')
+
 def append_configure(ecli_elem: Element):
     # TODO: merge functions 'append_configure_linux' and 'append_configure'
     configure = ET.SubElement(ecli_elem, Tag.configure)
@@ -406,7 +418,7 @@ def append_configure(ecli_elem: Element):
     append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps\\app_source_handler" && {git_exe} checkout master')
     append_command_elem(configure_console, 'cd "' + home + '\\eclipse-workspace-{version}\\testground_setup_apps\\LMToyBoxPython" && {git_exe} checkout master')
 
-    # Define git repo locations
+    # Define git repo locations in Egit config
     # TODO: append the path to value - do not replace
     key_value_egit1 = ET.SubElement(key_values_egit, Tag.key_value)
     LMetree.create_subelem(key_value_egit1, Tag.key, 'GitRepositoriesView.GitDirectories')
