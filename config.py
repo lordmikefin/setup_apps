@@ -359,7 +359,7 @@ def append_configure_linux(ecli_elem: Element):
     # TODO: 'python37_venv_setup_apps' venv is using 3.8. Is there way to force 3.7?
     LMetree.create_subelem(key_value_pydev, Tag.value,
          '<xml>\\n<name>python37_venv_setup_apps</name>\\n<version>3.8</version>\\n' +\
-         '<executable>' + home + '/Venv/venv-LMAutoSetBotUbM/bin/python</executable>\\n' +\
+         '<executable>' + home + '/Envs/venv-LMAutoSetBotUbM/bin/python</executable>\\n' +\
          '<lib>/usr/lib/python3.8</lib>\\n' +\
          '<lib>/usr/lib/python3.8/lib-dynload</lib>\\n' +\
          '<lib>' + home + '/Venv/venv-LMAutoSetBotUbM/lib/python3.8/site-packages</lib>\\n' +\
