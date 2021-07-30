@@ -46,6 +46,7 @@ PWS = 'powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile
 
 OS_WINDOWS = 'win32'
 OS_LINUX = 'linux'
+OS_FREEBSD12 = 'freebsd12'
 
 
 def create_logger():
@@ -97,6 +98,25 @@ def is_os_windows() -> bool:
 
 def is_os_linux() -> bool:
     return sys.platform == OS_LINUX
+
+def is_os_freebsd12() -> bool:
+    return sys.platform == OS_FREEBSD12
+
+def nix_only():
+    """ Raise error if OS is not *nix """
+    if not (is_os_linux() or is_os_freebsd12()):
+        # TODO: create custom exception
+        msg = 'util.' + print_caller_func_name() + '() Works only with *nix'
+        logger.critical(msg)
+        raise OSError(msg)
+
+def freebsd12_only():
+    """ Raise error if OS is not FreeBSD12 """
+    if not is_os_freebsd12():
+        # TODO: create custom exception
+        msg = 'util.' + print_caller_func_name() + '() Works only with FreeBSD12'
+        logger.critical(msg)
+        raise OSError(msg)
 
 def linux_only():
     """ Raise error if OS is not Linux """
@@ -208,9 +228,21 @@ def pause():
         pause_win()
     elif is_os_linux():
         pause_linux()
+    elif is_os_freebsd12():
+        pause_nix()
     else:
         #not_implemented()
         raise NotImplementedError(not_implemented_msg())
+
+
+def pause_nix():
+    '''
+    Pause the console app. *nix only!
+    '''
+    nix_only()
+    command = ["read", "-s", "-n", " 1", "-p", "Press any key to continue . . ."]
+    print("Press any key to continue . . .") # 'read' command will not print into console???
+    run_command(command, shell=True)
 
 
 def pause_linux():
@@ -539,6 +571,9 @@ def run_command_alt_1(command: Union[str, list], shell=False, root_password='') 
         # https://stackabuse.com/executing-shell-commands-with-python/
         # https://stackoverflow.com/questions/17435056/read-bash-variables-into-a-python-script
         kwargs['executable'] = '/bin/bash'
+    if is_os_freebsd12():
+        # NOTE: It seems that subprocess in using 'sh' not 'bash' as default shell.
+        kwargs['executable'] = '/usr/local/bin/bash'
 
     logger.info('Run command: ' + str(command))
     if is_os_linux():
