@@ -576,10 +576,12 @@ def run_command_alt_1(command: Union[str, list], shell=False, root_password='') 
         kwargs['executable'] = '/usr/local/bin/bash'
 
     logger.info('Run command: ' + str(command))
-    if is_os_linux():
+    if root_password:
         # NOTE: Run command as root
-        if root_password:
+        if is_os_linux() or is_os_freebsd12():
             command = 'echo ' + root_password + ' | sudo -S ' + command
+        else:
+            logger.warning("No implementation for using root pass")
 
     process = None
     try:
@@ -693,8 +695,10 @@ def run_command_sudo(command: Union[str, list]) -> CommandRet:
 
     # NOTE: Windows should already be in elevated mode.
     root_password = ''
-    if is_os_linux():
+    if is_os_linux() or is_os_freebsd12():
         root_password = ask_root_pass()
+    else:
+        logger.warning("No implementation for asking root pass")
 
     c_proc = run_command_alt_1(command=command, shell=True, root_password=root_password)
     if c_proc.stdout:
