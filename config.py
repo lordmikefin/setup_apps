@@ -514,6 +514,7 @@ def parse(source_file: str=''):
     #parse_source_xml(source_file)
     logger.info('parse the config XML file')
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
+    # TODO: What we should do when config xml file does not exist?
     tree = ET.parse(file)
     root = tree.getroot()
     for elem in root: #: :type elem: Element
@@ -1043,6 +1044,8 @@ def configure():
 
 def print_sample():
     file = util.fix_path(CONFIG_PATH + '/' + CONFIG_FILE)
+    # TODO: Print file only if it exists. Notify user if file does not exist.
+    # TODO: What we should do when config xml file does not exist?
     logger.info('print the sample config XML file: ' + str(file))
     tree = ET.parse(file)
     logger.debug(CONFIG_FILE + ' content:\n' + str(ET.tostring(tree.getroot()), 'utf-8'))
