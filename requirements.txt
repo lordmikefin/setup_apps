@@ -5,7 +5,7 @@
 #   https://github.com/lordmikefin/LMToyBoxPython
 
 
-requests==2.22.0
+requests==2.31.0
 tqdm==4.42.0
 elevate==0.1.3
 configparser==5.0.1
