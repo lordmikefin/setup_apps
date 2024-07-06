@@ -100,7 +100,11 @@ class Plugin(Base):
             return True
 
         logger.info('Download Eclipse plugin installer.')
-        util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        down_ok = util.download(self.installer_full_url, self.installer_path, show_progress=True)
+        if not down_ok:
+            logger.error('Download of Eclipse plugin installer failed.')
+            return False
+
         logger.info('Download complete.')
 
         if self.is_installer_downloaded(self.checksum):
