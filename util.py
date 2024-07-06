@@ -157,7 +157,7 @@ def print_this_func_name(caller_in_stack=1):
     return caller.function
 
 
-def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progress: bool=False):
+def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progress: bool=False) -> bool:
     '''
     Download the file from `url` and save it locally under `file_name`
 
@@ -173,10 +173,22 @@ def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progre
     # data = requests.get(url)
     # open(dst, 'wb').write(data.content)
 
+    # NOTE: 1st write into .TEMP file then move into dst
+    temp_file = str(dst) + '.TEMP'
+
     logger.info('Downloading from "' + str(url) + '"')
-    logger.info('Downloading into "' + str(dst) + '"')
-    with open(dst, "wb") as f:
+    #logger.info('Downloading into "' + str(dst) + '"')
+    #with open(dst, "wb") as f:
+    logger.info('Downloading into "' + str(temp_file) + '"')
+    response = requests.get(url, stream=True)
+    if response.status_code != 200:
+        logger.error('Response not OK (200)')
+        return False
+
+    with open(temp_file, "wb") as f:
+        '''
         response = requests.get(url, stream=True)
+        '''
         total_length = response.headers.get('content-length')
 
         if total_length is None:
@@ -192,9 +204,13 @@ def download(url: str, dst: str, length: int=io.DEFAULT_BUFFER_SIZE, show_progre
                 if pbar:
                     pbar.update(len(data))
 
+    logger.info('Move from "' + str(temp_file) + '" into "' + str(dst) + '"')
+    move(temp_file, dst)
+
     # file_name, headers = urllib.request.urlretrieve(url, filename=dst)
     # print('file_name : ' + str(file_name))
     # print('headers   : ' + str(headers))
+    return True
 
 
 def not_implemented():
