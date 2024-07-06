@@ -838,19 +838,20 @@ def create_missing_file(file: str):
         pass
 
 
-def is_md5_in_file(file: str, md5: str, file_installer: str) -> bool:
-    '''
-    Match file md5 sum to the md5sum file.
-    '''
-    file_src = Path(file)
+def read_hash_line_from_file(file_hash: str, file_installer: str) -> str:
     file_inst = Path(file_installer)
     logger.debug('is_file : ' + str(file_inst.is_file()))
     logger.debug('name    : ' + str(file_inst.name))
     file_name_installer = file_inst.name
 
+    file_src = Path(file_hash)
+
     # TODO: can I use  file_inst.read_bytes() ... will it close file with break ?
 
     md5_from_file = ''
+    if not file_src.is_file():
+        return md5_from_file
+
     with open(file_src, 'r') as lines:
         for line in lines:
             #logger.debug('Line :: ' + str(line))
@@ -860,6 +861,26 @@ def is_md5_in_file(file: str, md5: str, file_installer: str) -> bool:
                     md5_from_file = test[0]
                     logger.debug('md5 from file : ' + str(md5_from_file))
                     break
+
+    return md5_from_file
+
+
+def is_sha256_string(hash_str: str) -> bool:
+    # TODO: Use regular expression not just length
+
+    # https://stackoverflow.com/questions/5648929/check-if-string-is-a-hash
+    #   /[0-9a-f]{64}/i
+
+    test = len(str(hash_str)) == 64
+    return test
+
+
+# TODO: rename this function... 'is_md5_for_file' or 'is_hash_of_file' ... maybe? or just remove :)
+def is_md5_in_file(file: str, md5: str, file_installer: str) -> bool:
+    '''
+    Match file md5 sum to the md5sum file.
+    '''
+    md5_from_file = read_hash_line_from_file(file, file_installer)
 
     return is_md5_equal(md5, md5_from_file)
 
