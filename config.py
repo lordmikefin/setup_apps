@@ -530,25 +530,58 @@ def parse(source_file: str=''):
 
 #SOURCE_FILE = util.fix_path(SETUP.path_installers + '/' + 'app_source.xml')
 #SOURCE_FILE_OK = False
-def download_source_xml():
+def download_source_xml() -> bool:
     #global SOURCE_FILE_OK
     logger.info('download the source XML file')
     #file = SOURCE_FILE
     file = SETUP.source_file
     util.mkdir(SETUP.path_installers)
-    url = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml'
-    util.download(url, file, show_progress=True)
-    # TODO: download app_source.xml.sha256 file
+
+    # NOTE: download app_source.xml.sha256 file
     #file_sha = util.fix_path(SETUP.path_installers + '/' + 'app_source.xml.sha256')
     file_sha = SETUP.source_file_sha
     url_sha = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml.sha256'
-    util.download(url_sha, file_sha)
+
+    current_hash = util.read_hash_line_from_file(file_sha, file)
+    #current_is_sha256 = util.is_sha256_string(current_hash)
+
+    file_sha_latest = file_sha + '.LATEST'
+    down_ok = util.download(url_sha, file_sha_latest)
+    if down_ok:
+        latest_hash = util.read_hash_line_from_file(file_sha_latest, file)
+        latest_is_sha256 = util.is_sha256_string(latest_hash)
+
+        is_new_hash = latest_hash != current_hash
+        if is_new_hash and latest_is_sha256:
+            logger.debug('Latest remote app_source.xml.sha256 is different than local file.')
+            logger.debug('Replacing local with remote file.')
+            util.move(file_sha_latest, file_sha)
+
+    current_hash = util.read_hash_line_from_file(file_sha, file)
+    current_is_sha256 = util.is_sha256_string(current_hash)
+    is_correct_hash = False
+    if current_is_sha256:
+        hashsum = LMhashlib.sha256(file, show_progress=True)
+        is_correct_hash = util.is_md5_equal(current_hash, hashsum)
+
+    if is_correct_hash:
+        SETUP.source_file_ok = True
+        return True
+    else:
+        # NOTE: Download 'app_source.xml' file if it does not exist or is incorrect (sha256)
+        url = 'https://raw.githubusercontent.com/lordmikefin/app_source/master/app_source.xml'
+        file_ok = util.download(url, file, show_progress=True)
+        if not file_ok:
+            return False
+
     hashsum = LMhashlib.sha256(file, show_progress=True)
 
     # verification with md5sum
     if util.is_md5_in_file(file_sha, hashsum, file):
         #SOURCE_FILE_OK = True
         SETUP.source_file_ok = True
+
+    return True
 
 
 def parse_source_xml(source_file: str=''):
